@@ -164,7 +164,9 @@ img {
 
 /*==================== LAYOUT ====================*/
 .container {
-  max-width: 768px;
+  max-width: 100%;
+  padding-left: 1rem;
+  padding-right: 1rem;
   margin-left: var(--mb-1-5);
   margin-right: var(--mb-1-5);
 }
@@ -285,7 +287,9 @@ img {
 /*==================== HOME ====================*/
 .home__container {
     gap: 1rem;
-    margin: 0;
+    padding-left: 5rem;
+    padding-right: 5rem;
+    margin: auto;
 }
 
 .home__content {
@@ -301,7 +305,7 @@ img {
 }
 
 .home__social-icon {
-    font-size: 1.25rem;
+    font-size: 1.5rem;
     color: var(--first-color);
 }
 
@@ -334,31 +338,7 @@ img {
 }
 
 .home__description {
-    margin-bottom: var(--mb-2);
-}
-
-.home__scroll-button {
-    color: var(--first-color);
-    transition: .3s;
-}
-
-.home__scroll-button:hover {
-    transform: translateY(0.25rem);
-}
-
-.home__scroll-mouse {
-    font-size: 2rem;
-}
-
-.home__scroll-name {
-    font-size: var(--small-font-size);
-    color: var(--title-color);
-    font-weight: var(--font-medium);
-    margin-right: var(--mb-0-25);
-}
-
-.home__scroll-arrow {
-    font-size: 1.25rem;
+    margin-bottom: 0.15rem;
 }
 
 /*==================== BUTTONS ====================*/
@@ -405,7 +385,9 @@ img {
 /*==================== ABOUT ====================*/
 .about__container {
     row-gap: 0;
-    margin: 0;
+    padding-left: 5rem;
+    padding-right: 5rem;
+    margin: auto;
 }
 
 .about__img {
@@ -440,6 +422,11 @@ img {
 .about__info-name {
     display: block;
     text-align: center;
+}
+
+.about__info-item {
+    margin-left: 0.5rem;
+    margin-right: 0.5rem;
 }
 
 .about__buttons {
@@ -824,7 +811,8 @@ img {
 /* For medium devices */
 @media screen and (min-width: 568px) {
     .home__content {
-        grid-template-columns: max-content 1fr 1fr;
+        grid-template-columns: max-content 1fr;
+        margin: auto;
     }
     .home__data {
         grid-column: initial;
@@ -856,7 +844,7 @@ img {
     }
 }
 
-/* For medium devices */
+/* For large devices */
 @media screen and (min-width: 768px) {
     .container {
         margin-left: auto;
@@ -891,7 +879,8 @@ img {
     }
     .nav__list {
         display: flex;
-        column-gap: 2rem;
+        margin-top: 1rem;
+        column-gap: 4rem;
     }
     .nav__menu,
     .change-theme {
@@ -908,13 +897,7 @@ img {
         width: 270px;
     }
     .home__social-icon {
-        font-size: 2rem;
-    }
-    .home__scroll {
-        display: block;
-    }
-    .home__scroll-button {
-        margin-left: 3rem;
+        font-size: 1.5rem;
     }
     .about__container {
         column-gap: 5rem;
@@ -926,7 +909,7 @@ img {
         text-align: initial;
     }
     .about__info {
-        justify-content: space-between;
+        justify-content: center;
     }
     .about__buttons {
         justify-content: initial;
@@ -957,7 +940,7 @@ img {
     }
 }
 
-/* For large devices */
+/* For x-large devices */
 @media screen and (min-width: 1024px) {
     .header,
     .main,
