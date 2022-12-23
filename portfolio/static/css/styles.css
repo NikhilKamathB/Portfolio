@@ -522,6 +522,104 @@ img {
     margin: 0;
 }
 
+.qualification__row {
+    width: 75%;
+    margin: auto;
+}
+
+.qualification__timeline {
+    margin: 20px auto;
+    padding: 20px;
+}
+
+.qualification__card {
+    position: relative;
+    max-width: 400px;
+    border: none;
+}
+
+.qualification__card:nth-child(odd) {
+    padding: 30px 0 30px 30px;
+}
+
+.qualification__card:nth-child(even) {
+    padding: 30px 30px 30px 0;
+}
+
+.qualification__card::before {
+    content: "";
+    position: absolute;
+    width: 55%;
+    border: solid var(--first-color);
+}
+
+.qualification__card:nth-child(odd)::before {
+    left: 0px;
+    top: -5px;
+    bottom: 0px;
+    border-width: 5px 0 5px 5px;
+    border-radius: 50px 0 0 50px;
+}
+
+.qualification__card:nth-child(even)::before {
+    right: 0;
+    top: -5px;
+    bottom: 0;
+    border-width: 5px 5px 5px 0;
+    border-radius: 0 50px 50px 0;
+}
+  
+.qualification__card:first-child::before {
+    border-top: 0;
+    border-top-left-radius: 0;
+}
+  
+.qualification__card:last-child:nth-child(odd)::before {
+    border-bottom: 0;
+    border-bottom-left-radius: 0;
+}
+
+.qualification__card:last-child:nth-child(even)::before {
+    border-bottom: 0;
+    border-bottom-right-radius: 0;
+}
+
+.qualification__card__info {
+    display: flex;
+    flex-direction: column;
+    background: var(--first-color-second);
+    color: white;
+    border-radius: 10px;
+    padding: 10px;
+}
+  
+.qualification__card__title {
+    color: white;
+    position: relative;
+}
+  
+.qualification__card__title::before {
+    content: "";
+    position: absolute;
+    width: 20px;
+    height: 20px;
+    background: white;
+    border-radius: 999px;
+    border: 5px solid var(--first-color);
+}
+  
+.qualification__card:nth-child(even) > .qualification__card__info > .qualification__card__title {
+    text-align: right;
+}
+  
+.qualification__card:nth-child(odd) > .qualification__card__info > .qualification__card__title::before {
+    left: -45px;
+}
+  
+.qualification__card:nth-child(even) > .qualification__card__info > .qualification__card__title::before {
+    right: -45px;
+}
+
 .qualification__tabs {
     display: flex;
     justify-content: space-evenly;
@@ -543,50 +641,13 @@ img {
     margin-right: var(--mb-0-25);
 }
 
-.qualification__data {
-    display: grid;
-    grid-template-columns: 1fr max-content 1fr;
-    column-gap: 1.5rem;
-}
-
-.qualification__title {
-    font-size: var(--normal-font-size);
-    font-weight: var(--font-medium);
-}
-
-.qualification__subtitle {
-    display: inline-block;
-    font-size: var(--small-font-size);
-    margin-bottom: var(--mb-1);
-}
-
-.qualification__calendar {
-    font-size: var(--smaller-font-size);
-    color: var(--text-color-light);
-}
-
-.qualification__rounder {
-    display: inline-block;
-    width: 13px;
-    height: 13px;
-    background-color: var(--first-color);
-    border-radius: 50%;
-}
-
-.qualification__line {
-    display: block;
-    width: 1px;
-    height: 100%;
-    background-color: var(--first-color);
-    transform: translate(6px, -7px);
-}
-
 .qualification [data-content] {
     display: none;
 }
 
 .qualification__active[data-content] {
     display: block;
+    margin: auto;
 }
 
 .qualification__button.qualification__active {
@@ -802,9 +863,6 @@ img {
     }
     .skills__title {
         font-size: var(--normal-font-size);
-    }
-    .qualification__data {
-        gap: .5rem;
     }
 }
 
