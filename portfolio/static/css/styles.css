@@ -587,14 +587,21 @@ img {
 .qualification__card__info {
     display: flex;
     flex-direction: column;
-    background: var(--first-color-second);
-    color: white;
-    border-radius: 10px;
+    background: var(--container-color);
+    color: var(--text-color);
     padding: 10px;
+    border-radius: .25rem;
+    box-shadow: 0 4px 13px 0 rgba(0,0,0,0.2);
+    transition: .3s;
+}
+
+.qualification__card__info:hover {
+    box-shadow: 0 13px 25px 0 rgba(0,0,0,0.2);
+    transform: translateY(.25rem);
 }
   
 .qualification__card__title {
-    color: white;
+    color: var(--text-color);
     position: relative;
 }
   
@@ -703,55 +710,6 @@ img {
     transform: translateX(.25rem);
 }
 
-/*==================== CONTACT ME ====================*/
-.contact__container {
-    row-gap: 3rem;
-    margin: 0;
-}
-
-.contact__information {
-    display: flex;
-    margin-bottom: var(--mb-2);
-}
-
-.contact__icon {
-    font-size: 2rem;
-    color: var(--first-color);
-    margin-right: var(--mb-0-75);
-}
-
-.contact__title {
-    font-size: var(--h3-font-size);
-    font-weight: var(--font-medium);
-}
-
-.contact__subtitle {
-    font-size: var(--small-font-size);
-    color: var(--text-color-light);
-}
-
-.contact__content {
-    background-color: var(--input-color);
-    border-radius: .5rem;
-    padding: .75rem 1rem .25rem;
-}
-
-.contact__label {
-    font-size: var(--small-font-size);
-    color: var(--title-color);
-}
-
-.contact__input {
-    width: 100%;
-    background-color: var(--input-color);
-    color: var(--text-color);
-    font-family: var(--body-font);
-    font-size: var(--normal-font-size);
-    border: none;
-    outline: none;
-    padding: .25rem .5rem .5rem 0;
-}
-
 /*========== FOOTER ==========*/
 .footer {
     padding-top: 2rem;
@@ -780,6 +738,7 @@ img {
     display: flex;
     flex-direction: column;
     row-gap: 1.5rem;
+    padding: 0;
 }
 
 .footer__link:hover {
@@ -982,7 +941,9 @@ img {
         grid-template-columns: .5fr;
     }
     .project__container {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(3, 1fr);
+        padding-left: 3rem;
+        padding-right: 3rem;
     }
     .project__img {
         width: 320px;
@@ -1013,11 +974,5 @@ img {
     }
     .project__content {
         column-gap: 5rem;
-    }
-    .contact__form {
-        width: 460px;
-    }
-    .contact__inputs {
-        grid-template-columns: repeat(2, 1);
     }
 }
