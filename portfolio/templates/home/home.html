@@ -103,72 +103,32 @@
                 <div class="qualification__content qualification__active" data-content id="education">
                     <div class="qualification__timeline">
                         <div class="qualification__outer">
-                          <div class="qualification__card">
-                            <div class="qualification__card__info">
-                              <h3 class="qualification__card__title">Title 1</h3>
-                              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-                            </div>
-                          </div>
-                          <div class="qualification__card">
-                            <div class="qualification__card__info">
-                              <h3 class="qualification__card__title">Title 2</h3>
-                              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-                            </div>
-                          </div>
-                          <div class="qualification__card">
-                            <div class="qualification__card__info">
-                              <h3 class="qualification__card__title">Title 3</h3>
-                              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-                            </div>
-                          </div>
-                          <div class="qualification__card">
-                            <div class="qualification__card__info">
-                              <h3 class="qualification__card__title">Title 4</h3>
-                              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-                            </div>
-                          </div>
-                          <div class="qualification__card">
-                            <div class="qualification__card__info">
-                              <h3 class="qualification__card__title">Title 5</h3>
-                              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-                            </div>
-                          </div>
+                            {% for i in education %}
+                                <div class="qualification__card">
+                                    <div class="qualification__card__info">
+                                        <h3 class="qualification__card__title">{{ i.school_name }}</h3>
+                                        <p>GPA: {{ i.gpa | safe }}</p>
+                                        <p>{{ i.description | safe }}</p>
+                                        <p>{{ i.coursework | safe }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
                 <div class="qualification__content" data-content id="work">
                     <div class="qualification__timeline">
                         <div class="qualification__outer">
-                          <div class="qualification__card">
-                            <div class="qualification__card__info">
-                              <h3 class="qualification__card__title">Title 1 ww</h3>
-                              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-                            </div>
-                          </div>
-                          <div class="qualification__card">
-                            <div class="qualification__card__info">
-                              <h3 class="qualification__card__title">Title 2</h3>
-                              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-                            </div>
-                          </div>
-                          <div class="qualification__card">
-                            <div class="qualification__card__info">
-                              <h3 class="qualification__card__title">Title 3</h3>
-                              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-                            </div>
-                          </div>
-                          <div class="qualification__card">
-                            <div class="qualification__card__info">
-                              <h3 class="qualification__card__title">Title 4</h3>
-                              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-                            </div>
-                          </div>
-                          <div class="qualification__card">
-                            <div class="qualification__card__info">
-                              <h3 class="qualification__card__title">Title 5</h3>
-                              <p>Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. </p>
-                            </div>
-                          </div>
+                            {% for i in work %}
+                                <div class="qualification__card">
+                                    <div class="qualification__card__info">
+                                        <h3 class="qualification__card__title">{{ i.company_name }}</h3>
+                                        <p>{{ i.start_date | safe }} - {{ i.end_date | safe }}</p>
+                                        <p>{{ i.description | safe }}</p>
+                                        <p>{{ i.skills_used | safe }}</p>
+                                    </div>
+                                </div>
+                            {% endfor %}
                         </div>
                     </div>
                 </div>
@@ -183,54 +143,16 @@
             Ongoing and Completed projects
         </span>
         <div class="project__container container grid">
-            <div class="project__content">
-                <div>
-                    <img src="{% static 'img/about_profile.jpeg' %}" alt="" class="project__img">
+            {% for i in project %}
+                <div class="project__content">
+                    <div>
+                        <img src="../media/{{ i.image }}" alt="" class="project__img">
+                    </div>
+                    <a href="#" class="button--flex button--small project__button">
+                        {{ i.project_title }}<i class="uil uil-arrow-right button__icon"></i>
+                    </a>
                 </div>
-                <a href="#" class="button--flex button--small project__button">
-                    Project Name<i class="uil uil-arrow-right button__icon"></i>
-                </a>
-            </div>
-            <div class="project__content">
-                <div>
-                    <img src="{% static 'img/about_profile.jpeg' %}" alt="" class="project__img">
-                </div>
-                <a href="#" class="button--flex button--small project__button">
-                    Project Name<i class="uil uil-arrow-right button__icon"></i>
-                </a>
-            </div>
-            <div class="project__content">
-                <div>
-                    <img src="{% static 'img/about_profile.jpeg' %}" alt="" class="project__img">
-                </div>
-                <a href="#" class="button--flex button--small project__button">
-                    Project Name<i class="uil uil-arrow-right button__icon"></i>
-                </a>
-            </div>
-            <div class="project__content">
-                <div>
-                    <img src="{% static 'img/about_profile.jpeg' %}" alt="" class="project__img">
-                </div>
-                <a href="#" class="button--flex button--small project__button">
-                    Project Name<i class="uil uil-arrow-right button__icon"></i>
-                </a>
-            </div>
-            <div class="project__content">
-                <div>
-                    <img src="{% static 'img/about_profile.jpeg' %}" alt="" class="project__img">
-                </div>
-                <a href="#" class="button--flex button--small project__button">
-                    Project Name<i class="uil uil-arrow-right button__icon"></i>
-                </a>
-            </div>
-            <div class="project__content">
-                <div>
-                    <img src="{% static 'img/about_profile.jpeg' %}" alt="" class="project__img">
-                </div>
-                <a href="#" class="button--flex button--small project__button">
-                    Project Name<i class="uil uil-arrow-right button__icon"></i>
-                </a>
-            </div>
+            {% endfor %}
         </div>
     </section>
 </div>
