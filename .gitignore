@@ -4,9 +4,9 @@
 
 # MISC #
 *.env*
-*.svg*
-*.png*
-*.jpeg*
+# *.svg*
+# *.png*
+# *.jpeg*
 
 ### Django ###
 *.log

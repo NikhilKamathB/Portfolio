@@ -400,6 +400,10 @@ img {
     align-self: center;
 }
 
+.about__data {
+    justify-content: space-around;
+}
+
 .about__description {
     text-align: center;
     margin-bottom: var(--mb-2-5);

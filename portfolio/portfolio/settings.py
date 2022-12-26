@@ -38,6 +38,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+
+    # third party
+    'django_summernote',
+    # apps
+    'home.apps.HomeConfig',
 ]
 
 MIDDLEWARE = [
@@ -125,7 +130,7 @@ AUTH_PASSWORD_VALIDATORS = [
 
 LANGUAGE_CODE = 'en-us'
 
-TIME_ZONE = 'Asia/Kolkata'
+TIME_ZONE = 'America/Los_Angeles'
 
 USE_I18N = True
 
@@ -142,7 +147,7 @@ STATIC_ROOT = os.getenv('STATIC_ROOT', 'dist/static')
 
 # Media handling.
 MEDIA_URL = '/media/'
-MEDIA_ROOT = BASE_DIR / "media"
+MEDIA_ROOT = BASE_DIR / 'media'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -151,3 +156,20 @@ DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'
 
 # site id
 SITE_ID = 1
+
+# Summernote config
+X_FRAME_OPTIONS = 'SAMEORIGIN'
+SUMMERNOTE_CONFIG = {
+    'disable_attachment': False,
+    'summernote': {
+            'toolbar': [
+        ['style', ['bold', 'italic', 'underline', 'clear']],
+        ['fontsize', ['fontsize']],
+        ['color', ['color']],
+        ['para', ['ul', 'ol', 'paragraph']],
+        ['table', ['table']],
+        ['insert', ['link', 'picture', 'video']],
+        ['view', ['fullscreen', 'codeview', 'help']]
+            ]
+        }
+    }
