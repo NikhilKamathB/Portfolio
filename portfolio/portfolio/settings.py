@@ -143,7 +143,7 @@ STATIC_URL = '/static/'
 STATICFILES_DIRS = [
         BASE_DIR / 'static'
     ]
-STATIC_ROOT = BASE_DIR / os.getenv('STATIC_ROOT', 'dist/static')
+STATIC_ROOT = os.getenv('STATIC_ROOT', 'dist/static')
 
 # Media handling.
 MEDIA_URL = '/media/'
