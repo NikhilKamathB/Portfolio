@@ -236,7 +236,7 @@ def deploy(ctx, branch="master"):
         with CONN.cd(f"~/{PROJECT}/{PROJECT_DJANGO_ROOT}/"):
             CONN.run(f"~/{PROJECT}/venv/bin/pip install -r requirements.txt")
             CONN.run(f"~/{PROJECT}/venv/bin/python manage.py migrate")
-            CONN.sudo(f"~/{PROJECT}/venv/bin/python manage.py collectstatic --noinput")
+            CONN.run(f"~/{PROJECT}/venv/bin/python manage.py collectstatic --noinput")
     CONN.sudo(f"systemctl restart {PROJECT}.service")
 
 @task 
