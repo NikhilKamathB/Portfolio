@@ -144,7 +144,6 @@ STATICFILES_DIRS = [
         BASE_DIR / 'static'
     ]
 STATIC_ROOT = BASE_DIR / os.getenv('STATIC_ROOT', 'dist/static')
-print(STATIC_ROOT)
 
 # Media handling.
 MEDIA_URL = '/media/'
