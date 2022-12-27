@@ -164,6 +164,7 @@ def test_gunicorn(ctx):
     CONN.sudo(f"curl --unix-socket /run/{PROJECT}.sock http", user="www-data")
 
 # Nginx setup.
+# Note: remember to set the 'user' in '/etc/nginx/nginx.conf' to 'root'
 @task
 def create_nginx_config(ctx):
     CONN.sudo("rm -f /etc/nginx/sites-enabled/default")
@@ -172,6 +173,7 @@ def create_nginx_config(ctx):
 upstream {PROJECT}_server {{
   server unix:/run/{PROJECT}.sock fail_timeout=0;
 }}
+
 server {{
 
   listen 80;
@@ -183,6 +185,7 @@ server {{
   keepalive_timeout 5;
 
   root /home/{USER}/{PROJECT}/{PROJECT_DJANGO_ROOT}/{PROJECT_STATIC_FOLDER_NAME};
+
   location / {{
     try_files \$uri @proxy_to_{PROJECT};
   }}
