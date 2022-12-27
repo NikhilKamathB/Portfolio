@@ -182,12 +182,9 @@ server {{
   error_log /var/log/nginx/{PROJECT}-error.log;
   keepalive_timeout 5;
 
+  root /home/{USER}/{PROJECT}/{PROJECT_DJANGO_ROOT}/{PROJECT_STATIC_FOLDER_NAME};
   location / {{
     try_files \$uri @proxy_to_{PROJECT};
-  }}
-
-  location /static {{
-    root {PROJECT_STATIC_FOLDER_NAME};
   }}
 
   location @proxy_to_{PROJECT} {{
@@ -200,7 +197,7 @@ server {{
 
   error_page 500 502 503 504 /500.html;
   location = /500.html {{
-    root /home/{USER}/{PROJECT}/{PROJECT_DJANGO_ROOT}/{PROJECT_500_HTML};
+    root /home/{USER}/{PROJECT}/{PROJECT_DJANGO_ROOT}/{PROJECT_500_HTML}/500.html;
   }}
 
 }}
