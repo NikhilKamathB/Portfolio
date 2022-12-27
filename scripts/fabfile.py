@@ -183,6 +183,7 @@ server {{
   keepalive_timeout 5;
 
   root /home/{USER}/{PROJECT}/{PROJECT_DJANGO_ROOT}/{PROJECT_STATIC_FOLDER_NAME};
+
   location / {{
     try_files \$uri @proxy_to_{PROJECT};
   }}
