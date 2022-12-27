@@ -182,10 +182,12 @@ server {{
   error_log /var/log/nginx/{PROJECT}-error.log;
   keepalive_timeout 5;
 
-  root /home/{USER}/{PROJECT}/{PROJECT_DJANGO_ROOT}/{PROJECT_STATIC_FOLDER_NAME};
-
   location / {{
     try_files \$uri @proxy_to_{PROJECT};
+  }}
+
+  location /static {{
+    root {PROJECT_STATIC_FOLDER_NAME};
   }}
 
   location @proxy_to_{PROJECT} {{
@@ -234,7 +236,7 @@ def deploy(ctx, branch="master"):
         with CONN.cd(f"~/{PROJECT}/{PROJECT_DJANGO_ROOT}/"):
             CONN.run(f"~/{PROJECT}/venv/bin/pip install -r requirements.txt")
             CONN.run(f"~/{PROJECT}/venv/bin/python manage.py migrate")
-            CONN.run(f"~/{PROJECT}/venv/bin/python manage.py collectstatic --noinput")
+            CONN.sudo(f"~/{PROJECT}/venv/bin/python manage.py collectstatic --noinput")
     CONN.sudo(f"systemctl restart {PROJECT}.service")
 
 @task 
