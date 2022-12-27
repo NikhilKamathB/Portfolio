@@ -101,36 +101,48 @@
             </div>
             <div class="qualification__sections">
                 <div class="qualification__content qualification__active" data-content id="education">
-                    <div class="qualification__timeline">
-                        <div class="qualification__outer">
-                            {% for i in education %}
-                                <div class="qualification__card">
-                                    <div class="qualification__card__info">
-                                        <h3 class="qualification__card__title">{{ i.school_name }}</h3>
-                                        <p>GPA: {{ i.gpa | safe }}</p>
-                                        <p>{{ i.description | safe }}</p>
-                                        <p>{{ i.coursework | safe }}</p>
+                    {% if education %}
+                        <div class="qualification__timeline">
+                            <div class="qualification__outer">
+                                {% for i in education %}
+                                    <div class="qualification__card">
+                                        <div class="qualification__card__info">
+                                            <h3 class="qualification__card__title">{{ i.school_name }}</h3>
+                                            <p>GPA: {{ i.gpa | safe }}</p>
+                                            <p>{{ i.description | safe }}</p>
+                                            <p>{{ i.coursework | safe }}</p>
+                                        </div>
                                     </div>
-                                </div>
-                            {% endfor %}
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
+                    {% else %}
+                        <span class="section__subtitle">
+                            Coming soon ...
+                        </span>
+                    {% endif %}
                 </div>
                 <div class="qualification__content" data-content id="work">
-                    <div class="qualification__timeline">
-                        <div class="qualification__outer">
-                            {% for i in work %}
-                                <div class="qualification__card">
-                                    <div class="qualification__card__info">
-                                        <h3 class="qualification__card__title">{{ i.company_name }}</h3>
-                                        <p>{{ i.start_date | safe }} - {{ i.end_date | safe }}</p>
-                                        <p>{{ i.description | safe }}</p>
-                                        <p>{{ i.skills_used | safe }}</p>
+                    {% if work %}
+                        <div class="qualification__timeline">
+                            <div class="qualification__outer">
+                                {% for i in work %}
+                                    <div class="qualification__card">
+                                        <div class="qualification__card__info">
+                                            <h3 class="qualification__card__title">{{ i.company_name }}</h3>
+                                            <p>{{ i.start_date | safe }} - {{ i.end_date | safe }}</p>
+                                            <p>{{ i.description | safe }}</p>
+                                            <p>{{ i.skills_used | safe }}</p>
+                                        </div>
                                     </div>
-                                </div>
-                            {% endfor %}
+                                {% endfor %}
+                            </div>
                         </div>
-                    </div>
+                    {% else %}
+                        <span class="section__subtitle">
+                            Coming soon ...
+                        </span>
+                    {% endif %}
                 </div>
             </div>
         </div>
@@ -139,21 +151,27 @@
         <h2 class="section__title mt-5">
             Projects
         </h2>
-        <span class="section__subtitle">
-            Ongoing and Completed projects
-        </span>
-        <div class="project__container container grid">
-            {% for i in project %}
-                <div class="project__content">
-                    <div>
-                        <img src="../media/{{ i.image }}" alt="" class="project__img">
+        {% if project %}
+            <span class="section__subtitle">
+                Ongoing and Completed projects
+            </span>
+            <div class="project__container container grid">
+                {% for i in project %}
+                    <div class="project__content">
+                        <div>
+                            <img src="../media/{{ i.image }}" alt="" class="project__img">
+                        </div>
+                        <a href="#" class="button--flex button--small project__button">
+                            {{ i.project_title }}<i class="uil uil-arrow-right button__icon"></i>
+                        </a>
                     </div>
-                    <a href="#" class="button--flex button--small project__button">
-                        {{ i.project_title }}<i class="uil uil-arrow-right button__icon"></i>
-                    </a>
-                </div>
-            {% endfor %}
-        </div>
+                {% endfor %}
+            </div>
+        {% else %}
+            <span class="section__subtitle mt-4">
+                Coming soon ...
+            </span>
+        {% endif %}
     </section>
 </div>
 {% endblock body %}
