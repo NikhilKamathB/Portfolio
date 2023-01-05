@@ -108,9 +108,8 @@
                                     <div class="qualification__card">
                                         <div class="qualification__card__info">
                                             <h3 class="qualification__card__title">{{ i.school_name }}</h3>
-                                            <p>GPA: {{ i.gpa | safe }}</p>
-                                            <p>{{ i.description | safe }}</p>
-                                            <p>{{ i.coursework | safe }}</p>
+                                            <p class="qualification__card__para_gpa">GPA: {{ i.gpa | safe }}</p>
+                                            {{ i.coursework | safe }}
                                         </div>
                                     </div>
                                 {% endfor %}
@@ -130,7 +129,6 @@
                                     <div class="qualification__card">
                                         <div class="qualification__card__info">
                                             <h3 class="qualification__card__title">{{ i.company_name }}</h3>
-                                            <p>{{ i.start_date | safe }} - {{ i.end_date | safe }}</p>
                                             <p>{{ i.description | safe }}</p>
                                             <p>{{ i.skills_used | safe }}</p>
                                         </div>

@@ -520,6 +520,7 @@ img {
     border-radius: .25rem;
     box-shadow: 0 4px 13px 0 rgba(0,0,0,0.2);
     transition: .3s;
+    padding: 1rem;
 }
 
 .qualification__card__info:hover {
@@ -551,6 +552,18 @@ img {
 }
   
 .qualification__card:nth-child(even) > .qualification__card__info > .qualification__card__title::before {
+    right: -45px;
+}
+
+.qualification__card:nth-child(even) > .qualification__card__info > .qualification__card__para_gpa {
+    text-align: right;
+}
+  
+.qualification__card:nth-child(odd) > .qualification__card__info > .qualification__card__para_gpa::before {
+    left: -45px;
+}
+  
+.qualification__card:nth-child(even) > .qualification__card__info > .qualification__card__para_gpa::before {
     right: -45px;
 }
 
@@ -810,6 +823,7 @@ img {
         padding-bottom: 0;
     }
     .qualification__card {
+        padding: 1.5rem;
         margin: auto;
     }
     .project__container {
