@@ -10,14 +10,14 @@ class Education(models.Model):
     school_name = models.CharField(max_length=250)
     degree = models.CharField(max_length=250)
     gpa = models.CharField(max_length=10)
-    coursework = models.TextField(max_length=500, null=True, blank=True)
+    coursework = models.TextField(max_length=750, null=True, blank=True)
     address = models.TextField(max_length=500, null=True, blank=True)
     city = models.CharField(max_length=150, null=True, blank=True)
     state = models.CharField(max_length=150, null=True, blank=True)
     country = models.CharField(max_length=150, null=True, blank=True)
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
-    description = models.TextField(max_length=1000, null=True, blank=True)
+    description = models.TextField(max_length=2000, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -34,13 +34,13 @@ class Work(models.Model):
     company_name = models.CharField(max_length=250)
     designation = models.CharField(max_length=250)
     address = models.TextField(max_length=500, null=True, blank=True)
-    skills_used = models.TextField(max_length=500, null=True, blank=True)
+    skills_used = models.TextField(max_length=750, null=True, blank=True)
     city = models.CharField(max_length=150, null=True, blank=True)
     state = models.CharField(max_length=150, null=True, blank=True)
     country = models.CharField(max_length=150, null=True, blank=True)
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
-    description = models.TextField(max_length=1000, null=True, blank=True)
+    description = models.TextField(max_length=2000, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 
@@ -54,17 +54,23 @@ class Project(models.Model):
         verbose_name = "Project"
         verbose_name_plural = "Projects"
     
+    TAG_CHOICES =(
+        ("ongoing", "Ongoing"),
+        ("completed", "Completed")
+    )
+    
     project_title = models.CharField(max_length=250)
-    skills_used = models.TextField(max_length=500, null=True, blank=True)
+    skills_used = models.TextField(max_length=750, null=True, blank=True)
     github_link = models.URLField(max_length=200, null=True, blank=True)
     image = models.ImageField(upload_to="projects/")
+    tag = models.CharField(choices=TAG_CHOICES, max_length=100)
     start_date = models.DateField()
     end_date = models.DateField(null=True, blank=True)
     has_paper = models.BooleanField(default=False)
     paper_link = models.URLField(max_length=200, null=True, blank=True)
     has_patent = models.BooleanField(default=False)
     patent_link = models.URLField(max_length=200, null=True, blank=True)
-    description = models.TextField(max_length=1000, null=True, blank=True)
+    description = models.TextField(max_length=2000, null=True, blank=True)
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)
 

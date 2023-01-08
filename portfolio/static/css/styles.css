@@ -129,7 +129,7 @@ h1, h2, h3, h4 {
 }
 
 ul {
-  list-style: none;
+  list-style: circle;
 }
 
 a {
@@ -239,6 +239,7 @@ img {
 .nav__list {
     grid-template-columns: repeat(3, 1fr);
     gap: 2rem;
+    list-style: none;
 }
 
 .nav__link {
@@ -461,7 +462,6 @@ img {
 
 .qualification__card {
     position: relative;
-    max-width: 400px;
     border: none;
 }
 
@@ -517,7 +517,7 @@ img {
     background: var(--container-color);
     color: var(--text-color);
     padding: 10px;
-    border-radius: .25rem;
+    border-radius: .5rem;
     box-shadow: 0 4px 13px 0 rgba(0,0,0,0.2);
     transition: .3s;
     padding: 1rem;
@@ -634,6 +634,7 @@ img {
     margin-bottom: var(--mb-0-5);
     margin-left: var(--mb-0-75);
     margin-right: var(--mb-0-75);
+    color: var(--text-color);
 }
 
 .project__button {
@@ -649,6 +650,11 @@ img {
 .project__button:hover .button__icon{
     background-color: transparent;
     transform: translateX(.25rem);
+}
+
+.project__status {
+    margin-left: var(--mb-2-5);
+    margin-right: var(--mb-2-5);
 }
 
 /*========== FOOTER ==========*/
@@ -839,9 +845,10 @@ img {
         padding: 0;
     }
     .footer__links {
+        margin: 0;
         row-gap: 1.5rem;
-        align-items: center;
-        justify-content: center;
+        align-items: left;
+        justify-content: left;
     }
 }
 
@@ -907,7 +914,7 @@ img {
         width: 350px;
     }
     .about__description {
-        text-align: center;
+        text-align: justify;
     }
     .about__info {
         justify-content: space-evenly;

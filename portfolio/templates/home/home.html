@@ -1,6 +1,7 @@
 {% extends 'base.html' %}
 
 {% load static %}
+{% load custom_filter %}
 
 {% block title %}Home{% endblock title %}
 
@@ -61,7 +62,8 @@
                     About Me
                 </h2>
                 <p class="about__description">
-                    Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book.
+                    &nbsp;&nbsp;&nbsp;&nbsp;Since childhood, I have been fascinated by vehicles, especially flying objects. Whenever I heard the sound of an airplane, I would run to the window, convinced it was flying with some mystical powers possessed by humans, like characters in Indian mythology. However, learning the truth about how planes fly challenged my belief in this "mystical flight." This sparked my desire to turn my fantasy of flight into reality and led me to pursue a career in engineering. That was when I was introduced to Artificial Intelligence. Upon realizing its limitless potential for innovation, I decided to excel in this field and work towards establishing autonomy not only in flight, but also in other domains.<br><br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;My career objective is to carve out my very ideologies into products. So far, I have worked as an ML Engineer for over 1.5 years. In this role, I have built OCR pipelines, performed MLOps and DevOps, and developed web and mobile applications to enhance my profile. I have a wealth of experience with frameworks and tools such as PyTorch, PyTorch Lightning, TensorFlow, Keras, Docker, Kubernetes, Git, Django, Flask, MongoDB, PostgreSQL, NodeJS, React and Flutter, backed by cloud platforms such as GCP, AWS, and Azure. I have a proven track record of developing end-to-end machine learning pipelines and producing high-quality, maintainable code. I excel at collaborating with others and am committed to creating code that is easy for my colleagues to understand and use. I am confident in my abilities as an ML Engineer and am eager to find opportunities that will allow me to continue learning. In addition to my technical interests, I love to travel and enjoy hiking and biking on the weekends.
                 </p>
                 <div class="about__info grid">
                     <div class="about__info-item">
@@ -78,7 +80,7 @@
                     </div>
                 </div>
                 <div class="about__buttons">
-                    <a download="" href="{% static 'img/profile.png' %}" class="button button--flex">
+                    <a download="" href="{% static 'doc/NikhilBolaKamath_Resume.pdf' %}" class="button button--flex">
                         Download CV<i class="uil uil-download-alt button__icon"></i>
                     </a>
                 </div>
@@ -107,8 +109,8 @@
                                 {% for i in education %}
                                     <div class="qualification__card">
                                         <div class="qualification__card__info">
-                                            <h3 class="qualification__card__title">{{ i.school_name }}</h3>
-                                            <p class="qualification__card__para_gpa">GPA: {{ i.gpa | safe }}</p>
+                                            <h4 class="qualification__card__title">{{ i.school_name }}</h4>
+                                            <p class="qualification__card__para_gpa">GPA: {{ i.gpa | safe }} | {{i.start_date.month | month_name }} {{i.start_date.year}} - {% if i.end_date %} {{i.end_date.month | month_name }} {{i.end_date.year}} {% else %} Present {% endif %}</p>
                                             {{ i.coursework | safe }}
                                         </div>
                                     </div>
@@ -128,9 +130,9 @@
                                 {% for i in work %}
                                     <div class="qualification__card">
                                         <div class="qualification__card__info">
-                                            <h3 class="qualification__card__title">{{ i.company_name }}</h3>
+                                            <h4 class="qualification__card__title">{{ i.company_name }}</h4>
+                                            <p class="qualification__card__para_gpa">{{ i.designation | safe }} | {{i.start_date.month | month_name }} {{i.start_date.year}} - {% if i.end_date %} {{i.end_date.month | month_name }} {{i.end_date.year}} {% else %} Present {% endif %}</p>
                                             <p>{{ i.description | safe }}</p>
-                                            <p>{{ i.skills_used | safe }}</p>
                                         </div>
                                     </div>
                                 {% endfor %}
@@ -159,8 +161,8 @@
                         <div>
                             <img src="../media/{{ i.image }}" alt="" class="project__img">
                         </div>
-                        <a href="#" class="button--flex button--small project__button">
-                            {{ i.project_title }}<i class="uil uil-arrow-right button__icon"></i>
+                        <a href="{{ i.github_link }}" class="button--flex button--small project__button">
+                            <h4 class="project__title">{{ i.project_title }}<i class="uil uil-arrow-right button__icon"></i></h4>
                         </a>
                     </div>
                 {% endfor %}
