@@ -75,6 +75,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'portfolio.wsgi.application'
 
+CSRF_TRUSTED_ORIGINS = ['https://*.nikhilkamathb.com']
+
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
 
