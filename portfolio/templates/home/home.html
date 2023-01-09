@@ -159,7 +159,7 @@
                 {% for i in project %}
                     <div class="project__content">
                         <div>
-                            <img src="{% if debug %} ../media/{{i.image}} {% else %} {{ i.image.url }} {% endif %}" alt="" class="project__img">
+                            <img src="{% if debug %} ../media/{{i.image}} {% else %} {{ i.image.url }} {% endif %}" alt="" class="project__img" height="288">
                         </div>
                         <a href="{{ i.github_link }}" class="button--flex button--small project__button">
                             <h4 class="project__title">{{ i.project_title }}<i class="uil uil-arrow-right button__icon"></i></h4>

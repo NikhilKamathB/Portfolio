@@ -4,6 +4,7 @@
 
 # MISC #
 *.env*
+*secrets*
 # *.svg*
 # *.png*
 # *.jpeg*
