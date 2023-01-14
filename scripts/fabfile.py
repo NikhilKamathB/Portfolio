@@ -199,7 +199,7 @@ server {{
     try_files \$uri @proxy_to_{PROJECT};
   }}
 
-  location /static/ {{
+  location /static {{
     root /home/{USER}/{PROJECT}/{PROJECT_DJANGO_ROOT}/{PROJECT_STATIC_FOLDER_NAME};
   }}
 
