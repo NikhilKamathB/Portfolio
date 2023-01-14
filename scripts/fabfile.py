@@ -93,6 +93,7 @@ def install_virtualenv(ctx):
     CONN.sudo("apt-get install python3-pip -y")
     CONN.run("python3 -m pip install virtualenv")
 
+# https://www.youtube.com/watch?v=R5d-hN9UtpU
 @task
 def install_certbot(ctx):
     CONN.sudo("snap install core")
