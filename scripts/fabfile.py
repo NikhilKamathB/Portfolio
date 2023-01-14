@@ -199,6 +199,10 @@ server {{
     try_files \$uri @proxy_to_{PROJECT};
   }}
 
+  location /static/ {{
+    root /home/{USER}/{PROJECT}/{PROJECT_DJANGO_ROOT}/{PROJECT_STATIC_FOLDER_NAME};
+  }}
+
   location @proxy_to_{PROJECT} {{
     proxy_set_header X-Forwarded-For \$proxy_add_x_forwarded_for;
     proxy_set_header X-Forwarded-Proto \$scheme;
