@@ -93,6 +93,15 @@ def install_virtualenv(ctx):
     CONN.sudo("apt-get install python3-pip -y")
     CONN.run("python3 -m pip install virtualenv")
 
+@task
+def install_certbot(ctx):
+    CONN.sudo("snap install core")
+    CONN.sudo("snap refresh core")
+    CONN.sudo("apt-get remove certbot")
+    CONN.sudo("snap install --classic certbot")
+    CONN.sudo("ln -s /snap/bin/certbot /usr/bin/certbot")
+    CONN.sudo("certbot --version")
+
 # Git actions.
 @task
 def git_clone(ctx):
@@ -177,7 +186,6 @@ upstream {PROJECT}_server {{
 server {{
 
   listen 80;
-  listen 443;
   server_name {SERVER_NAME};
   client_max_body_size 4G;
   access_log /var/log/nginx/{PROJECT}-access.log;
@@ -218,6 +226,10 @@ def restart_nginx(ctx):
 @task
 def test_nginx(ctx):
     ctx.run(f"curl -i {HOST}")
+
+@task
+def set_certbot(ctx):
+    CONN.sudo("certbot --nginx")
 
 # Deploy.
 @task 
