@@ -17,3 +17,11 @@ Pillow==9.3.0
 fabric==2.7.1
 invoke==1.7.3
 psycopg2-binary
+unstructured==0.10.14
+langchain
+huggingface-hub
+openai
+tiktoken
+sentence-transformers
+InstructorEmbedding
+faiss-cpu

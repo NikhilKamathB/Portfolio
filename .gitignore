@@ -5,6 +5,7 @@
 # MISC #
 *.env*
 *secrets*
+**__model_store__**
 # *.svg*
 # *.png*
 # *.jpeg*
