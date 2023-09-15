@@ -3,9 +3,9 @@ import pickle
 from langchain.vectorstores.faiss import FAISS
 from langchain.embeddings import OpenAIEmbeddings
 from langchain.document_loaders import DirectoryLoader
-from langchain.text_splitter import CharacterTextSplitter
 from langchain.embeddings import HuggingFaceInstructEmbeddings
-from constants import LANGCHAIN_DATA_DIR_PATH, LANGCHAIN_PICKLE_FILE
+from langchain.text_splitter import RecursiveCharacterTextSplitter
+from constants import CHUNK_OVERLAP, CHUNK_SIZE, LANGCHAIN_DATA_DIR_PATH, LANGCHAIN_PICKLE_FILE
 
 
 def pickle_txt_data(
@@ -13,10 +13,9 @@ def pickle_txt_data(
         embedding_model_name: str = "hkunlp/instructor-large",
     ):
     loader = DirectoryLoader(LANGCHAIN_DATA_DIR_PATH, glob="*.txt")
-    text_splitter = CharacterTextSplitter(
-        separator="\n\n",
-        chunk_size=600,
-        chunk_overlap=150,
+    text_splitter = RecursiveCharacterTextSplitter(
+        chunk_size=CHUNK_SIZE,
+        chunk_overlap=CHUNK_OVERLAP,
         length_function=len,
         is_separator_regex=False
     )

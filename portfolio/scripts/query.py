@@ -1,21 +1,19 @@
 import pickle
 from langchain import HuggingFaceHub
+from langchain.chains import RetrievalQA
 from langchain.chat_models import ChatOpenAI
 from langchain.prompts.prompt import PromptTemplate
-from langchain.memory import ConversationBufferMemory
-from langchain.chains import ConversationalRetrievalChain
 from langchain.vectorstores.base import VectorStoreRetriever
-from constants import LANGCHAIN_PICKLE_FILE, TEMPLATE, CONDENSED_TEMPLATE, TEMPERATURE, \
-    MAX_LENGTH, REPO_ID, MIN_LENGTH, MODEL_NAME, MODEL_TYPE
+from constants import LANGCHAIN_PICKLE_FILE, TEMPLATE, TEMPERATURE, CHAIN_TYPE, LAMBDA_MULT, \
+    MAX_LENGTH, REPO_ID, MIN_LENGTH, MODEL_NAME, MODEL_TYPE, SEARCH_TOP_K
 
 
-QA_CONDENSE_PROMPT_TEMPLATE = PromptTemplate.from_template(CONDENSED_TEMPLATE)
 QA_PROMPT_TEMPLATE = PromptTemplate(template=TEMPLATE, input_variables=["question", "context"])
 
 def load_vectorstore():
     with open(LANGCHAIN_PICKLE_FILE, "rb") as f:
         vectorstore = pickle.load(f)
-    return VectorStoreRetriever(vectorstore=vectorstore)
+    return VectorStoreRetriever(vectorstore=vectorstore, search_type="mmr", search_kwargs={"top_k": SEARCH_TOP_K, "lambda_mult": LAMBDA_MULT})
 
 def get_custom_prompt_qa_chain():
     if MODEL_TYPE == "openai":
@@ -28,21 +26,19 @@ def get_custom_prompt_qa_chain():
             "max_length": MAX_LENGTH
         })
     retriever = load_vectorstore()
-    memory = ConversationBufferMemory(memory_key="chat_history", return_messages=True)
-    model = ConversationalRetrievalChain.from_llm(
+    model = RetrievalQA.from_chain_type(
         llm=llm,
         retriever=retriever,
-        memory=memory,
-        condense_question_prompt=QA_CONDENSE_PROMPT_TEMPLATE,
-        combine_docs_chain_kwargs={"prompt": QA_PROMPT_TEMPLATE})
+        chain_type=CHAIN_TYPE,
+        chain_type_kwargs={"prompt": QA_PROMPT_TEMPLATE})
     return model
 
 if __name__ == "__main__":
     model = get_custom_prompt_qa_chain()
     ctr = 1
     while True:
-        question = input(f"Pass {ctr}: ")
-        answer = model({"question": question})
-        print(answer['answer'])
+        query = input(f"Pass {ctr}: ")
+        answer = model({"query": query})
+        print(answer)
         print("\n\n")
         ctr += 1

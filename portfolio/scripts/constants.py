@@ -3,21 +3,22 @@ LANGCHAIN_PICKLE_FILE = "./static_base/doc/data.pkl"
 REPO_ID = "tiiuae/falcon-7b-instruct"
 MODEL_TYPE = "openai"
 MODEL_NAME = "gpt-3.5-turbo"
-TEMPERATURE = 0
+TEMPERATURE = 1e-2
 MIN_LENGTH = 100
 MAX_LENGTH = 500
+SEARCH_TOP_K = 6
+LAMBDA_MULT = 0.25
+CHAIN_TYPE = "stuff"
+CHUNK_SIZE = 700
+CHUNK_OVERLAP = 3
 TEMPLATE = """You are an AI assistant for answering questions about the Nikhil Bola Kamath.
-You are given the following extracted parts of a long document and a question. Provide a conversational answer.
-If you don't know the answer, just say "Hmmm, I don't have the answer to this. You may contact Nikhil via email." Don't try to make up an answer.
-Question: {question}
+Use the context below to answer the questions.
+Try to answer all the questions. You can generate your answers from the context provided to you.
+Be very brief in your answers and answer to the point. For example, if the question is "List your projects", you can answer "Project 1, Project 2, Project 3".
+Similarly, if the question is "What companies did you work in?", you can answer "Company 1, Company 2, Company 3".
+If you don't know the answer, just say "Hmmm, I don't have the answer to this. You may contact Nikhil @ nikhilbolakamath@gmail.com." Don't try to make up an answer.
 =========
 {context}
 =========
-Answer in Markdown:"""
-CONDENSED_TEMPLATE = """Given the following conversation and a follow up question, rephrase the follow up question to be a standalone question.
-You can assume the question about the most recent state of the union address.
-
-Chat History:
-{chat_history}
-Follow Up Input: {question}
-Standalone question:"""
+Question: {question}
+Answer:"""
