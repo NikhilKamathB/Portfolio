@@ -7,7 +7,6 @@ from fabric import Connection
 from invoke import run as local
 load_dotenv()
 
-
 USER = os.getenv("USER")
 HOST = os.getenv("HOST")
 SERVER_NAME = os.getenv('SERVER_NAME')

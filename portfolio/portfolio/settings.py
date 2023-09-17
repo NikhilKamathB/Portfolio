@@ -11,8 +11,11 @@ https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
 import os
+import pickle
 from pathlib import Path
 from dotenv import load_dotenv
+from langchain.vectorstores.base import VectorStoreRetriever
+
 load_dotenv()
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -30,7 +33,6 @@ DEBUG = bool(int(os.environ.get("DEBUG", 1)))
 ALLOWED_HOSTS = ['*']
 
 # Application definition
-
 INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
@@ -79,7 +81,6 @@ CSRF_TRUSTED_ORIGINS = ['https://*.nikhilkamathb.com']
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -110,7 +111,6 @@ postgres:latest
 
 # Password validation
 # https://docs.djangoproject.com/en/4.0/ref/settings/#auth-password-validators
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -129,7 +129,6 @@ AUTH_PASSWORD_VALIDATORS = [
 
 # Internationalization
 # https://docs.djangoproject.com/en/4.0/topics/i18n/
-
 LANGUAGE_CODE = 'en-us'
 
 TIME_ZONE = 'America/Los_Angeles'
@@ -140,7 +139,6 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
-
 STATIC_URL = '/static/'
 STATICFILES_DIRS = [
         BASE_DIR / 'static_base'
@@ -185,3 +183,54 @@ SUMMERNOTE_CONFIG = {
             ]
         }
     }
+
+# Google calendar event body
+EVENT_BODY = {
+    "summary": "Meeting with Nikhil Bola Kamath",
+    "description": "A meeting scheduled with Nikhil Bola Kamath from nikhilkb.com.",
+    "start": {
+        "dateTime": "{start_time}",
+        "timeZone": TIME_ZONE,
+    },
+    "end": {
+        "dateTime": "{end_time}",
+        "timeZone": TIME_ZONE,
+    },
+    "attendees": [
+        {"email": "nikhilbolakamath@gmail.com"}
+    ]
+}
+
+# LangChain
+LANGCHAIN_TEMPLATE = """You are an AI assistant for answering questions about the Nikhil Bola Kamath.
+Use the context below to answer the questions.
+Try to answer all the questions. You can generate your answers from the context provided to you.
+Be very brief in your answers and answer to the point.
+If you don't know the answer, just say "Hmmm, I don't have the answer to this. You may contact Nikhil @ nikhilbolakamath@gmail.com.".
+=========
+{context}
+=========
+Question: {question}
+Answer:"""
+LANGCHAIN_VECTORSTORE_SEARCHTYPE = "mmr"
+LANGCHAIN_VECTORSTORE_SEARCHKWARGS = {
+    "top_k": 6, "lambda_mult": 0.25
+}
+LANGCHAIN_VECTOR_STORE = "data.pkl"
+LANGCHAIN_MODEL_TYPE = "openai" # ["openai" "huggingface"]
+LANGCHAIN_MODEL_NAME = "gpt-3.5-turbo-16k" # ["gpt-3.5-turbo-16k", "tiiuae/falcon-7b-instruct"]
+LANGCHAIN_MODEL_TEMPERATURE = 1e-2
+LANGCHAIN_MODEL_MIN_LENGTH = 100
+LANGCHAIN_MODEL_MAX_LENGTH = 500
+LANGCHAIN_CHAIN_TYPE = "stuff"
+LANGCHAIN_VECTORSTORE_RETRIEVER = None
+LANGCHAIN_CHAT_ENABLE = True
+if not os.path.exists(BASE_DIR / 'static_base' / 'doc' / LANGCHAIN_VECTOR_STORE):
+    print("Vectorstore not found.")
+    print("Please run `python manage.py ingest --data_dir ./static_base/data --output_dir ./static_base/doc` to generate the vectorstore.")
+    LANGCHAIN_CHAT_ENABLE = False
+else:
+    with open(BASE_DIR / 'static_base' / 'doc' / LANGCHAIN_VECTOR_STORE, "rb") as f:
+        vectorstore = pickle.load(f)
+    LANGCHAIN_VECTORSTORE_RETRIEVER = VectorStoreRetriever(vectorstore=vectorstore, search_type=LANGCHAIN_VECTORSTORE_SEARCHTYPE, search_kwargs=LANGCHAIN_VECTORSTORE_SEARCHKWARGS)
+LANGCHAIN_CHAT_ENABLE = LANGCHAIN_VECTORSTORE_RETRIEVER and LANGCHAIN_CHAT_ENABLE

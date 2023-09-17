@@ -6,6 +6,7 @@
 *.env*
 *secrets*
 **__model_store__**
+**.json**
 # *.svg*
 # *.png*
 # *.jpeg*
