@@ -1,0 +1,43 @@
+Here is all about my work experience. I have work experience for almost two years now.
+
+I am currently (since October 2022) working as a research assistant at the Robotics Embedded Systems Laboratory at USC.
+
+Here, I am actively designing and implementing adversarial object-tracking algorithms, primarily focusing on strategically influencing the target of interest within the environment.
+
+The main objective of these algorithms is to skillfully lead the targets into desired states while continuously responding to quad-copters and exhibiting cover-seeking behaviors.
+
+Before this I was working as a Machine Learning Engineer at Insureka/Someshwara Software in Bangalore after my undergraduate studies (December 2020 to July 2022).
+
+I am fortunate to have worked with Mr. Darshan Sonde, the CTO of the company, for nearly two years.
+
+As an ML engineer, I have worked on building a private annotation website tool within the organization, providing essential key points annotation support for precise pose estimation of vehicles.
+
+I also successfully led the development of optical character recognition (OCR) models using diverse deep learning techniques to effectively detect and recognize various entities on critical Indonesian government documents, such as KTP, STNK, and SIM.
+
+In addition, I Implemented a seamless end-to-end pipeline for the task, as mentioned earlier, supporting crucial stages such as data injection, data cleaning and preprocessing, model training and evaluation, testing, and efficient model deployment (MLOps) using Apache Airflow on the Google Cloud Platform coupled with GIT CI/CD pipeline.
+
+Alongside, I designed a pose estimation model for vehicles, enabling augmented reality guided video capture to automate the "claim" process within the insurance company, streamlining operations effectively.
+
+As a part of this team, I successfully containerized and deployed applications, including ML applications and various other functionalities implemented as APIs, on cloud platforms like Azure and AWS, enabling smooth collaboration between teams within and outside the organization.
+
+Additionally, I actively contributed to further enhancing the development and deployment process by creating automated scripts for web application deployment on remote computers.
+
+Throughout my journey as an ML Engineer, I have successfully built OCR pipelines, mastered MLOps and DevOps practices, and created web and mobile applications to enrich my skill set.
+
+With a vast array of frameworks and tools in my repertoire, including PyTorch, PyTorch Lightning, TensorFlow, Keras, Docker, Kubernetes, Git, Django, Flask, MongoDB, PostgreSQL, NodeJS, React, Swift, and Flutter, I am well-equipped to tackle diverse challenges.
+
+My proficiency extends to cloud platforms like GCP, AWS, and Azure, enabling seamless integration of cutting-edge technologies.
+
+I take pride in my track record of delivering end-to-end machine learning pipelines and producing exceptional quality and maintainability code.
+
+Some internship programs I underwent during my undergraduate studies include one at the Bharat Electronics Limited (Department of Defense). I led a team and developed a user-friendly web application utilizing HTML, CSS, and JavaScript, enabling devotees to manage religious events on campus effortlessly.
+
+The application was seamlessly integrated with MongoDB, empowering smooth implementation of essential CRUD (Create, Read, Update, Delete) operations for enhanced functionality and data management.
+
+Two, at the School of Information Science, ​I implemented an AI application using Support Vector Machines (SVM) in Python to detect trigger words in user speech.
+
+The application further employed speaker recognition techniques to enable the execution of control commands for an Arduino-controlled prototype.
+
+This application showcased the fusion of AI and hardware technology for enhanced user interaction and control in real-world scenarios.
+
+I was also the CTO at BhavamAI Technology, founded by my undergraduate professors.

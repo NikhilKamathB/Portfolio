@@ -55,6 +55,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'home.middleware.ChatbotMiddleware'
 ]
 
 ROOT_URLCONF = 'portfolio.urls'
@@ -77,7 +78,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'portfolio.wsgi.application'
 
-CSRF_TRUSTED_ORIGINS = ['https://*.nikhilkamathb.com']
+CSRF_TRUSTED_ORIGINS = ['https://*.nikhilkb.com']
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -184,7 +185,14 @@ SUMMERNOTE_CONFIG = {
         }
     }
 
+# Django session settings
+CHATBOT_SESSION_KEY = "chatbot_session"
+SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+SESSION_SAVE_EVERY_REQUEST = True
+
 # Google calendar event body
+DEFAULT_EVENT_TIME = "15:00"
+DEFAULT_EVENT_DELTA_DAYS = 7
 EVENT_BODY = {
     "summary": "Meeting with Nikhil Bola Kamath",
     "description": "A meeting scheduled with Nikhil Bola Kamath from nikhilkb.com.",
@@ -202,16 +210,96 @@ EVENT_BODY = {
 }
 
 # LangChain
-LANGCHAIN_TEMPLATE = """You are an AI assistant for answering questions about the Nikhil Bola Kamath.
-Use the context below to answer the questions.
+LANGCHAIN_DEFAULT_MESSAGE = "Hmmm, I don't have the answer to this. You may contact Nikhil @ nikhilbolakamath@gmail.com"
+LANGCHAIN_TEMPLATE = f"""You are an AI assistant for answering questions about the Nikhil Bola Kamath.
+
 Try to answer all the questions. You can generate your answers from the context provided to you.
+
 Be very brief in your answers and answer to the point.
-If you don't know the answer, just say "Hmmm, I don't have the answer to this. You may contact Nikhil @ nikhilbolakamath@gmail.com.".
+
+If you don't know the answer, just say "{LANGCHAIN_DEFAULT_MESSAGE}".
+
 =========
-{context}
+{{context}}
 =========
-Question: {question}
+
+Question: {{question}}
+
 Answer:"""
+LANGCHAIN_AGENT_SYSTEM_MESSAGE_CHAT_CONVERSATIONAL_REACT_DESCRIPTION = f"""Assistant is a large language model.
+
+Assistant is designed to be able to assist with a wide range of tasks, from answering simple questions to providing in-depth explanations and discussions on a wide range of topics. As a language model, Assistant is able to generate human-like text based on the input it receives, allowing it to engage in natural-sounding conversations and provide responses that are coherent and relevant to the topic at hand.
+
+Assistant is constantly learning and improving, and its capabilities are constantly evolving. It is able to process and understand large amounts of text, and can use this knowledge to provide accurate and informative responses to a wide range of questions. Additionally, Assistant is able to generate its own text based on the input it receives, allowing it to engage in discussions and provide explanations and descriptions on a wide range of topics.
+
+Unfortunately, the Assistant is not allowed to use its own knowledge base. The Assistant always refers to it's trusty tools and absolutely does NOT try to answer by itself.
+
+If your observations is "{LANGCHAIN_DEFAULT_MESSAGE}", your next `action` MUST BE `Final Answer` with `action_input` as "{LANGCHAIN_DEFAULT_MESSAGE}". In short you MUST return final answer as "{LANGCHAIN_DEFAULT_MESSAGE}" immediately.
+
+If your observation is " Hello! How can I assist you today?", your next `action` MUST BE `Final Answer` with `action_input` as "Hello! How can I assist you today?". In short you MUST return final answer as "Hello! How can I assist you today?" immediately.
+
+Overall, Assistant is a powerful system that can help with a wide range of tasks and provide valuable insights and information on a wide range of topics. Whether you need help with a specific question or just want to have a conversation about a particular topic, Assistant is here to assist.
+"""
+LANGCHAIN_AGENT_SYSTEM_MESSAGE_STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION_PREFIX = f"""Respond to the human as helpfully and accurately as possible. 
+
+Unfortunately, you are NOT allowed to use your own knowledge base. You always refers to your trusty tools and absolutely does NOT try to answer by yourself.
+
+If your observations is "{LANGCHAIN_DEFAULT_MESSAGE}", ALWAYS return final answer as "{LANGCHAIN_DEFAULT_MESSAGE}" immediately. In short you MUST return final answer as "{LANGCHAIN_DEFAULT_MESSAGE}" immediately.
+
+You have access to the following tools:
+"""
+LANGCHAIN_AGENT_SYSTEM_MESSAGE_STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION_FORMAT_INSTRUCTIONS = """Use a json blob to specify a tool by providing an action key (tool name) and an action_input key (tool input).
+
+Valid "action" values: "Final Answer" or {tool_names}
+
+Provide only ONE action per $JSON_BLOB, as shown:
+
+```
+{{{{ 
+    "action": $TOOL_NAME,
+    "action_input": $INPUT
+}}}}
+```
+
+Follow this format:
+
+Question: input question to answer
+Thought: consider previous and subsequent steps
+Action:
+```
+    $JSON_BLOB
+```
+Observation: action result
+... (repeat Thought/Action/Observation N times)
+Thought: I know what to respond
+Action:
+```
+{{{{
+    "action": "Final Answer",
+    "action_input": "Final response to human"
+}}}}
+```
+"""
+LANGCHAIN_AGENT_SYSTEM_MESSAGE_STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION_SUFFIX = """Begin! Reminder to ALWAYS respond with a valid json blob of a single action using the provided tools ONLY. You must use trusty tools always and NOT your knowledge base. Respond directly if appropriate. Format is Action:```$JSON_BLOB```then Observation:.\nThought:
+"""
+LANGCHAIN_GOOGLE_CALENDAR_EVENT_SCHEMA_TOOL_DESC = """Use this tool when you need to generate or create a google calendar event.
+
+The input to this tool SHOULD be a stringyfied dictionary with the following keys: `date`, `time` and `duration`.
+
+The key `date` parameter must be in "MM-DD-YYYY" format or an empty string.
+
+The key `time` parameter must be in "HH:MM" format or an empty string.    
+    
+The key `duration` parameter must be a numeric value, the default value is 60.
+
+To use the tool, you MUST provide keys - `time` and `date` and optionally `duration` and MUST convert the dictionary into string and pass as input.
+"""
+LANGCHAIN_NBK_QA_TOOL_DESC = f"""Useful for when you need to answer questions, you may use this by default.
+
+If your observation is "{LANGCHAIN_DEFAULT_MESSAGE}" immediatedly return final answer as "{LANGCHAIN_DEFAULT_MESSAGE}".
+
+If your observation is " Hello! How can I assist you today?", immediatedly return final answer as "Hello! How can I assist you today?".
+"""
 LANGCHAIN_VECTORSTORE_SEARCHTYPE = "mmr"
 LANGCHAIN_VECTORSTORE_SEARCHKWARGS = {
     "top_k": 6, "lambda_mult": 0.25
@@ -223,8 +311,16 @@ LANGCHAIN_MODEL_TEMPERATURE = 1e-2
 LANGCHAIN_MODEL_MIN_LENGTH = 100
 LANGCHAIN_MODEL_MAX_LENGTH = 500
 LANGCHAIN_CHAIN_TYPE = "stuff"
+LANGCHAIN_CHAIN_AGENT_STRUCTURED_CHAT_ZERO_SHOT_REACT_DESCRIPTION = "structured-chat-zero-shot-react-description"
+LANGCHAIN_CHAIN_AGENT_CHAT_CONVERSATIONAL_REACT_DESCRIPTION = "chat-conversational-react-description"
+LANGCHAIN_CHAIN_AGENT_VERBOSE = False
+LANGCHAIN_CHAIN_AGENT_MAX_ITERATIONS = 2
+LANGCHAIN_CHAIN_AGENT_DOMAIN_SPECIFIC_QUERY = True
+LANGCHAIN_CHAIN_AGENT_EARLY_STOP = "force" # ["force", "generate"]
 LANGCHAIN_VECTORSTORE_RETRIEVER = None
 LANGCHAIN_CHAT_ENABLE = True
+LANGCHAIN_CONVERSATIONAL_BUFFER_WINDOW_MEMORY_KEY = "chat_history"
+LANGCHAIN_CONVERSATIONAL_BUFFER_WINDOW_MEMORY_K = 10
 if not os.path.exists(BASE_DIR / 'static_base' / 'doc' / LANGCHAIN_VECTOR_STORE):
     print("Vectorstore not found.")
     print("Please run `python manage.py ingest --data_dir ./static_base/data --output_dir ./static_base/doc` to generate the vectorstore.")

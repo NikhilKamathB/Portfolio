@@ -130,3 +130,112 @@ themeButton.addEventListener('click', () => {
     localStorage.setItem('selected-theme', getCurrentTheme())
     localStorage.setItem('selected-icon', getCurrentIcon())
 })
+
+// Textarea auto grow
+function auto_grow(element) {
+    element.style.height = "5px";
+    element.style.height = (element.scrollHeight) + "px";
+}
+
+// Chat scroll to bottom
+$('#chatbot-up').click(function (e) {
+    e.preventDefault();
+    setTimeout(function() {
+        $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "fast");
+    }, 500); 
+});
+
+// Chat submit
+$('#chatbot-submit').click(function(e) {
+    chatSubmit(e);
+})
+
+// Chat enter submit
+$('#chatbot-text').keypress(function(e) {
+    if(e.key === "Enter" && !e.shiftKey) {
+        chatSubmit(e);
+    }
+})
+
+// Utils
+function chatSubmit(e) {
+    e.preventDefault();
+    var message = $('#chatbot-text').val();
+    if(message.trim() == '') {
+        return false;
+    }
+    $('#chatbot-text').val('');
+    $('#chatbot-text').prop('disabled', true);
+    $('#chatbot-body').append(generateChatbotBody(message.replace(/\n/g, "<br>")));
+    $('#chatbot-body').append(generateChatbotBodyLoader());
+    $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
+    $.ajax({
+        type: "POST",
+        url: "chat/",
+        data: {
+            "chat-query": message
+        },
+        success: function(data) {
+            setTimeout(function() {
+                $('.text-loader').remove();
+                $('#chatbot-body').append(generateChatbotBody(data.replace(/\n/g, "<br>"), type="bot"));
+                $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
+                $('#chatbot-text').prop('disabled', false);
+                $('#chatbot-text').focus();
+            }, 1000);
+        },
+        error: function(data) {
+            setTimeout(function() {
+                $('.text-loader').remove();
+                $('#chatbot-body').append(generateChatbotBody("An internal server error occurred! Sorry for this. You may contact Nikhil @ nikhilbolakamath@gmail.com if you need more help or get to know him.", type="bot"));
+                $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
+                $('#chatbot-text').prop('disabled', false);
+                $('#chatbot-text').focus();
+            }, 1000);
+        }
+    })
+
+    function generateChatbotBodyLoader(type="bot") {
+        const icon = '<i class="fa-solid fa-robot chatbot-profile-bot"></i>';
+        var chatbotBodyLoader = `
+        <div class="chatbot-body-text-${type} text-loader" id="section">
+            <div>
+                ${icon}
+                <div class="chatbot-body-text">
+                    <div class="chatbot-body-text-loader">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `
+        return chatbotBodyLoader;
+    }
+
+    function generateChatbotBody(message, type='user') {
+        const icon = type == 'user' ? '<i class="fa-solid fa-user chatbot-profile-user"></i>' : '<i class="fa-solid fa-robot chatbot-profile-bot"></i>';
+        var chatbotBody = type == 'user' ? `
+            <div class="chatbot-body-text-${type}" id="section">
+                <div>
+                    <div class="chatbot-body-text">
+                        <p class="chatbot-body-text-p">${message}</p>
+                    </div>
+                    ${icon}
+                <div>
+            </div>
+        ` :
+        `
+            <div class="chatbot-body-text-${type}" id="section">
+                <div>
+                    ${icon}
+                    <div class="chatbot-body-text">
+                        <p class="chatbot-body-text-p">${message}</p>
+                    </div>
+                </div>
+            </div>
+        `
+        return chatbotBody;
+    }
+}
