@@ -18,3 +18,5 @@ class ChatbotMiddleware(MiddlewareMixin):
             )
         if not settings.CHATBOT_SESSION_KEY in cache:
             cache.set(settings.CHATBOT_SESSION_KEY, Agent())
+        if settings.CHATBOT_SESSION_KEY_TRIES[0] not in request.session:
+            request.session[settings.CHATBOT_SESSION_KEY_TRIES[0]] = 0

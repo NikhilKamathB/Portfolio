@@ -35,6 +35,12 @@ class GoogleCalendarEventGeneratorTool(BaseTool):
             date = (datetime.datetime.now() + datetime.timedelta(days=settings.DEFAULT_EVENT_DELTA_DAYS)).strftime("%m-%d-%Y")
         else:
             date = period.get("date")
+            if date == "today":
+                date = datetime.datetime.now().strftime("%m-%d-%Y")
+            elif date == "tomorrow":
+                date = (datetime.datetime.now() + datetime.timedelta(days=1)).strftime("%m-%d-%Y")
+            elif date == "day_after_tomorrow":
+                date = (datetime.datetime.now() + datetime.timedelta(days=2)).strftime("%m-%d-%Y")
         if not period.get("time", None):
             time = settings.DEFAULT_EVENT_TIME
         else:

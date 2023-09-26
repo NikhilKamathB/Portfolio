@@ -187,8 +187,10 @@ SUMMERNOTE_CONFIG = {
 
 # Django session settings
 CHATBOT_SESSION_KEY = "chatbot_session"
-SESSION_EXPIRE_AT_BROWSER_CLOSE = True
+CHATBOT_SESSION_KEY_TRIES = ["chatbot_session_tries", 10]
+SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_SAVE_EVERY_REQUEST = True
+SESSION_COOKIE_AGE = 60 * 60 * 3 # 3 hours
 
 # Google calendar event body
 DEFAULT_EVENT_TIME = "15:00"
@@ -293,6 +295,8 @@ The key `time` parameter must be in "HH:MM" format or an empty string.
 The key `duration` parameter must be a numeric value, the default value is 60.
 
 To use the tool, you MUST provide keys - `time` and `date` and optionally `duration` and MUST convert the dictionary into string and pass as input.
+
+If the user provides data like `tomorrow`, `today`, and `day after tomorrow`. then the tool will automatically generate the date for the event.
 """
 LANGCHAIN_NBK_QA_TOOL_DESC = f"""Useful for when you need to answer questions, you may use this by default.
 
