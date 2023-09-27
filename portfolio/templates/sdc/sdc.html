@@ -1,0 +1,55 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load custom_filter %}
+
+{% block title %}SDC{% endblock title %}
+
+{% block header %}
+{% include 'partials/alt_header.html' %}
+{% endblock header %}
+
+{% block body %}
+<div class="container-flex main__div">
+    <section class="home section" id="sdc-home">
+        <div class="home__container sdc__container container grid">
+            <div class="home__content grid pt-0">
+                <div class="home__data mb-5">
+                    <h2 class="home__title mb-5">
+                        Self-Driving car
+                    </h2>
+                    <video controls class="sdc__video">
+                        <source src="{% static 'video/sdc.mp4'%}" type="video/mp4">
+                        Your browser does not support the video tag.
+                    </video>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="about section" id="sdc-about">
+        <span class="section__subtitle"></span>
+        <div class="about__container sdc__container container">
+            <div class="about__data sdc__title">
+                <h3 class="mb-4">
+                    About the project
+                </h3>
+                <p class="about__description">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The initial phase of my project focused on designing and implementing a Level 3 autonomous vehicle in the Carla Simulator. The showcased video demonstrates the capabilities of this first version. Beyond typical driving conditions, the system adeptly handles a variety of tasks and scenarios. These include maintaining lane stability, executing overtaking maneuvers, navigating around roadblocks, and responding to jaywalking incidents. Integrated within the solution are concepts from deep learning, image processing, state estimation, localization, and motion planning. Moreover, the project introduces robust strategies for addressing sensor failures and pioneers an innovative approach to knowledge sharing. This endeavor was the capstone of my undergraduate studies.
+                    <br>
+                    <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;The latest iteration seeks to integrate additional onboard sensors, such as LIDAR and RADAR, to bolster localization, self-awareness, and maneuverability. Additionally, it will demonstrate how insights (or experiences) from other autonomous entities in the environment can greatly enhance planning and decision-making, leveraging imitation learning to expedite the learning curve. The project will also involve designing dynamic models to predict the movements of moving objects and to adapt to a range of weather conditions. Ultimately, the goal is to advance to a Level 4 autonomous vehicle. This is at its rudimentary phase and will be updated as the project progresses. More details can be found in my github repo. The github link for this project can be found below.
+                </p>
+                <div class="about__buttons">
+                    <a href="https://github.com/NikhilKamathB/SDC" target="_blank" class="button button--flex">
+                        Github
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+{% endblock body %}
+
+{% block footer %}
+{% include 'partials/footer.html' %}
+{% endblock footer %}

@@ -1,25 +1,25 @@
 <header class="header" id="header">
     <nav class="nav container-flex">
-        <a href="#" class="nav__logo">NBK</a>
+        <a href="{% url 'home:home' %}" class="nav__logo">NBK</a>
         <div class="nav__menu" id="nav-menu">
             <ul class="nav__list grid">
                 <li class="nav__item">
-                    <a href="#home" class="nav__link active-link">
+                    <a href="{% url 'home:home' %}#home" class="nav__link active-link">
                         <i class="uil uil-home nav__icon"></i> Home
                     </a>
                 </li>
                 <li class="nav__item">
-                    <a href="#about" class="nav__link">
+                    <a href="{% url 'home:home' %}#about" class="nav__link">
                         <i class="uil uil-user nav__icon"></i> About
                     </a>
                 </li>
                 <li class="nav__item">
-                    <a href="#qualification" class="nav__link">
+                    <a href="{% url 'home:home' %}#qualification" class="nav__link">
                         <i class="uil uil-briefcase-alt nav__icon"></i> Qualification
                     </a>
                 </li>
                 <li class="nav__item">
-                    <a href="#project" class="nav__link">
+                    <a href="{% url 'home:home' %}#project" class="nav__link">
                         <i class="uil uil-scenery nav__icon"></i> Project
                     </a>
                 </li>

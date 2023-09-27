@@ -171,7 +171,7 @@ function chatSubmit(e) {
     $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
     $.ajax({
         type: "POST",
-        url: "chat/",
+        url: window.location.origin + "/chat/",
         data: {
             "chat-query": message
         },
@@ -185,13 +185,24 @@ function chatSubmit(e) {
             }, 1000);
         },
         error: function(data) {
-            setTimeout(function() {
-                $('.text-loader').remove();
-                $('#chatbot-body').append(generateChatbotBody("An internal server error occurred! Sorry for this. You may contact Nikhil @ nikhilbolakamath@gmail.com if you need more help or get to know him.", type="bot"));
-                $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
-                $('#chatbot-text').prop('disabled', false);
-                $('#chatbot-text').focus();
-            }, 1000);
+            if (data.status == 400) {
+                console.log(data.message);
+                setTimeout(function() {
+                    $('.text-loader').remove();
+                    $('#chatbot-body').append(generateChatbotBody("Bad request! You may be getting this message because you might have tried too many times! Every time you text/chat I am getting billed. Sorry for the inconvenience. You may contact me @ nikhilbolakamath@gmail.com or via LinkedIn. Would really appreciate it! ", type="bot"));
+                    $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
+                    $('#chatbot-text').focus();
+                }, 1000);
+            }
+            else {
+                setTimeout(function() {
+                    $('.text-loader').remove();
+                    $('#chatbot-body').append(generateChatbotBody("An internal server error occurred! Sorry for this. You may contact me @ nikhilbolakamath@gmail.com if you need more help or get to know him.", type="bot"));
+                    $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
+                    $('#chatbot-text').prop('disabled', false);
+                    $('#chatbot-text').focus();
+                }, 1000);
+            }
         }
     })
 

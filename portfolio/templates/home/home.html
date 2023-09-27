@@ -14,23 +14,6 @@
     <section class="home section" id="home">
         <div class="home__container container grid">
             <div class="home__content grid">
-                <!-- <div class="home__img">
-                    <svg class="home__blob" viewBox="0 0 200 187" xmlns="http://www.w3.org/2000/svg" xmlns:xlink="http://www.w3.org/1999/xlink">
-                        <mask id="mask0" mask-type="alpha">
-                            <path d="M190.312 36.4879C206.582 62.1187 201.309 102.826 182.328 134.186C163.346 165.547 
-                            130.807 187.559 100.226 186.353C69.6454 185.297 41.0228 161.023 21.7403 129.362C2.45775 
-                            97.8511 -7.48481 59.1033 6.67581 34.5279C20.9871 10.1032 59.7028 -0.149132 97.9666 
-                            0.00163737C136.23 0.303176 174.193 10.857 190.312 36.4879Z"/>
-                        </mask>
-                        <g mask="url(#mask0)">
-                            <path d="M190.312 36.4879C206.582 62.1187 201.309 102.826 182.328 134.186C163.346 
-                            165.547 130.807 187.559 100.226 186.353C69.6454 185.297 41.0228 161.023 21.7403 
-                            129.362C2.45775 97.8511 -7.48481 59.1033 6.67581 34.5279C20.9871 10.1032 59.7028 
-                            -0.149132 97.9666 0.00163737C136.23 0.303176 174.193 10.857 190.312 36.4879Z"/>
-                            <image class="home__blob-img" x="0" y="0" xlink:href="{% static 'img/home_profile.jpeg' %}"/>
-                        </g>
-                    </svg>
-                </div> -->
                 <div class="home__data">
                     <h1 class="home__title">
                         Hi, I'm Nikhil Kamath B
@@ -105,46 +88,67 @@
             </div>
             <div class="qualification__sections">
                 <div class="qualification__content qualification__active" data-content id="education">
-                    {% if education %}
-                        <div class="qualification__timeline">
-                            <div class="qualification__outer">
-                                {% for i in education %}
-                                    <div class="qualification__card">
-                                        <div class="qualification__card__info">
-                                            <h4 class="qualification__card__title">{{ i.school_name }}</h4>
-                                            <p class="qualification__card__para_gpa">GPA: {{ i.gpa | safe }} | {{i.start_date.month | month_name }} {{i.start_date.year}} - {% if i.end_date %} {{i.end_date.month | month_name }} {{i.end_date.year}} {% else %} Present {% endif %}</p>
-                                            {{ i.coursework | safe }}
-                                        </div>
-                                    </div>
-                                {% endfor %}
+                    <div class="qualification__timeline">
+                        <div class="qualification__outer">
+                            <div class="qualification__card">
+                                <div class="qualification__card__info">
+                                    <h4 class="qualification__card__title">University of Southern California</h4>
+                                    <p class="qualification__card__para_gpa">GPA: 3.75/4.00 | August 2022 - Present</p>
+                                    <ul class="qualification__card__ul">
+                                        <li>Foundations for Artificial Intelligence</li>
+                                        <li>Machine Learning</li>
+                                        <li>Natural Language Processing</li>
+                                        <li>Algorithms</li> 
+                                        <li>Web Technologies</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="qualification__card">
+                                <div class="qualification__card__info">
+                                    <h4 class="qualification__card__title">NMAM Institute of Technology</h4>
+                                    <p class="qualification__card__para_gpa">GPA: 9.59/10.00 | August 2016 - August 2020</p>
+                                    <ul class="qualification__card__ul">
+                                        <li>Artificial Intelligence</li>
+                                        <li>Machine Learning and Deep Learning</li>
+                                        <li>Data Structures & Algorithms</li>
+                                        <li>Business Intelligence</li>
+                                        <li>Data Analytics</li>
+                                        <li>RDBMS</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    {% else %}
-                        <span class="section__subtitle">
-                            Coming soon ...
-                        </span>
-                    {% endif %}
+                    </div>
                 </div>
                 <div class="qualification__content" data-content id="work">
-                    {% if work %}
-                        <div class="qualification__timeline">
-                            <div class="qualification__outer">
-                                {% for i in work %}
-                                    <div class="qualification__card">
-                                        <div class="qualification__card__info">
-                                            <h4 class="qualification__card__title">{{ i.company_name }}</h4>
-                                            <p class="qualification__card__para_gpa">{{ i.designation | safe }} | {{i.start_date.month | month_name }} {{i.start_date.year}} - {% if i.end_date %} {{i.end_date.month | month_name }} {{i.end_date.year}} {% else %} Present {% endif %}</p>
-                                            <p>{{ i.description | safe }}</p>
-                                        </div>
-                                    </div>
-                                {% endfor %}
+                    <div class="qualification__timeline">
+                        <div class="qualification__outer">
+                            <div class="qualification__card">
+                                <div class="qualification__card__info">
+                                    <h4 class="qualification__card__title">Robotic Embedded Systems Laboratory</h4>
+                                    <p class="qualification__card__para_gpa">Assistant | October 2022 - Present</p>
+                                    <ul class="qualification__card__ul">
+                                        <li>Designing and implementing deceptive target tracking algorithms to manipulate object behavior, compelling them into desired states while they respond to tracking robots and seek cover.</li>
+                                        <li>Engaged in developing homogeneous multi-robot task assignment algorithms to achieve almost optimal allocation of robots for various tasks within the environment.</li>
+                                    </ul>
+                                </div>
+                            </div>
+                            <div class="qualification__card">
+                                <div class="qualification__card__info">
+                                    <h4 class="qualification__card__title">Insureka | Someshwara Softwares</h4>
+                                    <p class="qualification__card__para_gpa">Machine Learning Engineer | December 2020 - July 2022</p>
+                                    <ul class="qualification__card__ul">
+                                        <li>Integrated MLOps to design an OCR pipeline that captured data from Indonesian government IDs like STNKs, KTPs, and SIMs, encomapssing text detection, recognition, and entity association processes.</li>
+                                        <li>Developed and hosted a web-based tool for annotating key points on vehicles, which helped solve the 2D to 3D mapping problem.</li>
+                                        <li>Crafted a pose estimation model for vehicles utilizing the derived data (above), facilitating user-guided video capture (AR) of diverse parts of vehicle.</li>
+                                        <li>Designed automated scripts and established CI/CD processes to enhance the efficiency of web app deployment. Utilized Docker containers on Kubernetes to implement microservices, leading to substantial time and effort savings for the team.</li>
+                                        <li>Architected Restful APIs and analytical dashboards for VExhibit, an online exhibition and conference platform that hosted government events and academic conferences.</li>
+                                        <li>Built a web application for the State Bank of India using Django, which increased their regional customer acquisition by 10%.</li>
+                                    </ul>
+                                </div>
                             </div>
                         </div>
-                    {% else %}
-                        <span class="section__subtitle">
-                            Coming soon ...
-                        </span>
-                    {% endif %}
+                    </div>
                 </div>
             </div>
         </div>
@@ -153,27 +157,35 @@
         <h2 class="section__title mt-5">
             Projects
         </h2>
-        {% if project %}
-            <span class="section__subtitle">
-                Ongoing and Completed projects
-            </span>
-            <div class="project__container container grid">
-                {% for i in project %}
-                    <div class="project__content">
-                        <div>
-                            <img src="{% if debug %} ../media/{{i.image}} {% else %} {{ i.image.url }} {% endif %}" alt="" class="project__img">
-                        </div>
-                        <a href="{{ i.github_link }}" class="button--flex button--small project__button">
-                            <h4 class="project__title">{{ i.project_title }}<i class="uil uil-arrow-right button__icon"></i></h4>
-                        </a>
-                    </div>
-                {% endfor %}
+        <span class="section__subtitle">
+            Ongoing and Completed projects
+        </span>
+        <div class="project__container container grid">
+            <div class="project__content">
+                <div>
+                    <img src="{% static 'img/ocr.jpeg' %}" alt="" class="project__img">
+                </div>
+                <a href="https://github.com/NikhilKamathB/OCR" class="button--flex button--small project__button">
+                    <h4 class="project__title">Optical Character Recognition<i class="uil uil-arrow-right button__icon"></i></h4>
+                </a>
             </div>
-        {% else %}
-            <span class="section__subtitle mt-4">
-                Coming soon ...
-            </span>
-        {% endif %}
+            <div class="project__content">
+                <div>
+                    <img src="{% static 'img/sdc.jpeg' %}" alt="" class="project__img">
+                </div>
+                <a href="{% url 'sdc:sdc' %}" class="button--flex button--small project__button">
+                    <h4 class="project__title">Self-Driving Car<i class="uil uil-arrow-right button__icon"></i></h4>
+                </a>
+            </div>
+            <div class="project__content">
+                <div>
+                    <img src="{% static 'img/nn.jpeg' %}" alt="" class="project__img">
+                </div>
+                <a href="https://github.com/NikhilKamathB/Actor-Critic-Neural-Network-Modeling" class="button--flex button--small project__button">
+                    <h4 class="project__title">Actor Critic Neural Modeling<i class="uil uil-arrow-right button__icon"></i></h4>
+                </a>
+            </div>
+        </div>
     </section>
 </div>
 {% endblock body %}

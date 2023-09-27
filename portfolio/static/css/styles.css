@@ -567,6 +567,13 @@ img {
     right: -45px;
 }
 
+.qualification__card__ul {
+    font-size: var(--smaller-font-size);
+    font-style: italic;
+    color: var(text-color-light);
+    opacity: .65;
+}
+
 .qualification__tabs {
     display: flex;
     justify-content: space-evenly;
@@ -904,6 +911,21 @@ img {
 
 ::-webkit-scrollbar-thumb:hover {
     background-color: var(--text-color-light);
+}
+
+/*========== SDC ==========*/
+.sdc__container {
+    text-align: center;
+}
+
+.sdc__video {
+    width: 75%;
+    height: auto;
+}
+
+.sdc__description {
+    width: 75%;
+    margin: auto;
 }
 
 /*==================== MEDIA QUERIES ====================*/

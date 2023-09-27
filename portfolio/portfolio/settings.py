@@ -45,6 +45,8 @@ INSTALLED_APPS = [
     'django_summernote',
     # apps
     'home.apps.HomeConfig',
+    'sdc.apps.SdcConfig',
+    'ocr.apps.OcrConfig'
 ]
 
 MIDDLEWARE = [

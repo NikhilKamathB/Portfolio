@@ -171,7 +171,7 @@ function chatSubmit(e) {
     $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
     $.ajax({
         type: "POST",
-        url: "chat/",
+        url: window.location.origin + "/chat/",
         data: {
             "chat-query": message
         },

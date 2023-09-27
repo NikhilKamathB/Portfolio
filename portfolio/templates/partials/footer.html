@@ -3,23 +3,23 @@
         <div class="footer__container container grid">
             <div>
                 <h1 class="footer__title">Nikhil Bola Kamath</h1>
-                <span class="footer__subtitle">MSCS - AI | USC</span><br>
+                <span class="footer__subtitle">MSCS | USC</span><br>
                 <span class="footer__subtitle">Contact me @ nikhilbolakamath@gmail.com</span>
             </div>
             <ul class="footer__links">
                 <li>
-                    <a href="#home" class="footer__link">Home</a>
+                    <a href="{% url 'home:home' %}#home" class="footer__link">Home</a>
                 </li>
                 <li>
-                    <a href="#about" class="footer__link">About</a>
+                    <a href="{% url 'home:home' %}#about" class="footer__link">About</a>
                 </li>
             </ul>
             <ul class="footer__links">
                 <li>
-                    <a href="#qualification" class="footer__link">Qualification</a>
+                    <a href="{% url 'home:home' %}#qualification" class="footer__link">Qualification</a>
                 </li>
                 <li>
-                    <a href="#project" class="footer__link">Projects</a>
+                    <a href="{% url 'home:home' %}#project" class="footer__link">Projects</a>
                 </li>
             </ul>
         </div>
