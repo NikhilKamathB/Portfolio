@@ -19,6 +19,13 @@ if (navClose) {
     })
 }
 
+if (document.getElementById('ocr-file')) {
+    document.getElementById('ocr-file').addEventListener('change', function() {
+        var fileName = this.files[0].name; // Get the name of the uploaded file
+        document.getElementById('ocr-filename').textContent = "Uploaded: " + fileName; // Update the div with the file name
+    });
+}
+
 /*==================== REMOVE MENU MOBILE ====================*/
 const navLink = document.querySelectorAll('.nav__link')
 
@@ -77,9 +84,13 @@ function scrollActive(){
         sectionId = current.getAttribute('id')
 
         if(scrollY > sectionTop && scrollY <= sectionTop + sectionHeight){
-            document.querySelector('.nav__menu a[href*=' + sectionId + ']').classList.add('active-link')
-        }else{
-            document.querySelector('.nav__menu a[href*=' + sectionId + ']').classList.remove('active-link')
+            if (document.querySelector('.nav__menu a[href*=' + sectionId + ']') !== null) {
+                document.querySelector('.nav__menu a[href*=' + sectionId + ']').classList.add('active-link')
+            }
+        } else {
+            if (document.querySelector('.nav__menu a[href*=' + sectionId + ']') !== null) {
+                document.querySelector('.nav__menu a[href*=' + sectionId + ']').classList.remove('active-link')
+            }
         }
     })
 }
@@ -157,9 +168,27 @@ $('#chatbot-text').keypress(function(e) {
     }
 })
 
+// Get CSRF token
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
+
 // Utils
 function chatSubmit(e) {
     e.preventDefault();
+    const csrftoken = getCookie('csrftoken');
     var message = $('#chatbot-text').val();
     if(message.trim() == '') {
         return false;
@@ -172,6 +201,7 @@ function chatSubmit(e) {
     $.ajax({
         type: "POST",
         url: window.location.origin + "/chat/",
+        headers: {'X-CSRFToken': csrftoken},
         data: {
             "chat-query": message
         },
@@ -250,3 +280,18 @@ function chatSubmit(e) {
         return chatbotBody;
     }
 }
+
+// OCR
+$('#ocr-submit').click(function(e) {
+    e.preventDefault();
+    document.getElementById('ocr-form').style.display = 'none';
+    $('#ocr-input').append(`
+        <div class='ocr-processing-message mt-5' id='ocr-processing-message'>
+            <p class='mb-0'>Your image is getting processed...</p>
+            <p class='mb-0'>This might take some time as the image is getting processed on the server side.</p>
+            <p class='mb-0'>It may take several seconds to few minutes depending on your document.</p>
+            <p class='mb-0'>Thanks for your patience.</p>
+        </div>
+    `)
+    document.forms['ocr-form'].submit();
+})

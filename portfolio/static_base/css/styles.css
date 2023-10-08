@@ -193,6 +193,12 @@ img {
     margin: auto;
 }
 
+.messages {
+    margin-top: 5rem;
+    color: var(--title-color);
+    background-color: var(--first-color);
+}
+
 /*==================== NAV ====================*/
 .nav {
     height: var(--header-height);
@@ -899,7 +905,7 @@ img {
 
 /*========== SCROLL BAR ==========*/
 ::-webkit-scrollbar {
-    width: 0;
+    width: 5px;
     background-color: var(--scroll-bar-color);
     border-radius: .5rem;
 }
@@ -914,7 +920,7 @@ img {
 }
 
 /*========== SDC ==========*/
-.sdc__container {
+.sdc__container, .ocr__container, .acnn_container {
     text-align: center;
 }
 
@@ -926,6 +932,62 @@ img {
 .sdc__description {
     width: 75%;
     margin: auto;
+}
+
+.fa-file-image {
+    font-size: 10rem;
+}
+
+.fa-file-image:hover {
+    color: var(--first-color);
+    cursor: pointer;
+    transition: .3s;
+    scale: 1.025;
+}
+
+/*================= OCR =================*/
+.ocr-file-default-img {
+    max-width: 150px;
+}
+
+.ocr__result__container__row{
+    max-width: 80vw;
+}
+
+.ocr__result__container__col {
+    align-self: center;
+    max-width: 90%;
+}
+
+.ocr__result__container__col > img {
+    max-width: 75%;
+    max-height: 700px;
+    object-fit: cover;
+}
+
+.ocr__result__container__col__table {
+    max-height: 500px;
+    overflow: auto;
+}
+
+.ocr__result__table {
+    color: var(--title-color);
+}
+
+.ocr__result__table > thead > tr > th {
+    position: sticky; 
+    top: 0;
+    background-color: var(--body-color);
+}
+
+.ocr__result__table > tbody > tr:hover {
+    color: var(--first-color);
+}
+
+.ocr-processing-message {
+    border: solid 3px;
+    padding: 2rem;
+    border-radius: 0.75rem;
 }
 
 /*==================== MEDIA QUERIES ====================*/

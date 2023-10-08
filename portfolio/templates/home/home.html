@@ -165,7 +165,7 @@
                 <div>
                     <img src="{% static 'img/ocr.jpeg' %}" alt="" class="project__img">
                 </div>
-                <a href="https://github.com/NikhilKamathB/OCR" class="button--flex button--small project__button">
+                <a href="{% url 'ocr:ocr' %}" class="button--flex button--small project__button">
                     <h4 class="project__title">Optical Character Recognition<i class="uil uil-arrow-right button__icon"></i></h4>
                 </a>
             </div>
@@ -181,13 +181,21 @@
                 <div>
                     <img src="{% static 'img/nn.jpeg' %}" alt="" class="project__img">
                 </div>
-                <a href="https://github.com/NikhilKamathB/Actor-Critic-Neural-Network-Modeling" class="button--flex button--small project__button">
+                <a href="{% url 'acnn:acnn' %}" class="button--flex button--small project__button">
                     <h4 class="project__title">Actor Critic Neural Modeling<i class="uil uil-arrow-right button__icon"></i></h4>
                 </a>
             </div>
         </div>
     </section>
 </div>
+
+<!-- scroll top  -->
+{% include 'partials/scrollup.html' %}
+<!-- end scroll top -->
+<!-- chatbot top  -->
+{% include 'partials/chatbot.html' %}
+<!-- end chatbot top -->
+
 {% endblock body %}
 
 {% block footer %}

@@ -24,6 +24,7 @@
             <div class="modal-footer" id="chatbotModalLabelFooter">
                 <div class="chotbot-form">
                     <form>
+                        {% csrf_token %}
                         <div class="form-group">
                             <div class="input-group">
                                 <textarea wrap="off" class="form-control" id="chatbot-text" oninput="auto_grow(this)" placeholder="Your message..."></textarea>

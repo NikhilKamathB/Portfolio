@@ -3,14 +3,12 @@ from rest_framework import status
 from django.shortcuts import render
 from django.core.cache import cache
 from django.http import HttpResponse
-from django.views.decorators.csrf import csrf_exempt
 from home.models import *
 
 
 def index(request):
     return render(request, "home/home.html")
 
-@csrf_exempt
 def chat(request):
     if request.method == "POST":
         if settings.CHATBOT_SESSION_KEY in cache:

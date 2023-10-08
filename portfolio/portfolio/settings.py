@@ -143,8 +143,9 @@ USE_TZ = True
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
 STATIC_URL = '/static/'
+STATIC_BASE = 'static_base'
 STATICFILES_DIRS = [
-        BASE_DIR / 'static_base'
+        BASE_DIR / STATIC_BASE
     ]
 STATIC_ROOT = os.getenv('STATIC_ROOT', "static")
 
@@ -212,6 +213,18 @@ EVENT_BODY = {
         {"email": "nikhilbolakamath@gmail.com"}
     ]
 }
+
+# OCR
+OCR_TEXT_DETECTION_MODEL_SAVE_PATH = BASE_DIR / STATIC_BASE / 'model' / 'craft_mlt_25k.pth'
+OCR_TEXT_RECOGNITION_MODEL_SAVE_PATH = None
+OCR_TEXT_RECOGNITION_PROCESSOR = "microsoft/trocr-base-handwritten"
+OCR_IMAGE_RESIZE = (768, 768)
+OCR_CV2_THRESHOLD_LOW = 100
+OCR_CV2_THRESHOLD_HIGH = 255
+OCR_CV2_DILATE_KERNEL_SIZE = (3, 3)
+OCR_CV2_DILATE_ITERATION = 1
+OCR_CV2_DETECTION_BUFFER = 2
+OCR_MAX_RECOGNITIONS = 64
 
 # LangChain
 LANGCHAIN_DEFAULT_MESSAGE = "Hmmm, I don't have the answer to this. You may contact Nikhil @ nikhilbolakamath@gmail.com"
@@ -327,12 +340,12 @@ LANGCHAIN_VECTORSTORE_RETRIEVER = None
 LANGCHAIN_CHAT_ENABLE = True
 LANGCHAIN_CONVERSATIONAL_BUFFER_WINDOW_MEMORY_KEY = "chat_history"
 LANGCHAIN_CONVERSATIONAL_BUFFER_WINDOW_MEMORY_K = 10
-if not os.path.exists(BASE_DIR / 'static_base' / 'doc' / LANGCHAIN_VECTOR_STORE):
+if not os.path.exists(BASE_DIR / STATIC_BASE / 'doc' / LANGCHAIN_VECTOR_STORE):
     print("Vectorstore not found.")
-    print("Please run `python manage.py ingest --data_dir ./static_base/data --output_dir ./static_base/doc` to generate the vectorstore.")
+    print(f"Please run `python manage.py ingest --data_dir ./{STATIC_BASE}/data --output_dir ./{STATIC_BASE}/doc` to generate the vectorstore.")
     LANGCHAIN_CHAT_ENABLE = False
 else:
-    with open(BASE_DIR / 'static_base' / 'doc' / LANGCHAIN_VECTOR_STORE, "rb") as f:
+    with open(BASE_DIR / STATIC_BASE / 'doc' / LANGCHAIN_VECTOR_STORE, "rb") as f:
         vectorstore = pickle.load(f)
     LANGCHAIN_VECTORSTORE_RETRIEVER = VectorStoreRetriever(vectorstore=vectorstore, search_type=LANGCHAIN_VECTORSTORE_SEARCHTYPE, search_kwargs=LANGCHAIN_VECTORSTORE_SEARCHKWARGS)
 LANGCHAIN_CHAT_ENABLE = LANGCHAIN_VECTORSTORE_RETRIEVER and LANGCHAIN_CHAT_ENABLE

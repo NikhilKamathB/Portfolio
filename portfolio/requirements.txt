@@ -19,9 +19,13 @@ fabric==2.7.1
 invoke==1.7.3
 unstructured==0.10.14
 pydantic==2.3.0
+opencv-python==4.8.1.78
 # Version free
 psycopg2-binary
 langchain
+torch
+torchvision
+transformers
 huggingface-hub
 openai
 tiktoken
