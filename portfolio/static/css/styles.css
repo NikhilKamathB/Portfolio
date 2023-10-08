@@ -920,7 +920,7 @@ img {
 }
 
 /*========== SDC ==========*/
-.sdc__container, .ocr__container {
+.sdc__container, .ocr__container, .acnn_container {
     text-align: center;
 }
 
@@ -946,6 +946,10 @@ img {
 }
 
 /*================= OCR =================*/
+.ocr-file-default-img {
+    max-width: 150px;
+}
+
 .ocr__result__container__row{
     max-width: 80vw;
 }
