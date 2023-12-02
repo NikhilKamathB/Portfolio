@@ -3,9 +3,16 @@ import copy
 import torch
 import numpy as np
 from PIL import Image
-from django.conf import settings
 from transformers import TrOCRProcessor
 
+
+OCR_IMAGE_RESIZE = (768, 768)
+OCR_CV2_THRESHOLD_LOW = 100
+OCR_CV2_THRESHOLD_HIGH = 255
+OCR_CV2_DILATE_KERNEL_SIZE = (3, 3)
+OCR_CV2_DILATE_ITERATION = 1
+OCR_CV2_DETECTION_BUFFER = 2
+OCR_TEXT_RECOGNITION_PROCESSOR = "microsoft/trocr-base-handwritten"
 
 def resize(image: object, size: tuple = (768, 768)) -> np.ndarray:
     '''
@@ -48,8 +55,8 @@ def get_bbox(image: Image, region_map: np.ndarray) -> tuple:
     '''
     region_map *= 255.0
     region_map = region_map.astype(np.uint8)    
-    _, region_map = cv2.threshold(region_map, settings.OCR_CV2_THRESHOLD_LOW, settings.OCR_CV2_THRESHOLD_HIGH, cv2.THRESH_BINARY)
-    region_map_dilated = cv2.dilate(region_map, np.ones(settings.OCR_CV2_DILATE_KERNEL_SIZE, np.uint8), iterations=settings.OCR_CV2_DILATE_ITERATION)
+    _, region_map = cv2.threshold(region_map, OCR_CV2_THRESHOLD_LOW, OCR_CV2_THRESHOLD_HIGH, cv2.THRESH_BINARY)
+    region_map_dilated = cv2.dilate(region_map, np.ones(OCR_CV2_DILATE_KERNEL_SIZE, np.uint8), iterations=OCR_CV2_DILATE_ITERATION)
     region_map_contours, region_map_hierarchy = cv2.findContours(region_map_dilated, cv2.RETR_TREE, cv2.CHAIN_APPROX_SIMPLE)
     detections = {}
     for idx, contour in enumerate(region_map_contours):
@@ -63,12 +70,12 @@ def get_bbox(image: Image, region_map: np.ndarray) -> tuple:
             x_max = max(x_max, point[0][0])
             y_max = max(y_max, point[0][1])
         detections[f"bbox_{idx+1}"] = { "actual_bbox": (
-                (int(x_min - settings.OCR_CV2_DETECTION_BUFFER), int(y_min - settings.OCR_CV2_DETECTION_BUFFER)),
-                (int(x_max + settings.OCR_CV2_DETECTION_BUFFER), int(y_max + settings.OCR_CV2_DETECTION_BUFFER))
+                (int(x_min - OCR_CV2_DETECTION_BUFFER), int(y_min - OCR_CV2_DETECTION_BUFFER)),
+                (int(x_max + OCR_CV2_DETECTION_BUFFER), int(y_max + OCR_CV2_DETECTION_BUFFER))
             ),
             "normalized_bbox": (
-                (int(x_min - settings.OCR_CV2_DETECTION_BUFFER)/region_map.shape[1], int(y_min - settings.OCR_CV2_DETECTION_BUFFER)/region_map.shape[0]),
-                (int(x_max + settings.OCR_CV2_DETECTION_BUFFER)/region_map.shape[1], int(y_max + settings.OCR_CV2_DETECTION_BUFFER)/region_map.shape[0])
+                (int(x_min - OCR_CV2_DETECTION_BUFFER)/region_map.shape[1], int(y_min - OCR_CV2_DETECTION_BUFFER)/region_map.shape[0]),
+                (int(x_max + OCR_CV2_DETECTION_BUFFER)/region_map.shape[1], int(y_max + OCR_CV2_DETECTION_BUFFER)/region_map.shape[0])
             )
         }
     image_resized = resize(image=image, size=(region_map.shape[0], region_map.shape[1]))
@@ -91,7 +98,7 @@ def text_detect(image: Image, model: object) -> tuple:
     # Get the image in model readable format.
     model.eval()
     og_image = copy.deepcopy(image)
-    image = resize(image=image, size=settings.OCR_IMAGE_RESIZE)
+    image = resize(image=image, size=OCR_IMAGE_RESIZE)
     og_resized_image = copy.deepcopy(image)
     image = normalize_image(image=image)
     image = torch.from_numpy(image) # image shape - h, w, c
@@ -107,7 +114,7 @@ def text_detect(image: Image, model: object) -> tuple:
     res_image = resize(image=image, size=(og_image.size[1], og_image.size[0]))
     return (res_image, detections)
 
-def text_recognize(image: Image, model: object, detections: dict, processor: str = settings.OCR_TEXT_RECOGNITION_PROCESSOR) -> list:
+def text_recognize(image: Image, model: object, detections: dict, processor: str = OCR_TEXT_RECOGNITION_PROCESSOR, max_instances: int = 16) -> list:
     '''
         Process the image.
         Input params:
@@ -137,7 +144,7 @@ def text_recognize(image: Image, model: object, detections: dict, processor: str
         output = output.cpu().detach().numpy()
         output = processor.batch_decode(output, skip_special_tokens=True)[0]
         result.append((x1, y1, x2, y2, output))
-        if idx+1 >= settings.OCR_MAX_RECOGNITIONS:
+        if idx+1 >= max_instances:
             break
     sorted_result = sorted(result, key=lambda x: (x[1], x[0]))
     return sorted_result

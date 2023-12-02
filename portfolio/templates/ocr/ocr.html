@@ -3,7 +3,7 @@
 {% load static %}
 {% load custom_filter %}
 
-{% block title %}SDC{% endblock title %}
+{% block title %}OCR{% endblock title %}
 
 {% block header %}
 {% include 'partials/alt_header.html' %}
@@ -19,70 +19,74 @@
                         Optical Character Recognition
                     </h2>
                     {% if not show_result %}
-                        <div class="ocr-input" id="ocr-input">
-                            <form id="ocr-form" action="{% url 'ocr:process-image' %}" method="POST", enctype="multipart/form-data">
-                                {% csrf_token %}
-                                <div class="row">
-                                    <div class="col" style="border-right: solid 3px;">
-                                        <label for="ocr-file">
-                                            <i class="fa-regular fa-file-image"></i><br>
-                                            <span class="ocr-file-span mt-3" style="font-size: small;">Upload file</span>
-                                        </label>
-                                        <input type="file" id="ocr-file" name="ocr-file" accept="image/*" class="ocr__file mb-2" style="display: none;">
-                                    </div>
-                                    <div class="col" style="margin: auto;">
-                                        <img class="ocr-file-default-img" src="{% static 'img/ocr_sample.png' %}"></img><br>
-                                        <span class="ocr-file-span mt-3" style="font-size: small;">Use sample file</span>
-                                    </div>
+                    <div class="ocr-input" id="ocr-input">
+                        <form id="ocr-form" action="{% url 'ocr:process-image' %}" method="POST" ,
+                            enctype="multipart/form-data">
+                            {% csrf_token %}
+                            <div class="row">
+                                <div class="col" style="border-right: solid 3px;">
+                                    <label for="ocr-file">
+                                        <i class="fa-regular fa-file-image"></i><br>
+                                        <span class="ocr-file-span mt-3" style="font-size: small;">Upload file</span>
+                                    </label>
+                                    <input type="file" id="ocr-file" name="ocr-file" accept="image/*"
+                                        class="ocr__file mb-2" style="display: none;">
                                 </div>
-                                <div class="mt-3" id="ocr-filename"></div>
-                                <p class="mt-3 mb-0">Drop in your image here or use our sample image to perform OCR</p>
-                                <p>You may press the above icon to upload your image or simply hit `process` button</p>
-                                <a class="button button--flex ocr-submit" id="ocr-submit">
-                                    Process
-                                </a>
-                            </form>
-                        </div>
+                                <div class="col" style="margin: auto;">
+                                    <img class="ocr-file-default-img" src="{% static 'img/ocr_sample.png' %}"></img><br>
+                                    <span class="ocr-file-span mt-3" style="font-size: small;">Use sample file</span>
+                                </div>
+                            </div>
+                            <div class="mt-3" id="ocr-filename"></div>
+                            <p class="mt-3 mb-0">Drop in your image here or use our sample image to perform OCR</p>
+                            <p>You may press the above icon to upload your image or simply hit `process` button</p>
+                            <a class="button button--flex ocr-submit" id="ocr-submit">
+                                Process
+                            </a>
+                        </form>
+                    </div>
                     {% else %}
-                        <div class="ocr__result" id="ocr__result">
-                            <div class="container ocr__result__container">
-                                <div class="row ocr__result__container__row">
-                                    <div class="col-sm my-3 ocr__result__container__col">
-                                        <img src="{{ ocr_image }}" alt="ocr_image">
-                                    </div>
-                                    <div class="col-sm my-3 table-responsive ocr__result__container__col ocr__result__container__col__table">
-                                        <table class="table table-hover ocr__result__table">
-                                            <thead>
-                                                <tr>
+                    <div class="ocr__result" id="ocr__result">
+                        <div class="container ocr__result__container">
+                            <div class="row ocr__result__container__row">
+                                <div class="col-sm my-3 ocr__result__container__col">
+                                    <img src="{{ ocr_image }}" alt="ocr_image">
+                                </div>
+                                <div
+                                    class="col-sm my-3 table-responsive ocr__result__container__col ocr__result__container__col__table">
+                                    <table class="table table-hover ocr__result__table">
+                                        <thead>
+                                            <tr>
                                                 <th scope="col"></th>
                                                 <th scope="col">x1</th>
                                                 <th scope="col">y1</th>
                                                 <th scope="col">x2</th>
                                                 <th scope="col">y2</th>
                                                 <th scope="col">text</th>
-                                                </tr>
-                                            </thead>
-                                            <tbody>
-                                                {% for i in recognized_texts %}
-                                                <tr>
-                                                    <th scope="row">{{ forloop.counter }}</th>
-                                                    <td>{{ i.0 }}</td>
-                                                    <td>{{ i.1 }}</td>
-                                                    <td>{{ i.2 }}</td>
-                                                    <td>{{ i.3 }}</td>
-                                                    <td style="text-overflow: ellipsis;"> {{ i.4 }}</td>
-                                                </tr>
-                                                {% endfor %}
-                                            </tbody>
-                                            </table>
-                                    </div>
+                                            </tr>
+                                        </thead>
+                                        <tbody>
+                                            {% for i in recognized_texts %}
+                                            <tr>
+                                                <th scope="row">{{ forloop.counter }}</th>
+                                                <td>{{ i.0 }}</td>
+                                                <td>{{ i.1 }}</td>
+                                                <td>{{ i.2 }}</td>
+                                                <td>{{ i.3 }}</td>
+                                                <td style="text-overflow: ellipsis;"> {{ i.4 }}</td>
+                                            </tr>
+                                            {% endfor %}
+                                        </tbody>
+                                    </table>
                                 </div>
-                                <p class="mt-3">(x1, y1) represents the bottom-left corner of the rectangle contaning the text. (x2, y2) represents the top-right corner.</p>
-                                <a class="button button--flex ocr-reset mt-5" id="ocr-reset" href="{% url 'ocr:ocr' %}">
-                                    Reset
-                                </a>
                             </div>
+                            <p class="mt-3">(x1, y1) represents the bottom-left corner of the rectangle contaning the
+                                text. (x2, y2) represents the top-right corner.</p>
+                            <a class="button button--flex ocr-reset mt-5" id="ocr-reset" href="{% url 'ocr:ocr' %}">
+                                Reset
+                            </a>
                         </div>
+                    </div>
                     {% endif %}
                 </div>
             </div>
@@ -96,13 +100,19 @@
                     About the project
                 </h3>
                 <p class="about__description">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This an end-to-end pipeline designed for the task of optical character recognition. The main objective is to develop an OCR pipeline to emulate the functionality of the Splitwise application and achieve sketch-to-webpage translation. The following are the tasks performed under this project:
-                    <ul style="text-align: left;">
-                        <li>Annotated a diverse range of receipts sourced from online platforms and physical copies to create a tailored dataset for text detection, recognition, and information extraction.</li>
-                        <li>Devised a comprehensive end-to-end module that addresses text detection (utilizing CRAFT), text recognition (using ViTs) and information extraction (leveraging GCNs) tasks.</li>
-                        <li>Established an efficient machine learning workflow management system using the MLFlow platform on kubernetes.</li>
-                    </ul>
-                    <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;This an end-to-end pipeline designed for the task of
+                    optical character recognition. The main objective is to develop an OCR pipeline to emulate the
+                    functionality of the Splitwise application and achieve sketch-to-webpage translation. The following
+                    are the tasks performed under this project:
+                <ul style="text-align: left;">
+                    <li>Annotated a diverse range of receipts sourced from online platforms and physical copies to
+                        create a tailored dataset for text detection, recognition, and information extraction.</li>
+                    <li>Devised a comprehensive end-to-end module that addresses text detection (utilizing CRAFT), text
+                        recognition (using ViTs) and information extraction (leveraging GCNs) tasks.</li>
+                    <li>Established an efficient machine learning workflow management system using the MLFlow platform
+                        on kubernetes.</li>
+                </ul>
+                <br>
                 </p>
                 <div class="about__buttons">
                     <a href="https://github.com/NikhilKamathB/OCR" target="_blank" class="button button--flex">

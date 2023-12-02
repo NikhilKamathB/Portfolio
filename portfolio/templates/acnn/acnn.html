@@ -3,7 +3,7 @@
 {% load static %}
 {% load custom_filter %}
 
-{% block title %}SDC{% endblock title %}
+{% block title %}ACNN{% endblock title %}
 
 {% block header %}
 {% include 'partials/alt_header.html' %}
@@ -30,16 +30,27 @@
                     About the project
                 </h3>
                 <p class="about__description">
-                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Training deep neural networks, such as transformers, deep vision models, etc. from scratch with sufficient data is undeniably expensive in terms of time and resources. However, the necessity of this level of depth can be questioned, especially when aiming to deploy models in real-time applications where low latency is crucial. To make deep networks usable for real-time scenarios, researchers have explored various approaches to reduce the computational burden. This repository aims to propose a hypothetical approach (Konwledge Distillation) that enables modeling shallow neural networks by guided gradient descent to achieve performance similar to that of deep networks for a given task. Note: This is just an experiment.
-                    <ul style="text-align: left;">
-                        <li>To initiate the process, scripts for data generation and the implementation of a neural network from scratch have been developed, adhering to the PyTorch nn framework.</li>
-                        <li>At present, efforts are directed towards the exploration of belief networks and neuron-centric gradient computation. The goal is to discern the most suitable and accurate descent on the error hyperplane by drawing insights from the experience of deep neural networks.</li>
-                    </ul>
-                    <br>
-                    <br>
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;Training deep neural networks, such as transformers,
+                    deep vision models, etc. from scratch with sufficient data is undeniably expensive in terms of time
+                    and resources. However, the necessity of this level of depth can be questioned, especially when
+                    aiming to deploy models in real-time applications where low latency is crucial. To make deep
+                    networks usable for real-time scenarios, researchers have explored various approaches to reduce the
+                    computational burden. This repository aims to propose a hypothetical approach (Konwledge
+                    Distillation) that enables modeling shallow neural networks by guided gradient descent to achieve
+                    performance similar to that of deep networks for a given task. Note: This is just an experiment.
+                <ul style="text-align: left;">
+                    <li>To initiate the process, scripts for data generation and the implementation of a neural network
+                        from scratch have been developed, adhering to the PyTorch nn framework.</li>
+                    <li>At present, efforts are directed towards the exploration of belief networks and neuron-centric
+                        gradient computation. The goal is to discern the most suitable and accurate descent on the error
+                        hyperplane by drawing insights from the experience of deep neural networks.</li>
+                </ul>
+                <br>
+                <br>
                 </p>
                 <div class="about__buttons">
-                    <a href="https://github.com/NikhilKamathB/Actor-Critic-Neural-Network-Modeling" target="_blank" class="button button--flex">
+                    <a href="https://github.com/NikhilKamathB/Actor-Critic-Neural-Network-Modeling" target="_blank"
+                        class="button button--flex">
                         Github
                     </a>
                 </div>

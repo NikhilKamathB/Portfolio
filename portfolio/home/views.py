@@ -18,13 +18,16 @@ def chat(request):
                     return HttpResponse("error: too many tries.", status=status.HTTP_400_BAD_REQUEST)
                 request.session[settings.CHATBOT_SESSION_KEY_TRIES[0]] += 1
                 chat_response = agent.get_qa_agent_with_memory_chain().run(input=request.POST.get("chat-query"))
+                print("chat-response: ", chat_response)
                 return HttpResponse(chat_response, status=status.HTTP_200_OK)
             except ValueError as ve:
                 response = str(ve)
+                print("chat-response: ", response)
                 if str(ve).startswith("Could not parse LLM output: "):
                     return HttpResponse(response[len("Could not parse LLM output: "):], status=status.HTTP_200_OK)
                 return HttpResponse(f"An error occurred: `{ve}`.\nYou may contact Nikhil @ nikhilbolakamath@gmail.com", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-            except Exception as e:
-                return HttpResponse(f"An error occurred: `{e}`.\nYou may contact Nikhil @ nikhilbolakamath@gmail.com", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
+            # except Exception as e:
+            #     print("chat-response: ", e)
+            #     return HttpResponse(f"An error occurred: `{e}`.\nYou may contact Nikhil @ nikhilbolakamath@gmail.com", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
         return HttpResponse("error: agent not found in cache.", status=status.HTTP_404_NOT_FOUND)
     return HttpResponse("error: method not allowed.", status=status.HTTP_405_METHOD_NOT_ALLOWED)

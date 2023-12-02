@@ -10,10 +10,15 @@ For the full list of settings and their values, see
 https://docs.djangoproject.com/en/4.0/ref/settings/
 """
 
+import warnings
+warnings.simplefilter(action='ignore', category=FutureWarning)
+warnings.simplefilter(action='ignore', category=DeprecationWarning)
+
 import os
 import pickle
 from pathlib import Path
 from dotenv import load_dotenv
+from google.cloud import storage
 from langchain.vectorstores.base import VectorStoreRetriever
 
 load_dotenv()
@@ -37,7 +42,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    'django.contrib.sessions',
+    # 'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
@@ -84,12 +89,14 @@ CSRF_TRUSTED_ORIGINS = ['https://*.nikhilkb.com']
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
-DATABASES = {
-    'default': {
-        'ENGINE': 'django.db.backends.sqlite3',
-        'NAME': BASE_DIR / 'db.sqlite3',
-    }
-}
+# Use sqlite3.
+#
+# DATABASES = {
+#     'default': {
+#         'ENGINE': 'django.db.backends.sqlite3',
+#         'NAME': BASE_DIR / 'db.sqlite3',
+#     }
+# }
 
 '''
 To install postgres using docker:
@@ -101,6 +108,8 @@ docker run -d --name postgres -p 5499:5432 \                                    
 postgres:latest
 
 '''
+# Use postgres.
+#
 # DATABASES = {
 #     'default': {
 #         'ENGINE': 'django.db.backends.postgresql_psycopg2',
@@ -159,6 +168,7 @@ if not DEBUG:
     AWS_ACCESS_KEY_ID = os.getenv('AWS_ACCESS_KEY_ID', None)
     AWS_SECRET_ACCESS_KEY = os.getenv('AWS_SECRET_ACCESS_KEY', None)
     AWS_STORAGE_BUCKET_NAME = os.getenv('AWS_STORAGE_BUCKET_NAME', None)
+    GOOGLE_BUCKET_NAME = os.getenv('GOOGLE_BUCKET_NAME', None)
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
@@ -189,10 +199,13 @@ SUMMERNOTE_CONFIG = {
     }
 
 # Django session settings
-CHATBOT_SESSION_KEY = "chatbot_session"
+SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
+SESSION_COOKIE_NAME = CHATBOT_SESSION_KEY = "chatbot_session"
 CHATBOT_SESSION_KEY_TRIES = ["chatbot_session_tries", 10]
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_SAVE_EVERY_REQUEST = True
+SESSION_COOKIE_HTTPONLY = True
+SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_AGE = 60 * 60 * 3 # 3 hours
 
 # Google calendar event body
@@ -215,16 +228,7 @@ EVENT_BODY = {
 }
 
 # OCR
-OCR_TEXT_DETECTION_MODEL_SAVE_PATH = BASE_DIR / STATIC_BASE / 'model' / 'craft_mlt_25k.pth'
-OCR_TEXT_RECOGNITION_MODEL_SAVE_PATH = None
-OCR_TEXT_RECOGNITION_PROCESSOR = "microsoft/trocr-base-handwritten"
-OCR_IMAGE_RESIZE = (768, 768)
-OCR_CV2_THRESHOLD_LOW = 100
-OCR_CV2_THRESHOLD_HIGH = 255
-OCR_CV2_DILATE_KERNEL_SIZE = (3, 3)
-OCR_CV2_DILATE_ITERATION = 1
-OCR_CV2_DETECTION_BUFFER = 2
-OCR_MAX_RECOGNITIONS = 64
+OCR_GCLOUD_RUN_API = "https://ocr-zwqz52dqpa-uw.a.run.app"
 
 # LangChain
 LANGCHAIN_DEFAULT_MESSAGE = "Hmmm, I don't have the answer to this. You may contact Nikhil @ nikhilbolakamath@gmail.com"
