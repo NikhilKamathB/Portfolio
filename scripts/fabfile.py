@@ -1,4 +1,4 @@
-# Fab file to automate django website deployment.
+# Fab file to automate django website deployment on EC2 instance.
 
 import os
 from dotenv import load_dotenv
