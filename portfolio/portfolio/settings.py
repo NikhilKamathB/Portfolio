@@ -51,7 +51,9 @@ INSTALLED_APPS = [
     # apps
     'home.apps.HomeConfig',
     'sdc.apps.SdcConfig',
-    'ocr.apps.OcrConfig'
+    'ocr.apps.OcrConfig',
+    'cm_mt.apps.CmMtConfig',
+    'acnn.apps.AcnnConfig'
 ]
 
 MIDDLEWARE = [
@@ -62,7 +64,9 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'home.middleware.ChatbotMiddleware'
+    'home.middleware.ChatbotMiddleware',
+    'ocr.middleware.OcrMiddleware',
+    'cm_mt.middleware.CmmtMiddleware'
 ]
 
 ROOT_URLCONF = 'portfolio.urls'
@@ -85,7 +89,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'portfolio.wsgi.application'
 
-CSRF_TRUSTED_ORIGINS = ['https://*.nikhilkb.com']
+CSRF_TRUSTED_ORIGINS = ['http://*', 'https://*']
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
@@ -202,6 +206,8 @@ SUMMERNOTE_CONFIG = {
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
 SESSION_COOKIE_NAME = CHATBOT_SESSION_KEY = "chatbot_session"
 CHATBOT_SESSION_KEY_TRIES = ["chatbot_session_tries", 10]
+OCR_SESSION_KEY_TRIES = ["ocr_session_tries", 3]
+CMMT_SESSION_KEY_TRIES = ["cmmt_session_tries", 7]
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_COOKIE_HTTPONLY = True
@@ -227,8 +233,11 @@ EVENT_BODY = {
     ]
 }
 
+# Service APIs
 # OCR
 OCR_GCLOUD_RUN_API = "https://ocr-zwqz52dqpa-uw.a.run.app"
+# CM-MT
+CM_MT_GCLOUD_RUN_API = "https://cmmt-zwqz52dqpa-uw.a.run.app"
 
 # LangChain
 LANGCHAIN_DEFAULT_MESSAGE = "Hmmm, I don't have the answer to this. You may contact Nikhil @ nikhilbolakamath@gmail.com"

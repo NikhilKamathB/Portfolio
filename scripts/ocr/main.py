@@ -1,6 +1,5 @@
 import io
 import os
-import sys
 import logging
 from PIL import Image
 from base64 import b64encode
@@ -11,7 +10,7 @@ from utils import text_detect, text_recognize
 
 
 app = Flask(__name__)
-logging.basicConfig(level=logging.DEBUG, format="%(asctime)s || %(levelname)s || %(message)s")
+logging.basicConfig(level=logging.DEBUG, format="OCR || %(asctime)s || %(levelname)s || %(message)s")
 load_dotenv()
 
 DEFAULT_IMAGE_PATH = "ocr_sample.png"

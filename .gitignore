@@ -8,6 +8,10 @@
 **__model_store__**
 **.json**
 **.pth**
+**.pt**
+**.bin**
+**.safetensors**
+**merges.txt**
 # *.svg*
 # *.png*
 # *.jpeg*

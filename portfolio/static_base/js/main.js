@@ -286,12 +286,45 @@ $('#ocr-submit').click(function (e) {
     e.preventDefault();
     document.getElementById('ocr-form').style.display = 'none';
     $('#ocr-input').append(`
+        <div class="mt-5"></div>
+        <div class="loader my-5">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
         <div class='ocr-processing-message mt-5' id='ocr-processing-message'>
             <p class='mb-0'>Your image is getting processed...</p>
             <p class='mb-0'>This might take some time as the image is getting processed on the server side.</p>
-            <p class='mb-0'>It may take several seconds to few minutes depending on your document.</p>
+            <p class='mb-0'>It may take several seconds to few minutes depending on your document. This is done to reduce the cost.</p>
             <p class='mb-0'>Thanks for your patience.</p>
         </div>
     `)
     document.forms['ocr-form'].submit();
+})
+
+// CM-MT
+$('#cmmt-submit').click(function (e) {
+    e.preventDefault();
+    document.getElementById('cmmt-text').readOnly = true;
+    var submitLink = document.getElementById('cmmt-submit');
+    submitLink.classList.add('cmmt-disabled');
+    var translateBody = document.getElementById('cmmt__result');
+    if (translateBody) {
+        translateBody.remove();
+    }
+    $('#cmmt-display-message').append(`
+        <div class="mt-5"></div>
+        <div class="loader my-5">
+            <div class="dot"></div>
+            <div class="dot"></div>
+            <div class="dot"></div>
+        </div>
+        <div class='cmmt-processing-message mt-5' id='cmmt-processing-message'>
+            <p class='mb-0'>Your text is getting processed...</p>
+            <p class='mb-0'>This might take some time as the text is getting processed on the server side.</p>
+            <p class='mb-0'>It may take several seconds to few minutes. This is done to reduce the cost.</p>
+            <p class='mb-0'>Thanks for your patience.</p>
+        </div>
+    `)
+    document.forms['cmmt-form'].submit();
 })
