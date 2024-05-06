@@ -25,6 +25,7 @@ urlpatterns = [
     path('sdc/', include('sdc.urls')),
     path('cmmt/', include('cm_mt.urls')),
     path('acnn/', include('acnn.urls')),
+    path('simpan/', include('simpan.urls')),
     path('admin/', admin.site.urls),
     path('summernote/', include('django_summernote.urls')),
 ]

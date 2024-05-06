@@ -1114,7 +1114,7 @@ img {
     }
 
     .project__container {
-        grid-template-columns: repeat(4, 1fr);
+        grid-template-columns: repeat(5, 1fr);
         padding-left: 3rem;
         padding-right: 3rem;
     }

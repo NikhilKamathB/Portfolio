@@ -51,7 +51,8 @@ INSTALLED_APPS = [
     'sdc.apps.SdcConfig',
     'ocr.apps.OcrConfig',
     'cm_mt.apps.CmMtConfig',
-    'acnn.apps.AcnnConfig'
+    'acnn.apps.AcnnConfig',
+    'simpan.apps.SimpanConfig',
 ]
 
 MIDDLEWARE = [

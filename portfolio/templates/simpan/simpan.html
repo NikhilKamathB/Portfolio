@@ -1,0 +1,62 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load custom_filter %}
+
+{% block title %}SimPan{% endblock title %}
+
+{% block header %}
+{% include 'partials/alt_header.html' %}
+{% endblock header %}
+
+{% block body %}
+<div class="container-flex main__div">
+    <section class="home section pb-0" id="simpan-home">
+        <div class="home__container simpan__container container grid">
+            <div class="home__content grid pt-0">
+                <div class="home__data">
+                    <h2 class="home__title">
+                        SimPan
+                    </h2>
+                    <div>
+                        <img src="{% static 'img/simpan-main.png'%}" alt="SimPan" class="simpan__image">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="about section pt-0" id="simpan-about">
+        <span class="section__subtitle"></span>
+        <div class="about__container simpan__container container">
+            <div class="about__data simpan__title">
+                <h3 class="mb-4">
+                    About the project
+                </h3>
+                <p class="about__description">
+                    &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;SimPan is a cutting-edge no-code platform designed to transform how users build and manage end-to-end pipelines,
+                    including machine learning workflows, task orchestration, and comprehensive services. By eliminating the need for
+                    traditional coding, SimPan provides a highly intuitive user interface that allows even non-technical users to create
+                    complex systems easily. This innovative tool abstracts underlying coding complexities, significantly speeding up the
+                    development cycle and making it more efficient and accessible to a broader audience. SimPan is ideal for professionals
+                    looking to streamline their operations and enhance productivity without delving into the intricacies of code. Keep an
+                    eye out for further updates as SimPan continues to evolve and expand its capabilities.
+                </p>
+                <div class="about__buttons">
+                    <a href="https://github.com/NikhilKamathB/SimPan" target="_blank" class="button button--flex">
+                        Github
+                    </a>
+                </div>
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- scroll top  -->
+{% include 'partials/scrollup.html' %}
+<!-- end scroll top -->
+
+{% endblock body %}
+
+{% block footer %}
+{% include 'partials/footer.html' %}
+{% endblock footer %}
