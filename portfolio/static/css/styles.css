@@ -775,6 +775,7 @@ img {
 
 /*========== SDC ==========*/
 .sdc__container,
+.simpan__container,
 .ocr__container,
 .acnn_container,
 .cmmt__container {
@@ -800,6 +801,12 @@ img {
     cursor: pointer;
     transition: .3s;
     scale: 1.025;
+}
+
+/*================= SIMPAN =================*/
+.simpan__image {
+    width: 50%;
+    height: auto;
 }
 
 /*================= OCR =================*/
@@ -1114,7 +1121,7 @@ img {
     }
 
     .project__container {
-        grid-template-columns: repeat(5, 1fr);
+        grid-template-columns: repeat(3, 1fr);
         padding-left: 3rem;
         padding-right: 3rem;
     }
