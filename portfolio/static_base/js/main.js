@@ -142,16 +142,20 @@ themeButton.addEventListener('click', () => {
     localStorage.setItem('selected-icon', getCurrentIcon())
 })
 
-// OCR
+/*========================= OCR =========================*/
 $('#ocr-submit').click(function (e) {
     e.preventDefault();
     document.getElementById('ocr-form').style.display = 'none';
     $('#ocr-input').append(`
         <div class="mt-5"></div>
-        <div class="loader my-5">
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
+        <div class="spinner-grow spinner-laoder" role="status">
+            <span></span>
+        </div>
+        <div class="spinner-grow spinner-laoder" role="status">
+            <span></span>
+        </div>
+        <div class="spinner-grow spinner-laoder" role="status">
+            <span></span>
         </div>
         <div class='ocr-processing-message mt-5' id='ocr-processing-message'>
             <p class='mb-0'>Your image is getting processed...</p>
@@ -163,7 +167,7 @@ $('#ocr-submit').click(function (e) {
     document.forms['ocr-form'].submit();
 })
 
-// CM-MT
+/*======================= CM-MT =======================*/
 $('#cmmt-submit').click(function (e) {
     e.preventDefault();
     document.getElementById('cmmt-text').readOnly = true;
@@ -175,10 +179,14 @@ $('#cmmt-submit').click(function (e) {
     }
     $('#cmmt-display-message').append(`
         <div class="mt-5"></div>
-        <div class="loader my-5">
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
+        <div class="spinner-grow spinner-laoder" role="status">
+            <span></span>
+        </div>
+        <div class="spinner-grow spinner-laoder" role="status">
+            <span></span>
+        </div>
+        <div class="spinner-grow spinner-laoder" role="status">
+            <span></span>
         </div>
         <div class='cmmt-processing-message mt-5' id='cmmt-processing-message'>
             <p class='mb-0'>Your text is getting processed...</p>
@@ -189,3 +197,137 @@ $('#cmmt-submit').click(function (e) {
     `)
     document.forms['cmmt-form'].submit();
 })
+
+/*==================== CHATBOT ====================*/
+// Chat scroll to bottom
+$('#chatbot-up').click(function (e) {
+    e.preventDefault();
+    setTimeout(function () {
+        $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "fast");
+    }, 500);
+});
+
+// Chat submit
+$('#chatbot-submit').click(function (e) {
+    chatSubmit(e);
+})
+
+// Chat enter submit
+$('#chatbot-text').keypress(function (e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+        chatSubmit(e);
+    }
+})
+
+function chatSubmit(e) {
+    e.preventDefault();
+    const csrftoken = getCookie('csrftoken');
+    var message = $('#chatbot-text').val();
+    if (message.trim() == '') {
+        return false;
+    }
+    $('#chatbot-text').val('');
+    $('#chatbot-text').prop('disabled', true);
+    $('#chatbot-body').append(generateChatbotBody(message.replace(/\n/g, "<br>")));
+    $('#chatbot-body').append(generateChatbotBodyLoader());
+    $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
+    $.ajax({
+        type: "POST",
+        url: window.location.origin + "/chat/",
+        headers: { 'X-CSRFToken': csrftoken },
+        data: {
+            "chat-query": message
+        },
+        success: function (data) {
+            setTimeout(function () {
+                $('.text-loader').remove();
+                $('#chatbot-body').append(generateChatbotBody(data.replace(/\n/g, "<br>"), type = "bot"));
+                $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
+                $('#chatbot-text').prop('disabled', false);
+                $('#chatbot-text').focus();
+            }, 1000);
+        },
+        error: function (data) {
+            if (data.status == 400) {
+                console.log(data.message);
+                setTimeout(function () {
+                    $('.text-loader').remove();
+                    $('#chatbot-body').append(generateChatbotBody("Bad request! You may be getting this message because you might have tried too many times! Every time you text/chat I am getting billed. Sorry for the inconvenience. You may contact me @ nikhilbo@kamath.work or via LinkedIn. Would really appreciate it! ", type = "bot"));
+                    $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
+                    $('#chatbot-text').focus();
+                }, 1000);
+            }
+            else {
+                setTimeout(function () {
+                    $('.text-loader').remove();
+                    $('#chatbot-body').append(generateChatbotBody("An internal server error occurred! Sorry for this. You may contact me @ nikhilbo@kamath.work if you need more help or get to know him.", type = "bot"));
+                    $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
+                    $('#chatbot-text').prop('disabled', false);
+                    $('#chatbot-text').focus();
+                }, 1000);
+            }
+        }
+    })
+
+    function generateChatbotBodyLoader(type = "bot") {
+        const icon = '<i class="fa-solid fa-robot chatbot-profile-bot"></i>';
+        var chatbotBodyLoader = `
+        <div class="chatbot-body-text-${type} text-loader" id="section">
+            <div>
+                ${icon}
+                <div class="chatbot-body-text">
+                    <div class="chatbot-body-text-loader">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `
+        return chatbotBodyLoader;
+    }
+
+    function generateChatbotBody(message, type = 'user') {
+        const icon = type == 'user' ? '<i class="fa-solid fa-user chatbot-profile-user"></i>' : '<i class="fa-solid fa-robot chatbot-profile-bot"></i>';
+        var chatbotBody = type == 'user' ? `
+            <div class="chatbot-body-text-${type}" id="section">
+                <div>
+                    <div class="chatbot-body-text">
+                        <p class="chatbot-body-text-p">${message}</p>
+                    </div>
+                    ${icon}
+                <div>
+            </div>
+        ` :
+            `
+            <div class="chatbot-body-text-${type}" id="section">
+                <div>
+                    ${icon}
+                    <div class="chatbot-body-text">
+                        <p class="chatbot-body-text-p">${message}</p>
+                    </div>
+                </div>
+            </div>
+        `
+        return chatbotBody;
+    }
+}
+
+/*==================== UTILITIES ====================*/
+// Get CSRF token
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}

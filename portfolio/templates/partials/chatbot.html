@@ -1,0 +1,48 @@
+<div>
+    <a class="chatbotup" id="chatbot-up" type="button" data-bs-toggle="modal" data-bs-target="#chatbotModal">
+        <div id="chat-overlay"></div>
+        <i class="uil uil-hipchat chatbotup__icon"></i>
+    </a>
+</div>
+
+<!-- Modal -->
+<div class="modal fade" id="chatbotModal" tabindex="-1" aria-labelledby="chatbotModalLabel" aria-hidden="true">
+    <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable">
+        <div class="modal-content" id="chatbotModalLabelContent">
+            <div class="modal-header" id="chatbotModalLabelHeader">
+                <h5 class="modal-title" id="chatbotModalLabel">
+                    <i class="fa-brands fa-earlybirds"></i>
+                    &nbsp;&nbsp;&nbsp;Harpy
+                </h5>
+                <a type="button" id="chatbotModalClose" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </a>
+            </div>
+            <div class="modal-body" id="chatbotModalBody">
+                <div class="chatbot-body" id="chatbot-body"></div>
+            </div>
+            <div class="modal-footer" id="chatbotModalLabelFooter">
+                <div class="chotbot-form">
+                    <form>
+                        {% csrf_token %}
+                        <div class="form-group">
+                            <div class="input-group">
+                                <textarea wrap="off" class="form-control" id="chatbot-text" oninput="auto_grow(this)"
+                                    placeholder="Your message..."></textarea>
+                                <span class="input-group-addon" id="fa-plane-send-span">
+                                    <a class="send-button chatbot-submit" type="submit" id="chatbot-submit"><i
+                                            class="fa-solid fa-paper-plane" id="fa-plane-send"></i></a>
+                                </span>
+                            </div>
+                        </div>
+                    </form>
+                </div>
+                <div class="chatbot-disclaimer">
+                    <p class="chat-disclaimer" style="font-size: 10px;">This chat is generated using LLMs. It is in beta
+                        version, for more accurate information please download the resume from the 'about me' section
+                    </p>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
