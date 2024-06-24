@@ -15,7 +15,6 @@ warnings.simplefilter(action='ignore', category=FutureWarning)
 warnings.simplefilter(action='ignore', category=DeprecationWarning)
 
 import os
-import pickle
 from pathlib import Path
 from dotenv import load_dotenv
 
