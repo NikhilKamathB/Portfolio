@@ -792,6 +792,11 @@ img {
     color: #fff;
 }
 
+.chatbot-hello-img {
+    width: 1.25rem;
+    height: 1.25rem;
+}
+
 #chatbotModalLabelContent {
     margin: 1rem;
     height: 75%;
@@ -849,24 +854,28 @@ img {
 }
 
 .chatbot-body-text-user {
-    text-align-last: right;
+    text-align: right;
 }
 
 .chatbot-body-text-bot {
-    text-align-last: left;
+    text-align: left;
 }
 
 .chatbot-body-text {
     display: inline-flex;
+    text-align: left;
+    max-width: 90%;
     background-color: var(--body-color);
-    margin-top: 2rem;
+    margin-top: 1rem;
     border-radius: 1rem;
 }
 
-.chatbot-body-text-p {
+.chatbot-body-text-p-bot, .chatbot-body-text-p-user {
     font-size: 12px;
     padding: 0.75rem 0.5rem;
     margin: 0.25rem;
+    word-wrap: break-word;
+    overflow-wrap: break-word;
 }
 
 .chatbot-body-text-loader {

@@ -199,9 +199,68 @@ $('#cmmt-submit').click(function (e) {
 })
 
 /*==================== CHATBOT ====================*/
+// Text area auto grow
+function auto_grow(element) {
+    element.style.height = "5px";
+    element.style.height = (element.scrollHeight) + "px";
+}
+
+// Chatbot modal helper
+function generateChatbotBodyLoader(type = "bot") {
+    const icon = '<i class="fa-solid fa-robot chatbot-profile-bot"></i>';
+    var chatbotBodyLoader = `
+        <div class="chatbot-body-text-${type} text-loader" id="section">
+            <div>
+                ${icon}
+                <div class="chatbot-body-text">
+                    <div class="chatbot-body-text-loader">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `
+    return chatbotBodyLoader;
+}
+
+// Chatbot modal helper
+function generateChatbotBody(message, type = 'user') {
+    const icon = type == 'user' ? '<i class="fa-solid fa-user chatbot-profile-user"></i>' : '<i class="fa-solid fa-robot chatbot-profile-bot"></i>';
+    var chatbotBody = type == 'user' ? `
+            <div class="chatbot-body-text-${type}" id="section">
+                <div class="chatbot-body-text">
+                    <p class="chatbot-body-text-p-${type}">${message}</p>
+                </div>
+                ${icon}
+            </div>
+        ` :
+        `
+            <div class="chatbot-body-text-${type}" id="section">
+                ${icon}
+                <div class="chatbot-body-text">
+                    <p class="chatbot-body-text-p-${type}">${message}</p>
+                </div>
+            </div>
+        `
+    return chatbotBody;
+}
+
 // Chat scroll to bottom
 $('#chatbot-up').click(function (e) {
     e.preventDefault();
+    if ($('#chatbot-body').children().length == 0) {
+        $('#chatbot-body').append(generateChatbotBodyLoader());
+        setTimeout(function () {
+            $('.text-loader').remove();
+            $('#chatbot-body').append(generateChatbotBody(
+                "Hi! <img src='https://user-images.githubusercontent.com/18350557/176309783-0785949b-9127-417c-8b55-ab5a4333674e.gif' class='chatbot-hello-img'></img> I am Harpy. What do you want to know about Nikhil? You can ask me anything about him! He is am amazing guy you know...😊",
+                type = "bot"));
+            $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
+            $('#chatbot-text').focus();
+        }, 1000);
+    }
     setTimeout(function () {
         $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "fast");
     }, 500);
@@ -249,7 +308,6 @@ function chatSubmit(e) {
         },
         error: function (data) {
             if (data.status == 400) {
-                console.log(data.message);
                 setTimeout(function () {
                     $('.text-loader').remove();
                     $('#chatbot-body').append(generateChatbotBody("Bad request! You may be getting this message because you might have tried too many times! Every time you text/chat I am getting billed. Sorry for the inconvenience. You may contact me @ nikhilbo@kamath.work or via LinkedIn. Would really appreciate it! ", type = "bot"));
@@ -268,50 +326,6 @@ function chatSubmit(e) {
             }
         }
     })
-
-    function generateChatbotBodyLoader(type = "bot") {
-        const icon = '<i class="fa-solid fa-robot chatbot-profile-bot"></i>';
-        var chatbotBodyLoader = `
-        <div class="chatbot-body-text-${type} text-loader" id="section">
-            <div>
-                ${icon}
-                <div class="chatbot-body-text">
-                    <div class="chatbot-body-text-loader">
-                        <span></span>
-                        <span></span>
-                        <span></span>
-                    </div>
-                </div>
-            </div>
-        </div>
-        `
-        return chatbotBodyLoader;
-    }
-
-    function generateChatbotBody(message, type = 'user') {
-        const icon = type == 'user' ? '<i class="fa-solid fa-user chatbot-profile-user"></i>' : '<i class="fa-solid fa-robot chatbot-profile-bot"></i>';
-        var chatbotBody = type == 'user' ? `
-            <div class="chatbot-body-text-${type}" id="section">
-                <div>
-                    <div class="chatbot-body-text">
-                        <p class="chatbot-body-text-p">${message}</p>
-                    </div>
-                    ${icon}
-                <div>
-            </div>
-        ` :
-            `
-            <div class="chatbot-body-text-${type}" id="section">
-                <div>
-                    ${icon}
-                    <div class="chatbot-body-text">
-                        <p class="chatbot-body-text-p">${message}</p>
-                    </div>
-                </div>
-            </div>
-        `
-        return chatbotBody;
-    }
 }
 
 /*==================== UTILITIES ====================*/
