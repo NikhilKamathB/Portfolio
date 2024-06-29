@@ -7,5 +7,11 @@ django-cors-headers>=4.4.0
 djangorestframework>=3.15.2
 python-dotenv>=1.0.1
 Pillow>=10.3.0
+langchain>=0.2.6
+langchain-community>=0.2.6
+langchain-chroma>=0.1.1
+langchain-openai>=0.1.12
+unstructured>=0.14.9
+psutil>=6.0.0
 # Version free
 psycopg2-binary
