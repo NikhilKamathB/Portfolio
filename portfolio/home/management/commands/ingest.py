@@ -1,19 +1,12 @@
 import os
 import shutil
-from enum import Enum
 from typing import Any, List
+from django.conf import settings
 from langchain_chroma import Chroma
-from langchain_openai import OpenAIEmbeddings
 from langchain_community.document_loaders import DirectoryLoader
 from langchain.text_splitter import RecursiveCharacterTextSplitter
 from django.core.management.base import BaseCommand, CommandError, CommandParser
-
-
-class EmbeddingType(Enum):
-
-    TEXT_EMBEDDING_3_SMALL = "text-embedding-3-small"
-    TEXT_EMBEDDING_3_LARGE = "text-embedding-3-large"
-    TEXT_EMBEDDING_ADA_002 = "text-embedding-ada-002"
+from home.management.commands.utils import get_embedding_function, EmbeddingType
 
 
 class Command(BaseCommand):
@@ -23,10 +16,10 @@ class Command(BaseCommand):
     in_data_glob: str = "*.txt"
 
     def add_arguments(self, parser: CommandParser) -> None:
-        parser.add_argument("-i", "--input_directory", default="./static_base/data", type=str, help="Directory containing data to ingest.")
-        parser.add_argument("-o", "--output_directory", default="./static_base/chroma_db", type=str, help="Directory to output data to.")
-        parser.add_argument("-c", "--chunk_size", default=4000, type=int, help="Text splitter chunk size.")
-        parser.add_argument("-co", "--overlap", default=200, type=int, help="Text splitter overlap.")
+        parser.add_argument("-i", "--input_directory", default=settings.RAW_DATA_PATH, type=str, help="Directory containing data to ingest.")
+        parser.add_argument("-o", "--output_directory", default=settings.CHORMA_DB_PATH, type=str, help="Directory to output data to.")
+        parser.add_argument("-c", "--chunk_size", default=settings.CHUNK_SIZE, type=int, help="Text splitter chunk size.")
+        parser.add_argument("-co", "--overlap", default=settings.CHUNK_OVERLAP, type=int, help="Text splitter overlap.")
         parser.add_argument("-e", "--embedding_type", default=EmbeddingType.TEXT_EMBEDDING_3_LARGE.value, type=str, help="Embedding type to use - Options: text-embedding-3-small, text-embedding-3-large, text-embedding-ada-002")
 
     def handle(self, *args: Any, **options: Any) -> str | None:
@@ -42,18 +35,11 @@ class Command(BaseCommand):
             text_splitter = RecursiveCharacterTextSplitter(
                 chunk_size=options["chunk_size"], chunk_overlap=options["overlap"], separators=self.separator)
             documents = text_splitter.split_documents(data)
-            # Load embeddings
-            if options["embedding_type"] == EmbeddingType.TEXT_EMBEDDING_3_SMALL.value:
-                embeddings = OpenAIEmbeddings(model="text-embedding-3-small")
-            elif options["embedding_type"] == EmbeddingType.TEXT_EMBEDDING_3_LARGE.value:
-                embeddings = OpenAIEmbeddings(model="text-embedding-3-large")
-            elif options["embedding_type"] == EmbeddingType.TEXT_EMBEDDING_ADA_002.value:
-                embeddings = OpenAIEmbeddings(model="text-embedding-ada-002")
-            else:
-                raise NotImplementedError(f"Embedding type {options['embedding_type']} not implemented.")
-            embeddings = OpenAIEmbeddings(model=options["embedding_type"])
+            # Load embedding function
+            embedding_function = get_embedding_function(options["embedding_type"])
             # Ingest data
-            _ = Chroma.from_documents(documents=documents, embedding=embeddings, persist_directory=options["output_directory"])
+            _ = Chroma.from_documents(
+                documents=documents, embedding=embedding_function, persist_directory=options["output_directory"])
             print("Data ingested...")
         except Exception as e:
             raise CommandError(f"An error occurred: `{e}`")

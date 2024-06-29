@@ -201,6 +201,13 @@ SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_AGE = 60 * 60 * 3 # 3 hours
 
+# Langchain settings
+RAW_DATA_PATH = os.getenv("RAW_DATA_PATH", "./static_base/data")
+CHORMA_DB_PATH = os.getenv("CHROMA_DB_PATH", "./static_base/chroma_db")
+CHUNK_SIZE = 4000
+CHUNK_OVERLAP = 200
+TOP_K = 5
+
 # Service APIs
 # OCR
 OCR_GCLOUD_RUN_API = "https://ocr-zwqz52dqpa-uw.a.run.app"
