@@ -17,6 +17,8 @@ warnings.simplefilter(action='ignore', category=DeprecationWarning)
 import os
 from pathlib import Path
 from dotenv import load_dotenv
+from langchain_chroma import Chroma
+from langchain_openai import OpenAIEmbeddings
 
 load_dotenv()
 
@@ -201,15 +203,36 @@ SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_AGE = 60 * 60 * 3 # 3 hours
 
-# Langchain settings
-RAW_DATA_PATH = os.getenv("RAW_DATA_PATH", "./static_base/data")
-CHORMA_DB_PATH = os.getenv("CHROMA_DB_PATH", "./static_base/chroma_db")
-CHUNK_SIZE = 4000
-CHUNK_OVERLAP = 200
-TOP_K = 5
-
 # Service APIs
 # OCR
 OCR_GCLOUD_RUN_API = "https://ocr-zwqz52dqpa-uw.a.run.app"
 # CM-MT
 CM_MT_GCLOUD_RUN_API = "https://cmmt-zwqz52dqpa-uw.a.run.app"
+
+# Langchain settings
+LANGCHAIN_MODE = os.getenv("LANGCHAIN_MODE", "exec") # two mode - build and exec | use `build` when ingesting data into vector store
+RAW_DATA_PATH = os.getenv("RAW_DATA_PATH", "./static_base/data")
+CHORMA_DB_PATH = os.getenv("CHROMA_DB_PATH", "./static_base/chroma_db")
+TOP_K = os.getenv("TOP_K", 4)
+FETCH_K = os.getenv("FETCH_K", 20)
+LAMBDA_MULTIPLIER = os.getenv("LAMBDA_MULTIPLIER", 0.5)
+CHUNK_SIZE = os.getenv("CHUNK_SIZE", 4000)
+CHUNK_OVERLAP = os.getenv("CHUNK_OVERLAP", 1000)
+EMBEDDING_TYPE = os.getenv("EMBEDDING_TYPE", "text-embedding-3-large")
+SEARCH_TYPE = os.getenv("SEARCH_TYPE", "similarity")
+
+# Langchain RAG settings
+if LANGCHAIN_MODE != "build":
+    # Embedding function
+    EMBEDDING_FUNCTION = OpenAIEmbeddings(model=EMBEDDING_TYPE)
+    # Chroma DB
+    CHROMA_DB = Chroma(persist_directory=CHORMA_DB_PATH, embedding_function=EMBEDDING_FUNCTION)
+    # Search kwargs
+    __search_kwargs_chroma__ = {
+        "k": TOP_K,
+    }
+    if SEARCH_TYPE == "mmr":
+        __search_kwargs_chroma__["fetch_k"] = FETCH_K
+        __search_kwargs_chroma__["lambda_multiplier"] = LAMBDA_MULTIPLIER
+    # Retriever
+    RETRIEVER = CHROMA_DB.as_retriever(search_type=SEARCH_TYPE, search_kwargs=__search_kwargs_chroma__)
