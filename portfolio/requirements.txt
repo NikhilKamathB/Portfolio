@@ -11,6 +11,7 @@ langchain>=0.2.6
 langchain-community>=0.2.6
 langchain-chroma>=0.1.1
 langchain-openai>=0.1.12
+langchainhub>=0.1.20
 unstructured>=0.14.9
 psutil>=6.0.0
 # Version free

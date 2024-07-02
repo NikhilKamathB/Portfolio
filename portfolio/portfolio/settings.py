@@ -16,9 +16,13 @@ warnings.simplefilter(action='ignore', category=DeprecationWarning)
 
 import os
 from pathlib import Path
+from langchain import hub
 from dotenv import load_dotenv
 from langchain_chroma import Chroma
+from langchain_openai import ChatOpenAI
 from langchain_openai import OpenAIEmbeddings
+from langchain_core.runnables import RunnablePassthrough
+from langchain_core.output_parsers import StrOutputParser
 
 load_dotenv()
 
@@ -220,19 +224,54 @@ CHUNK_SIZE = os.getenv("CHUNK_SIZE", 4000)
 CHUNK_OVERLAP = os.getenv("CHUNK_OVERLAP", 1000)
 EMBEDDING_TYPE = os.getenv("EMBEDDING_TYPE", "text-embedding-3-large")
 SEARCH_TYPE = os.getenv("SEARCH_TYPE", "similarity")
+DOCUMENT_SEPARATOR = os.getenv("DOCUMENT_SEPARATOR", "\n\n")
+LLM_MODEL_NAME = os.getenv("LLM_MODEL_NAME", "gpt-3.5-turbo")
+LLM_TEMPERATURE = os.getenv("LLM_TEMPERATURE", 1)
+LLM_MAX_TOKEN_LENGTH = os.getenv("LLM_MAX_LENGTH", None)
+LLM_TOP_P = os.getenv("LLM_TOP_P", 1)
+LLM_PRESENCE_PENALTY = os.getenv("LLM_PRESENCE_PENALTY", 0)
+LLM_FREQUENCY_PENALTY = os.getenv("LLM_FREQUENCY_PENALTY", 0)
 
 # Langchain RAG settings
+CHAIN = None
 if LANGCHAIN_MODE != "build":
     # Embedding function
-    EMBEDDING_FUNCTION = OpenAIEmbeddings(model=EMBEDDING_TYPE)
+    _EMBEDDING_FUNCTION = OpenAIEmbeddings(model=EMBEDDING_TYPE)
     # Chroma DB
-    CHROMA_DB = Chroma(persist_directory=CHORMA_DB_PATH, embedding_function=EMBEDDING_FUNCTION)
+    _CHROMA_DB = Chroma(persist_directory=CHORMA_DB_PATH,
+                        embedding_function=_EMBEDDING_FUNCTION)
     # Search kwargs
     __search_kwargs_chroma__ = {
-        "k": TOP_K,
+        "k": int(TOP_K),
     }
     if SEARCH_TYPE == "mmr":
-        __search_kwargs_chroma__["fetch_k"] = FETCH_K
-        __search_kwargs_chroma__["lambda_multiplier"] = LAMBDA_MULTIPLIER
+        __search_kwargs_chroma__["fetch_k"] = int(FETCH_K)
+        __search_kwargs_chroma__[
+            "lambda_multiplier"] = LAMBDA_MULTIPLIER
     # Retriever
-    RETRIEVER = CHROMA_DB.as_retriever(search_type=SEARCH_TYPE, search_kwargs=__search_kwargs_chroma__)
+    _RETRIEVER = _CHROMA_DB.as_retriever(
+        search_type=SEARCH_TYPE, search_kwargs=__search_kwargs_chroma__)
+    # Prompt
+    _PROMPT = hub.pull("portfolio-rag-prompt")
+    # LLM
+    __model_kwargs__ = {
+        "top_p": LLM_TOP_P,
+        "frequency_penalty": LLM_FREQUENCY_PENALTY,
+        "presence_penalty": LLM_PRESENCE_PENALTY,
+    }
+    _LLM = ChatOpenAI(
+        model=LLM_MODEL_NAME,
+        temperature=LLM_TEMPERATURE,
+        max_tokens=LLM_MAX_TOKEN_LENGTH,
+        model_kwargs=__model_kwargs__
+    )
+    # Chain
+    CHAIN = (
+        {
+            "context": _RETRIEVER | (lambda docs: "\n\n".join(doc.page_content for doc in docs)),
+            "question": RunnablePassthrough()
+        }
+        | _PROMPT
+        | _LLM
+        | StrOutputParser()
+    )

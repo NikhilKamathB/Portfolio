@@ -308,9 +308,10 @@ function chatSubmit(e) {
         },
         error: function (data) {
             if (data.status == 400) {
+                console.log(data);
                 setTimeout(function () {
                     $('.text-loader').remove();
-                    $('#chatbot-body').append(generateChatbotBody("Bad request! You may be getting this message because you might have tried too many times! Every time you text/chat I am getting billed. Sorry for the inconvenience. You may contact me @ nikhilbo@kamath.work or via LinkedIn. Would really appreciate it! ", type = "bot"));
+                    $('#chatbot-body').append(generateChatbotBody(`<i>${data.responseText.replace(/\n/g, "<br>")}</i>`, type = "bot"));
                     $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
                     $('#chatbot-text').focus();
                 }, 1000);
@@ -318,7 +319,7 @@ function chatSubmit(e) {
             else {
                 setTimeout(function () {
                     $('.text-loader').remove();
-                    $('#chatbot-body').append(generateChatbotBody("An internal server error occurred! Sorry for this. You may contact me @ nikhilbo@kamath.work if you need more help or get to know him.", type = "bot"));
+                    $('#chatbot-body').append(generateChatbotBody(`<i>${data.responseText.replace(/\n/g, "<br>")}</i>`, type = "bot"));
                     $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
                     $('#chatbot-text').prop('disabled', false);
                     $('#chatbot-text').focus();
