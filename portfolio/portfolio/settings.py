@@ -143,7 +143,7 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'portfolio.wsgi.application'
 
-CSRF_TRUSTED_ORIGINS = ['http://*', 'https://*']
+CSRF_TRUSTED_ORIGINS = ["https://personal-project-381802.wl.r.appspot.com", "https://kamath.work"]
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases

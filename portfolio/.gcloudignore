@@ -21,5 +21,7 @@ __pycache__/
 venv/
 # models
 .pth
+# static files
+*/static_base/*
 # Secrets
 *.env*

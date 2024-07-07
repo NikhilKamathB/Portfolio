@@ -254,14 +254,14 @@ function generateChatbotBody(message, type = 'user') {
 }
 
 // Chat scroll to bottom
-$('#chatbot-up').click(function (e) {
+$('[id="chatbot-up"]').click(function (e) {
     e.preventDefault();
     if ($('#chatbot-body').children().length == 0) {
         $('#chatbot-body').append(generateChatbotBodyLoader());
         setTimeout(function () {
             $('.text-loader').remove();
             $('#chatbot-body').append(generateChatbotBody(
-                "Hi! <img src='https://user-images.githubusercontent.com/18350557/176309783-0785949b-9127-417c-8b55-ab5a4333674e.gif' class='chatbot-hello-img'></img> I am Harpy. What do you want to know about Nikhil? You can ask me anything about him! He is am amazing guy you know...😊",
+                "Hi! <img src='https://user-images.githubusercontent.com/18350557/176309783-0785949b-9127-417c-8b55-ab5a4333674e.gif' class='chatbot-hello-img'></img> I am Harpy. What do you want to know about Nikhil? You can ask me anything about him! He is an amazing guy you know...😊",
                 type = "bot"));
             $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
             $('#chatbot-text').focus();
