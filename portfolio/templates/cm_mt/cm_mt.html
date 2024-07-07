@@ -27,11 +27,14 @@
                                         placeholder="Type your hinglish text here..." />
                                 </div>
                             </div>
-                            {% if not show_result %}
                             <p class="mt-3 mb-0" id="cmmt-p">
-                                Enter text in Hinglish, expected result might not be 100% correct :-).
+                                Enter text in Hinglish, expected result might not be 100% correct :-). <br><br>
+                                You may select an example from below by simply selecting the text <br> and hitting the submit button:<br><br>
+                                <li class="cmmt-example" id="cmmt-example">miami se west palm tak kitni der lagegi</li>
+                                <li class="cmmt-example" id="cmmt-example">me tumse pyaar kartha hu</li>
+                                <li class="cmmt-example" id="cmmt-example">har ghante ke liye alarm set kare</li>
+                                <li class="cmmt-example" id="cmmt-example">alarm ko abhi stop kare</li>
                             </p>
-                            {% endif %}
                             <div id="cmmt-display-message"></div>
                             {% if show_result %}
                             <div class="cmmt__result mt-5" id="cmmt__result">
@@ -70,7 +73,7 @@
                     concept,
                     potentially paving the way for enhanced mixed language translation in various applications. The
                     following
-                    are the tasks performed under this project:
+                    are the tasks performed under this project (still under development and tested on a subset of data):
                 <ul style="text-align: left;">
                     <li>Curated dataset for this task. Currently, I am working on adding other languages to our bucket
                         as well.</li>

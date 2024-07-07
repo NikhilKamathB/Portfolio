@@ -353,9 +353,13 @@ img {
     margin-bottom: var(--mb-0-75);
 }
 
-.home__description {
+.home__description, .home__buttons {
     text-align: center;
     margin-bottom: 0.15rem;
+}
+
+.home__buttons {
+    margin-top: .5rem;
 }
 
 /*==================== BUTTONS ====================*/
@@ -676,7 +680,6 @@ img {
     margin-right: var(--mb-2-5);
 }
 
-/*========== SDC ==========*/
 .sdc__container,
 .simpan__container,
 .ocr__container,
@@ -685,6 +688,14 @@ img {
     text-align: center;
 }
 
+.ocr-submit:hover,
+.cmmt-submit:hover,
+.home__buttons:hover,
+.cmmt-example:hover {
+    cursor: pointer;
+}
+
+/*========== SDC ==========*/
 .sdc__video {
     width: 75%;
     height: auto;
@@ -762,6 +773,10 @@ img {
     border: solid 3px;
     padding: 2rem;
     border-radius: 0.75rem;
+}
+
+.cmmt-example:hover {
+    font-weight: bold;
 }
 
 .cmmt-disabled {

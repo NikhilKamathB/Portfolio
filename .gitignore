@@ -12,6 +12,7 @@
 **.bin**
 **.safetensors**
 **merges.txt**
+**/static/**
 # *.svg*
 # *.png*
 # *.jpeg*

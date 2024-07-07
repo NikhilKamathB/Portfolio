@@ -168,6 +168,12 @@ $('#ocr-submit').click(function (e) {
 })
 
 /*======================= CM-MT =======================*/
+document.querySelectorAll('.cmmt-example').forEach(item => {
+    item.addEventListener('click', event => {
+        document.getElementById('cmmt-text').value = event.target.innerText;
+    });
+});
+
 $('#cmmt-submit').click(function (e) {
     e.preventDefault();
     document.getElementById('cmmt-text').readOnly = true;

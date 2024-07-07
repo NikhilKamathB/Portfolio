@@ -142,16 +142,20 @@ themeButton.addEventListener('click', () => {
     localStorage.setItem('selected-icon', getCurrentIcon())
 })
 
-// OCR
+/*========================= OCR =========================*/
 $('#ocr-submit').click(function (e) {
     e.preventDefault();
     document.getElementById('ocr-form').style.display = 'none';
     $('#ocr-input').append(`
         <div class="mt-5"></div>
-        <div class="loader my-5">
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
+        <div class="spinner-grow spinner-laoder" role="status">
+            <span></span>
+        </div>
+        <div class="spinner-grow spinner-laoder" role="status">
+            <span></span>
+        </div>
+        <div class="spinner-grow spinner-laoder" role="status">
+            <span></span>
         </div>
         <div class='ocr-processing-message mt-5' id='ocr-processing-message'>
             <p class='mb-0'>Your image is getting processed...</p>
@@ -163,7 +167,13 @@ $('#ocr-submit').click(function (e) {
     document.forms['ocr-form'].submit();
 })
 
-// CM-MT
+/*======================= CM-MT =======================*/
+document.querySelectorAll('.cmmt-example').forEach(item => {
+    item.addEventListener('click', event => {
+        document.getElementById('cmmt-text').value = event.target.innerText;
+    });
+});
+
 $('#cmmt-submit').click(function (e) {
     e.preventDefault();
     document.getElementById('cmmt-text').readOnly = true;
@@ -175,10 +185,14 @@ $('#cmmt-submit').click(function (e) {
     }
     $('#cmmt-display-message').append(`
         <div class="mt-5"></div>
-        <div class="loader my-5">
-            <div class="dot"></div>
-            <div class="dot"></div>
-            <div class="dot"></div>
+        <div class="spinner-grow spinner-laoder" role="status">
+            <span></span>
+        </div>
+        <div class="spinner-grow spinner-laoder" role="status">
+            <span></span>
+        </div>
+        <div class="spinner-grow spinner-laoder" role="status">
+            <span></span>
         </div>
         <div class='cmmt-processing-message mt-5' id='cmmt-processing-message'>
             <p class='mb-0'>Your text is getting processed...</p>
@@ -189,3 +203,152 @@ $('#cmmt-submit').click(function (e) {
     `)
     document.forms['cmmt-form'].submit();
 })
+
+/*==================== CHATBOT ====================*/
+// Text area auto grow
+function auto_grow(element) {
+    element.style.height = "5px";
+    element.style.height = (element.scrollHeight) + "px";
+}
+
+// Chatbot modal helper
+function generateChatbotBodyLoader(type = "bot") {
+    const icon = '<i class="fa-solid fa-robot chatbot-profile-bot"></i>';
+    var chatbotBodyLoader = `
+        <div class="chatbot-body-text-${type} text-loader" id="section">
+            <div>
+                ${icon}
+                <div class="chatbot-body-text">
+                    <div class="chatbot-body-text-loader">
+                        <span></span>
+                        <span></span>
+                        <span></span>
+                    </div>
+                </div>
+            </div>
+        </div>
+        `
+    return chatbotBodyLoader;
+}
+
+// Chatbot modal helper
+function generateChatbotBody(message, type = 'user') {
+    const icon = type == 'user' ? '<i class="fa-solid fa-user chatbot-profile-user"></i>' : '<i class="fa-solid fa-robot chatbot-profile-bot"></i>';
+    var chatbotBody = type == 'user' ? `
+            <div class="chatbot-body-text-${type}" id="section">
+                <div class="chatbot-body-text">
+                    <p class="chatbot-body-text-p-${type}">${message}</p>
+                </div>
+                ${icon}
+            </div>
+        ` :
+        `
+            <div class="chatbot-body-text-${type}" id="section">
+                ${icon}
+                <div class="chatbot-body-text">
+                    <p class="chatbot-body-text-p-${type}">${message}</p>
+                </div>
+            </div>
+        `
+    return chatbotBody;
+}
+
+// Chat scroll to bottom
+$('#chatbot-up').click(function (e) {
+    e.preventDefault();
+    if ($('#chatbot-body').children().length == 0) {
+        $('#chatbot-body').append(generateChatbotBodyLoader());
+        setTimeout(function () {
+            $('.text-loader').remove();
+            $('#chatbot-body').append(generateChatbotBody(
+                "Hi! <img src='https://user-images.githubusercontent.com/18350557/176309783-0785949b-9127-417c-8b55-ab5a4333674e.gif' class='chatbot-hello-img'></img> I am Harpy. What do you want to know about Nikhil? You can ask me anything about him! He is am amazing guy you know...😊",
+                type = "bot"));
+            $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
+            $('#chatbot-text').focus();
+        }, 1000);
+    }
+    setTimeout(function () {
+        $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "fast");
+    }, 500);
+});
+
+// Chat submit
+$('#chatbot-submit').click(function (e) {
+    chatSubmit(e);
+})
+
+// Chat enter submit
+$('#chatbot-text').keypress(function (e) {
+    if (e.key === "Enter" && !e.shiftKey) {
+        chatSubmit(e);
+    }
+})
+
+function chatSubmit(e) {
+    e.preventDefault();
+    const csrftoken = getCookie('csrftoken');
+    var message = $('#chatbot-text').val();
+    if (message.trim() == '') {
+        return false;
+    }
+    $('#chatbot-text').val('');
+    $('#chatbot-text').prop('disabled', true);
+    $('#chatbot-body').append(generateChatbotBody(message.replace(/\n/g, "<br>")));
+    $('#chatbot-body').append(generateChatbotBodyLoader());
+    $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
+    $.ajax({
+        type: "POST",
+        url: window.location.origin + "/chat/",
+        headers: { 'X-CSRFToken': csrftoken },
+        data: {
+            "chat-query": message
+        },
+        success: function (data) {
+            setTimeout(function () {
+                $('.text-loader').remove();
+                $('#chatbot-body').append(generateChatbotBody(data.replace(/\n/g, "<br>"), type = "bot"));
+                $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
+                $('#chatbot-text').prop('disabled', false);
+                $('#chatbot-text').focus();
+            }, 1000);
+        },
+        error: function (data) {
+            if (data.status == 400) {
+                console.log(data);
+                setTimeout(function () {
+                    $('.text-loader').remove();
+                    $('#chatbot-body').append(generateChatbotBody(`<i>${data.responseText.replace(/\n/g, "<br>")}</i>`, type = "bot"));
+                    $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
+                    $('#chatbot-text').focus();
+                }, 1000);
+            }
+            else {
+                setTimeout(function () {
+                    $('.text-loader').remove();
+                    $('#chatbot-body').append(generateChatbotBody(`<i>${data.responseText.replace(/\n/g, "<br>")}</i>`, type = "bot"));
+                    $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
+                    $('#chatbot-text').prop('disabled', false);
+                    $('#chatbot-text').focus();
+                }, 1000);
+            }
+        }
+    })
+}
+
+/*==================== UTILITIES ====================*/
+// Get CSRF token
+function getCookie(name) {
+    let cookieValue = null;
+    if (document.cookie && document.cookie !== '') {
+        const cookies = document.cookie.split(';');
+        for (let i = 0; i < cookies.length; i++) {
+            const cookie = cookies[i].trim();
+            // Does this cookie string begin with the name we want?
+            if (cookie.substring(0, name.length + 1) === (name + '=')) {
+                cookieValue = decodeURIComponent(cookie.substring(name.length + 1));
+                break;
+            }
+        }
+    }
+    return cookieValue;
+}
