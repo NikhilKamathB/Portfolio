@@ -284,6 +284,12 @@ $('#chatbot-text').keypress(function (e) {
     }
 })
 
+function resetChatbotTextarea() {
+    $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
+    $('#chatbot-text').prop('disabled', false);
+    $('#chatbot-text').focus();
+}
+
 function chatSubmit(e) {
     e.preventDefault();
     const csrftoken = getCookie('csrftoken');
@@ -303,36 +309,89 @@ function chatSubmit(e) {
         data: {
             "chat-query": message
         },
-        success: function (data) {
+        success: function (response) {
+            const data = response.description;
             setTimeout(function () {
                 $('.text-loader').remove();
-                $('#chatbot-body').append(generateChatbotBody(data.replace(/\n/g, "<br>"), type = "bot"));
-                $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
-                $('#chatbot-text').prop('disabled', false);
-                $('#chatbot-text').focus();
+                if (response.message === "Your message has been registered for sending.") {
+                    $('#chatbot-body').append(generateChatbotBody("Preparing to send a message...", type = "bot"));
+                    localStorage.setItem('ref_email_message', response.description);
+                    setTimeout(function () {
+                        $('#chatbotModal').modal('hide');
+                        $('#chatbotSecondaryModal').modal('show');
+                    }, 500);
+                }
+                else {
+                    $('#chatbot-body').append(generateChatbotBody(response.description.replace(/\n/g, "<br>"), type = "bot"));
+                }
+                resetChatbotTextarea()
             }, 1000);
         },
-        error: function (data) {
-            if (data.status == 400) {
-                console.log(data);
-                setTimeout(function () {
-                    $('.text-loader').remove();
-                    $('#chatbot-body').append(generateChatbotBody(`<i>${data.responseText.replace(/\n/g, "<br>")}</i>`, type = "bot"));
-                    $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
-                    $('#chatbot-text').focus();
-                }, 1000);
-            }
-            else {
-                setTimeout(function () {
-                    $('.text-loader').remove();
-                    $('#chatbot-body').append(generateChatbotBody(`<i>${data.responseText.replace(/\n/g, "<br>")}</i>`, type = "bot"));
-                    $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
-                    $('#chatbot-text').prop('disabled', false);
-                    $('#chatbot-text').focus();
-                }, 1000);
-            }
+        error: function (response) {
+            const data = response.responseJSON;
+            setTimeout(function () {
+                $('.text-loader').remove();
+                $('#chatbot-body').append(generateChatbotBody(`<i>${data.description.replace(/\n/g, "<br>")}</i>`, type = "bot"));
+                resetChatbotTextarea()
+            }, 1000);
         }
-    })
+    });
+}
+
+$(document).ready(function () {
+    $('#chatbotSecondaryModal').on('show.bs.modal', function (event) {
+        $('#chatbot-email').val(localStorage.getItem('ref_email') || '');
+        $('#chatbot-email-text').val(localStorage.getItem('ref_email_message') || '');
+    });
+});
+
+$('#chatbot-submit-message').click(function (e) {
+    chatSubmitMessage(e);
+});
+
+function setPostMessageBody(msg) {
+    $('#chatbotSecondaryModal').modal('hide');
+    $('#chatbotModal').modal('show');
+    localStorage.setItem('ref_email_message', '');
+    setTimeout(function () {
+        $('#chatbot-body').append(generateChatbotBody(msg, type = "bot"));
+        $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
+    }, 250);
+}
+
+function chatSubmitMessage(e) {
+    e.preventDefault();
+    const csrftoken = getCookie('csrftoken');
+    const email = $('#chatbot-email').val().trim();
+    const message = $('#chatbot-email-text').val().trim();
+    var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (email === '' || message === '') {
+        alert('Please fill in both the email and message fields before submitting.');
+    } else if (!emailPattern.test(email)) {
+        alert('Please enter a valid email address.');
+    } else {
+        // Proceed with form submission
+        localStorage.setItem('ref_email', email);
+        $.ajax({
+            type: "POST",
+            url: window.location.origin + "/send-email/",
+            headers: { 'X-CSRFToken': csrftoken },
+            data: {
+                "message": message,
+                "email": localStorage.getItem('ref_email')
+            },
+            success: function (response) {
+                const data = response.description;
+                setPostMessageBody("I have sent your message :-)");
+            },
+            error: function (response) {
+                const data = response.responseJSON;
+                setTimeout(function () {
+                    setPostMessageBody(`<i>${data.description.replace(/\n/g, "<br>")}</i>`);
+                }, 1000);
+            }
+        });
+    }
 }
 
 /*==================== UTILITIES ====================*/

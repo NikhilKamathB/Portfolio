@@ -842,6 +842,10 @@ img {
     margin-left: 0.5rem;
 }
 
+#fa-paper-plane-o-send {
+    margin-left: 0.5rem;
+}
+
 #chatbotModalLabel,
 #chatbotModalClose {
     color: var(--title-color)

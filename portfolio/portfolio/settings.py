@@ -19,13 +19,7 @@ import io
 import os
 import environ
 from pathlib import Path
-from langchain import hub
 from google.cloud import secretmanager
-from langchain_openai import ChatOpenAI
-from langchain_openai import OpenAIEmbeddings
-from langchain_pinecone import PineconeVectorStore
-from langchain_core.runnables import RunnablePassthrough
-from langchain_core.output_parsers import StrOutputParser
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -37,6 +31,8 @@ env = environ.Env(
     DEBUG=(bool, True),
     SECRET_KEY=(str, ""),
     STATIC_ROOT=(str, "static"),
+    OCR_SESSION_TRIES=(int, 3),
+    CMMT_SESSION_TRIES=(int, 5),
     # Langchain
     RAW_DATA_PATH=(str, "./static_base/data"),
     CHORMA_DB_PATH=(str, "./static_base/chroma_db"),
@@ -54,6 +50,8 @@ env = environ.Env(
     LLM_TOP_P=(float, 1.0),
     LLM_PRESENCE_PENALTY=(float, 0.0),
     LLM_FREQUENCY_PENALTY=(float, 0.0),
+    LLM_RAG_PROMPT_NAME=(str, "portfolio-rag-prompt"),
+    LLM_AGENT_MAX_ITERATIONS=(int, 5),
     # Langsmith
     LANGCHAIN_TRACING_V2=(bool, True),
     LANGCHAIN_ENDPOINT=(str, "https://api.smith.langchain.com"),
@@ -96,7 +94,7 @@ INSTALLED_APPS = [
     'django.contrib.admin',
     'django.contrib.auth',
     'django.contrib.contenttypes',
-    # 'django.contrib.sessions',
+    'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
 
@@ -159,7 +157,7 @@ CSRF_TRUSTED_ORIGINS = ["https://personal-project-381802.wl.r.appspot.com", "htt
 '''
 To install postgres using docker:
 
-docker run -d --name postgres -p 5499:5432 \                                                                                                                   tyche@tyche
+docker run -d --name postgres -p 5499:5432 \
 -e POSTGRES_USER=portfolio \
 -e POSTGRES_PASSWORD=portfolio \
 -e POSTGRES_DB=portfolio \
@@ -248,10 +246,13 @@ SUMMERNOTE_CONFIG = {
         }
     }
 
-# Django session settings
+# Django defaults
+DEFAULT_NIKHIL_EMAIL = "nikhilbo@kamath.work"
+
+# Django cache and session settings
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
-OCR_SESSION_KEY_TRIES = ["ocr_session_tries", 3]
-CMMT_SESSION_KEY_TRIES = ["cmmt_session_tries", 7]
+OCR_SESSION_KEY_TRIES = ["ocr_session_tries", env("OCR_SESSION_TRIES")]
+CMMT_SESSION_KEY_TRIES = ["cmmt_session_tries", env("CMMT_SESSION_TRIES")]
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_COOKIE_HTTPONLY = True
@@ -281,6 +282,11 @@ LLM_MAX_TOKEN_LENGTH = env("LLM_MAX_TOKEN_LENGTH")
 LLM_TOP_P = env("LLM_TOP_P")
 LLM_PRESENCE_PENALTY = env("LLM_PRESENCE_PENALTY")
 LLM_FREQUENCY_PENALTY = env("LLM_FREQUENCY_PENALTY")
+LLM_RAG_PROMPT_NAME = env("LLM_RAG_PROMPT_NAME")
+LLM_AGENT_MAX_ITERATIONS = env("LLM_AGENT_MAX_ITERATIONS")
+
+# Langchain tool setting
+REGISTER_SEND_EMAIL_RETURN = "Your message has been registered for sending."
 
 # Pinecone settings
 PINECONE_API_KEY = env("PINECONE_API_KEY")
@@ -291,45 +297,3 @@ PINECONE_INDEX_CONFIG = {
         "metric": "cosine"
     }
 }
-
-# Langchain RAG settings
-CHAIN = None
-# Embedding function
-_EMBEDDING_FUNCTION = OpenAIEmbeddings(model=EMBEDDING_TYPE)
-# Pinecone
-_PINECONE_VS = PineconeVectorStore(index_name=PINECONE_INDEX_NAME, embedding=_EMBEDDING_FUNCTION)
-# Search kwargs
-__search_kwargs_chroma__ = {
-    "k": int(TOP_K),
-}
-if SEARCH_TYPE == "mmr":
-    __search_kwargs_chroma__["fetch_k"] = int(FETCH_K)
-    __search_kwargs_chroma__[
-        "lambda_multiplier"] = LAMBDA_MULTIPLIER
-# Retriever
-_RETRIEVER = _PINECONE_VS.as_retriever(
-    search_type=SEARCH_TYPE, search_kwargs=__search_kwargs_chroma__)
-# Prompt
-_PROMPT = hub.pull("portfolio-rag-prompt")
-# LLM
-__model_kwargs__ = {
-    "top_p": LLM_TOP_P,
-    "frequency_penalty": LLM_FREQUENCY_PENALTY,
-    "presence_penalty": LLM_PRESENCE_PENALTY,
-}
-_LLM = ChatOpenAI(
-    model=LLM_MODEL_NAME,
-    temperature=LLM_TEMPERATURE,
-    max_tokens=LLM_MAX_TOKEN_LENGTH,
-    model_kwargs=__model_kwargs__
-)
-# Chain
-CHAIN = (
-    {
-        "context": _RETRIEVER | (lambda docs: "\n\n".join(doc.page_content for doc in docs)),
-        "question": RunnablePassthrough()
-    }
-    | _PROMPT
-    | _LLM
-    | StrOutputParser()
-)

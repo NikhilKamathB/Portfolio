@@ -1,8 +1,13 @@
+
 from django.conf import settings
 from rest_framework import status
 from django.shortcuts import render
-from django.http import HttpResponse
+from django.core.cache import cache
+from django.http import JsonResponse
 from django.core.exceptions import BadRequest
+from home import AGENT
+from home.models import ChatResponse
+from home.utils import send_email_utils
 
 
 def index(request):
@@ -14,12 +19,70 @@ def chat(request):
             query = request.POST.get("chat-query")
             if not query:
                 raise BadRequest("You have not provided a query.")
-            if not settings.CHAIN:
+            if not AGENT:
                 raise BadRequest("Langchain is not initialized.")
-            response_str = settings.CHAIN.invoke(query)
-            return HttpResponse(response_str, status=status.HTTP_200_OK)
+            agent_response = AGENT.invoke({"question": query})
+            response_str = agent_response.get("output", "Sorry! I was unable to generate any respone. Contact Nikhil.")
+            if cache.get("chatbot_message") and response_str == settings.REGISTER_SEND_EMAIL_RETURN:
+                description = cache.get("chatbot_message")
+                cache.delete("chatbot_message")
+                return JsonResponse(
+                    ChatResponse(success=True, message=response_str,
+                                 description=description).model_dump(),
+                    status=status.HTTP_200_OK
+                )
+            return JsonResponse(
+                ChatResponse(success=True, message="Success",
+                             description=response_str).model_dump(),
+                status=status.HTTP_200_OK
+            )
         except BadRequest as e:
-            return HttpResponse(f"{e}", status=status.HTTP_400_BAD_REQUEST)
+            return JsonResponse(
+                ChatResponse(success=False, message="Bad Request",
+                             description=f"{e}").model_dump(),
+                status=status.HTTP_400_BAD_REQUEST
+            )
         except Exception as e:
-            return HttpResponse(f"An internal server error occurred! Sorry for this. You may contact Nikhil at `nikhilbo@kamath.work` if you need more help or get to know him.", status=status.HTTP_500_INTERNAL_SERVER_ERROR)
-    return HttpResponse("Method not allowed", status=status.HTTP_405_METHOD_NOT_ALLOWED)
+            return JsonResponse(
+                ChatResponse(success=False, message="Internal Server Error",
+                             description=f"{e}").model_dump(),
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+    return JsonResponse(
+        ChatResponse(success=False, message="Method not allowed",
+                     description="This method is not allowed.").model_dump(),
+        status=status.HTTP_405_METHOD_NOT_ALLOWED
+    )
+
+def send_email(request):
+    if request.method == "POST":
+        try:
+            message = request.POST.get("message")
+            email = request.POST.get("email")
+            if not message:
+                raise BadRequest("You have not provided a message.")
+            if not email:
+                raise BadRequest("You have not provided an email.")
+            send_email_utils(email, message)
+            return JsonResponse(
+                ChatResponse(success=True, message="Email sent",
+                             description="Email sent successfully.").model_dump(),
+                status=status.HTTP_200_OK
+            )
+        except BadRequest as e:
+            return JsonResponse(
+                ChatResponse(success=False, message="Bad Request",
+                             description=f"{e}").model_dump(),
+                status=status.HTTP_400_BAD_REQUEST
+            )
+        except Exception as e:
+            return JsonResponse(
+                ChatResponse(success=False, message="Internal Server Error",
+                             description=f"{e}").model_dump(),
+                status=status.HTTP_500_INTERNAL_SERVER_ERROR
+            )
+    return JsonResponse(
+        ChatResponse(success=False, message="Method not allowed",
+                     description="This method is not allowed.").model_dump(),
+        status=status.HTTP_405_METHOD_NOT_ALLOWED
+    )
