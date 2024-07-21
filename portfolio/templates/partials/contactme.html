@@ -1,0 +1,29 @@
+<div class="offcanvas offcanvas-end" tabindex="-1" id="offcanvasRight" aria-labelledby="offcanvasRightLabel">
+    <div class="offcanvas-header">
+        <h2 class="offcanvas__title m-0">
+            Contact Me
+        </h2>
+        <a class="text-reset" type="button" id="contact-me-close" aria-label="Close" data-bs-dismiss="offcanvas">
+            <i class="fa-solid fa-xmark"></i>
+        </a>
+    </div>
+    <form>
+        <div class="offcanvas-body">
+            <div class="form-group">
+                <div class="mb-3">
+                    <label for="contact-me-email" class="form-label">Email address</label>
+                    <input type="email" class="form-control" id="contact-me-email" required>
+                </div>
+                <div class="mb-3">
+                    <label for="contact-me-text" class="form-label">Message</label>
+                    <textarea class="form-control" id="contact-me-text" rows="7" required></textarea>
+                </div>
+                <div class="home__buttons mt-5" id="offcanvas-contact-me-submit-body" style="text-align: justify;">
+                    <a class="button button--flex" id="offcanvas-contact-me-submit" type="submit">
+                        Send <i class="fa fa-paper-plane-o button__icon"></i>
+                    </a>
+                </div>
+            </div>
+        </div>
+    </form>
+</div>

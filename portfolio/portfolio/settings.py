@@ -63,6 +63,11 @@ env = environ.Env(
     # GCP
     SETTINGS_NAME=(str, "portfolio_settings"),
     SECRET_MANAGER_VERSION=(str, "3"),
+    # AWS
+    AWS_ACCESS_KEY_ID=(str, ""),
+    AWS_SECRET_ACCESS_KEY=(str, ""),
+    AWS_SES_REGION_NAME=(str, "us-west-2"),
+    AWS_SES_REGION_ENDPOINT=(str, "email.us-west-2.amazonaws.com"),
 )
 env_file = os.path.join(BASE_DIR, ".env")
 
@@ -246,8 +251,17 @@ SUMMERNOTE_CONFIG = {
         }
     }
 
-# Django defaults
+# Email settings
+EMAIL_BACKEND = 'django_ses.SESBackend'
+DEFAULT_FROM_EMAIL = "no-reply@kamath.work"
 DEFAULT_NIKHIL_EMAIL = "nikhilbo@kamath.work"
+DEFAULT_EMAIL_SUBJECT = "Nikhil Bola Kamath - Contact Form"
+
+# AWS settings
+AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
+AWS_SECRET_ACCESS_KEY = env("AWS_SECRET_ACCESS_KEY")
+AWS_SES_REGION_NAME = env("AWS_SES_REGION_NAME")
+AWS_SES_REGION_ENDPOINT = env("AWS_SES_REGION_ENDPOINT")
 
 # Django cache and session settings
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'

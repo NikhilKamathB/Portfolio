@@ -151,7 +151,7 @@ img {
     padding: 0;
 }
 
-.section__title {
+.section__title, .offcanvas__title {
     font-size: var(--h1-font-size);
     color: var(--title-color);
 }
@@ -165,6 +165,10 @@ img {
 .section__title,
 .section__subtitle {
     text-align: center;
+}
+
+.offcanvas__title {
+    text-align: left;
 }
 
 /*==================== LAYOUT ====================*/
@@ -680,6 +684,19 @@ img {
     margin-right: var(--mb-2-5);
 }
 
+/*==================== Contact me ====================*/
+.offcanvas-header {
+    border-bottom: 1px solid var(--first-color);
+}
+
+#offcanvasRight, #offcanvas-contact-me-submit-loading {
+    color: var(--text-color);
+}
+
+#offcanvasRight {
+    width: 50%;
+}
+
 .sdc__container,
 .simpan__container,
 .ocr__container,
@@ -697,7 +714,7 @@ img {
 
 /*========== SDC ==========*/
 .sdc__video {
-    width: 75%;
+    width: 75vw;
     height: auto;
 }
 
@@ -847,11 +864,15 @@ img {
 }
 
 #chatbotModalLabel,
-#chatbotModalClose {
+#chatbotModalClose,
+#chatbotModalMsgClose,
+#contact-me-close {
     color: var(--title-color)
 }
 
-#chatbotModalClose {
+#chatbotModalClose,
+#chatbotModalMsgClose,
+#contact-me-close {
     font-size: 20px;
 }
 
@@ -859,7 +880,7 @@ img {
     color: var(--first-color);
 }
 
-#chatbotModalLabelHeader {
+#chatbotModalLabelHeader, #offcanvasRight {
     background-color: var(--body-color);
 }
 
@@ -1115,6 +1136,7 @@ img {
         grid-template-columns: .6fr;
         justify-content: center;
     }
+    
 }
 
 @media screen and (max-width: 568px) {
@@ -1158,6 +1180,10 @@ img {
 
     .project__content {
         margin: 1rem;
+    }
+
+    #offcanvasRight {
+        width: 100%;
     }
 
     .footer__container {

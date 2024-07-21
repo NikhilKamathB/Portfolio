@@ -1,5 +1,5 @@
 <div>
-    <a class="chatbotup" id="chatbot-up" type="button" data-bs-toggle="modal" data-bs-target="#chatbotModal">
+    <a class="chatbotup mb-2" id="chatbot-up" type="button" data-bs-toggle="modal" data-bs-target="#chatbotModal">
         <div id="chat-overlay"></div>
         <i class="uil uil-hipchat chatbotup__icon"></i>
     </a>
@@ -42,32 +42,32 @@
                         version, for more accurate information please download the resume from the 'about me' section
                     </p>
                 </div>
-                <!-- <button class="btn btn-primary" data-bs-target="#chatbotSecondaryModal" data-bs-toggle="modal" data-bs-dismiss="modal">Open second modal</button> -->
             </div>
         </div>
     </div>
 </div>
+
 <div class="modal fade" id="chatbotSecondaryModal" aria-hidden="true" aria-labelledby="chatbotSecondaryModalLabel" tabindex="-1">
     <div class="modal-dialog modal-dialog-centered modal-dialog-scrollable modal-lg">
         <div class="modal-content">
             <div class="modal-header" id="chatbotModalLabelHeader">
                 <h5 class="modal-title" id="chatbotSecondaryModalLabel">Confirm message</h5>
-                <a type="button" id="chatbotModalClose" aria-label="Close" data-bs-toggle="modal" data-bs-target="#chatbotModal" data-bs-dismiss="modal">
+                <a type="button" id="chatbotModalMsgClose" aria-label="Close" data-bs-toggle="modal" data-bs-target="#chatbotModal" data-bs-dismiss="modal">
                     <i class="fa-solid fa-xmark"></i>
                 </a>
             </div>
             <form>
             <div class="modal-body">
-                    <div class="form-group">
-                        <div class="mb-3">
-                            <label for="chatbot-email" class="form-label">Email address</label>
-                            <input type="email" class="form-control" id="chatbot-email" required>
-                        </div>
-                        <div class="mb-3">
-                            <label for="chatbot-email-text" class="form-label">Message</label>
-                            <textarea class="form-control" id="chatbot-email-text" required></textarea>
-                        </div>
+                <div class="form-group">
+                    <div class="mb-3">
+                        <label for="chatbot-email" class="form-label">Your email address</label>
+                        <input type="email" class="form-control" id="chatbot-email" required>
                     </div>
+                    <div class="mb-3">
+                        <label for="chatbot-email-text" class="form-label">Message</label>
+                        <textarea class="form-control" id="chatbot-email-text" required></textarea>
+                    </div>
+                </div>
             </div>
             <div class="modal-footer" id="chatbotModalLabelFooter">
                 <span class="input-group-addon">

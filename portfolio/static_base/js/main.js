@@ -202,7 +202,41 @@ $('#cmmt-submit').click(function (e) {
         </div>
     `)
     document.forms['cmmt-form'].submit();
-})
+});
+
+/*==================== CONTACT ME ====================*/
+$('#offcanvas-contact-me-submit').click(function (e) {
+    e.preventDefault();
+    const csrftoken = getCookie('csrftoken');
+    var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    const email = $('#contact-me-email').val().trim();
+    const message = $('#contact-me-text').val().trim();
+    var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (email === '' || message === '') {
+        alert('Please fill in both the email and message fields before submitting.');
+    } else if (!emailPattern.test(email)) {
+        alert('Please enter a valid email address.');
+    } else {
+        $('#offcanvasRight').offcanvas('hide');
+        $.ajax({
+            type: "POST",
+            url: window.location.origin + "/send-email/",
+            headers: { 'X-CSRFToken': csrftoken },
+            data: {
+                "message": message,
+                "email": email
+            },
+            success: function (response) {
+                const data = response.description;
+                alert('Your message has been sent successfully!');
+            },
+            error: function (response) {
+                const data = response.responseJSON;
+                alert('There was an error sending your message. Please try again later or contact me through other means.');
+            }
+        });
+    }
+});
 
 /*==================== CHATBOT ====================*/
 // Text area auto grow
@@ -349,21 +383,30 @@ $('#chatbot-submit-message').click(function (e) {
     chatSubmitMessage(e);
 });
 
+
 function setPostMessageBody(msg) {
-    $('#chatbotSecondaryModal').modal('hide');
-    $('#chatbotModal').modal('show');
-    localStorage.setItem('ref_email_message', '');
     setTimeout(function () {
+        $('.text-loader').remove();
         $('#chatbot-body').append(generateChatbotBody(msg, type = "bot"));
         $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
     }, 250);
 }
+
+$('#chatbotModalMsgClose').click(function (e) {
+    setPostMessageBody("Cancelled sending the message.");
+});
 
 function chatSubmitMessage(e) {
     e.preventDefault();
     const csrftoken = getCookie('csrftoken');
     const email = $('#chatbot-email').val().trim();
     const message = $('#chatbot-email-text').val().trim();
+    $('#chatbotSecondaryModal').modal('hide');
+    $('#chatbotModal').modal('show');
+    setTimeout(function () {
+        $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
+        $('#chatbot-body').append(generateChatbotBodyLoader());
+    }, 250);
     var emailPattern = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
     if (email === '' || message === '') {
         alert('Please fill in both the email and message fields before submitting.');
@@ -382,11 +425,13 @@ function chatSubmitMessage(e) {
             },
             success: function (response) {
                 const data = response.description;
+                localStorage.setItem('ref_email_message', '');
                 setPostMessageBody("I have sent your message :-)");
             },
             error: function (response) {
                 const data = response.responseJSON;
                 setTimeout(function () {
+                    localStorage.setItem('ref_email_message', '');
                     setPostMessageBody(`<i>${data.description.replace(/\n/g, "<br>")}</i>`);
                 }, 1000);
             }
