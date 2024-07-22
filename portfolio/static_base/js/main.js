@@ -227,11 +227,9 @@ $('#offcanvas-contact-me-submit').click(function (e) {
                 "email": email
             },
             success: function (response) {
-                const data = response.description;
                 alert('Your message has been sent successfully!');
             },
             error: function (response) {
-                const data = response.responseJSON;
                 alert('There was an error sending your message. Please try again later or contact me through other means.');
             }
         });
@@ -295,7 +293,7 @@ $('[id="chatbot-up"]').click(function (e) {
         setTimeout(function () {
             $('.text-loader').remove();
             $('#chatbot-body').append(generateChatbotBody(
-                "Hi! <img src='https://user-images.githubusercontent.com/18350557/176309783-0785949b-9127-417c-8b55-ab5a4333674e.gif' class='chatbot-hello-img'></img> I am Harpy. What do you want to know about Nikhil? You can ask me anything about him! He is an amazing guy you know...😊",
+                "Hi! <img src='https://user-images.githubusercontent.com/18350557/176309783-0785949b-9127-417c-8b55-ab5a4333674e.gif' class='chatbot-hello-img'></img> I am Harpy. What do you want to know about Nikhil? You can ask me anything about him! He is an amazing guy 😎, you know...😊. If you want to send a message to him , I can help you out with that as well. Just type something like <i>Send a message, ...</i> or <i>Email nikhil to ....</i> or <i>Message nikhil for ...</i>, etc. I will email him on your behalf 📧.",
                 type = "bot"));
             $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
             $('#chatbot-text').focus();
@@ -344,7 +342,6 @@ function chatSubmit(e) {
             "chat-query": message
         },
         success: function (response) {
-            const data = response.description;
             setTimeout(function () {
                 $('.text-loader').remove();
                 if (response.message === "Your message has been registered for sending.") {
@@ -424,7 +421,6 @@ function chatSubmitMessage(e) {
                 "email": localStorage.getItem('ref_email')
             },
             success: function (response) {
-                const data = response.description;
                 localStorage.setItem('ref_email_message', '');
                 setPostMessageBody("I have sent your message :-)");
             },

@@ -73,4 +73,4 @@ _CHAIN = (
 )
 _CHAIN
 # Agent
-AGENT = AgentExecutor(agent=_CHAIN, tools=_TOOLS, max_iterations=settings.LLM_AGENT_MAX_ITERATIONS, verbose=True)
+AGENT = AgentExecutor(agent=_CHAIN, tools=_TOOLS, max_iterations=settings.LLM_AGENT_MAX_ITERATIONS, verbose=False)
