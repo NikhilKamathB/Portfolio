@@ -1,4 +1,5 @@
 
+from markdown import markdown
 from django.conf import settings
 from rest_framework import status
 from django.shortcuts import render
@@ -22,18 +23,19 @@ def chat(request):
     if not AGENT:
         raise BadRequest("Langchain is not initialized.")
     agent_response = AGENT.invoke({"question": query})
-    response_str = agent_response.get("output", "Sorry! I was unable to generate any respone. Contact Nikhil.")
-    if cache.get("chatbot_message") and response_str == settings.REGISTER_SEND_EMAIL_RETURN:
+    response_raw = agent_response.get("output", "Sorry! I was unable to generate any respone. Contact Nikhil.")
+    response_html = markdown(response_raw)
+    if cache.get("chatbot_message") and settings.REGISTER_SEND_EMAIL_RETURN == response_raw:
         description = cache.get("chatbot_message")
         cache.delete("chatbot_message")
         return JsonResponse(
-            ChatResponse(success=True, message=response_str,
+            ChatResponse(success=True, message=settings.REGISTER_SEND_EMAIL_RETURN,
                             description=description).model_dump(),
             status=status.HTTP_200_OK
         )
     return JsonResponse(
         ChatResponse(success=True, message="Success",
-                        description=response_str).model_dump(),
+                        description=response_html).model_dump(),
         status=status.HTTP_200_OK
     )
 

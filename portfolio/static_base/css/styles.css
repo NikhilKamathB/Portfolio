@@ -918,6 +918,11 @@ img {
     overflow-wrap: break-word;
 }
 
+.chatbot-body-text-p-bot p,
+.chatbot-body-text-p-user p {
+    margin: 0;
+}
+
 .chatbot-body-text-loader {
     margin: .75rem;
 }

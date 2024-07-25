@@ -7,11 +7,11 @@ from django.core.management.base import BaseCommand, CommandError, CommandParser
 
 class Command(BaseCommand):
 
-    help: str = "Query Chroma DB."
+    help: str = "Query Pinecone DB."
 
     def add_arguments(self, parser: CommandParser) -> None:
         parser.add_argument("-i", "--input_directory", default=settings.CHORMA_DB_PATH,
-                            type=str, help="Directory containing Chroma DB.")
+                            type=str, help="Directory containing Pinecone DB.")
         parser.add_argument(
             "-q", "--query", default="What is the meaning of life?", type=str, help="Query to run.")
         parser.add_argument("-k", "--top_k", default=settings.TOP_K,
@@ -57,6 +57,6 @@ class Command(BaseCommand):
             # Get results
             results = retreiver.invoke(options["query"])
             print(f"Results: {results}")
-            print("Querying Chroma DB done...")
+            print("Querying Pinecone DB done...")
         except Exception as e:
             raise CommandError(f"An error occurred: `{e}`")

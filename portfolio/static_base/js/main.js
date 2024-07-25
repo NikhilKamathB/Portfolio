@@ -264,12 +264,12 @@ function generateChatbotBodyLoader(type = "bot") {
 }
 
 // Chatbot modal helper
-function generateChatbotBody(message, type = 'user') {
+function generateChatbotBody(type = 'user') {
     const icon = type == 'user' ? '<i class="fa-solid fa-user chatbot-profile-user"></i>' : '<i class="fa-solid fa-robot chatbot-profile-bot"></i>';
     var chatbotBody = type == 'user' ? `
             <div class="chatbot-body-text-${type}" id="section">
                 <div class="chatbot-body-text">
-                    <p class="chatbot-body-text-p-${type}">${message}</p>
+                    <p class="chatbot-body-text-p-${type}"></p>
                 </div>
                 ${icon}
             </div>
@@ -278,7 +278,7 @@ function generateChatbotBody(message, type = 'user') {
             <div class="chatbot-body-text-${type}" id="section">
                 ${icon}
                 <div class="chatbot-body-text">
-                    <p class="chatbot-body-text-p-${type}">${message}</p>
+                    <p class="chatbot-body-text-p-${type}"></p>
                 </div>
             </div>
         `
@@ -292,9 +292,8 @@ $('[id="chatbot-up"]').click(function (e) {
         $('#chatbot-body').append(generateChatbotBodyLoader());
         setTimeout(function () {
             $('.text-loader').remove();
-            $('#chatbot-body').append(generateChatbotBody(
-                "Hi! <img src='https://user-images.githubusercontent.com/18350557/176309783-0785949b-9127-417c-8b55-ab5a4333674e.gif' class='chatbot-hello-img'></img> I am Harpy. What do you want to know about Nikhil? You can ask me anything about him! He is an amazing guy 😎, you know...😊. If you want to send a message to him , I can help you out with that as well. Just type something like <i>Send a message, ...</i> or <i>Email nikhil to ....</i> or <i>Message nikhil for ...</i>, etc. I will email him on your behalf 📧.",
-                type = "bot"));
+            $('#chatbot-body').append(generateChatbotBody(type = "bot"));
+            $('.chatbot-body-text-p-bot').last().append("<p>Hi! <img src='https://user-images.githubusercontent.com/18350557/176309783-0785949b-9127-417c-8b55-ab5a4333674e.gif' class='chatbot-hello-img'></img> I am Harpy. What do you want to know about Nikhil? You can ask me anything about him! He is an amazing guy 😎, you know...😊. If you want to send a message to him , I can help you out with that as well. Just type something like <i>Send a message, ...</i> or <i>Email nikhil to ....</i> or <i>Message nikhil for ...</i>, etc. I will email him on your behalf 📧.</p>");
             $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
             $('#chatbot-text').focus();
         }, 1000);
@@ -331,7 +330,8 @@ function chatSubmit(e) {
     }
     $('#chatbot-text').val('');
     $('#chatbot-text').prop('disabled', true);
-    $('#chatbot-body').append(generateChatbotBody(message.replace(/\n/g, "<br>")));
+    $('#chatbot-body').append(generateChatbotBody());
+    $('.chatbot-body-text-p-user').last().append(`<p>${message}<p>`);
     $('#chatbot-body').append(generateChatbotBodyLoader());
     $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
     $.ajax({
@@ -345,7 +345,8 @@ function chatSubmit(e) {
             setTimeout(function () {
                 $('.text-loader').remove();
                 if (response.message === "Your message has been registered for sending.") {
-                    $('#chatbot-body').append(generateChatbotBody("Preparing to send a message...", type = "bot"));
+                    $('#chatbot-body').append(generateChatbotBody(type = "bot"));
+                    $('.chatbot-body-text-p-bot').last().append("<p>Preparing to send a message...</p>");
                     localStorage.setItem('ref_email_message', response.description);
                     setTimeout(function () {
                         $('#chatbotModal').modal('hide');
@@ -353,7 +354,8 @@ function chatSubmit(e) {
                     }, 500);
                 }
                 else {
-                    $('#chatbot-body').append(generateChatbotBody(response.description.replace(/\n/g, "<br>"), type = "bot"));
+                    $('#chatbot-body').append(generateChatbotBody(type = "bot"));
+                    $('.chatbot-body-text-p-bot').last().append(response.description);
                 }
                 resetChatbotTextarea()
             }, 1000);
@@ -362,7 +364,8 @@ function chatSubmit(e) {
             const data = response.responseJSON;
             setTimeout(function () {
                 $('.text-loader').remove();
-                $('#chatbot-body').append(generateChatbotBody(`<i>${data.description.replace(/\n/g, "<br>")}</i>`, type = "bot"));
+                $('#chatbot-body').append(generateChatbotBody(type = "bot"));
+                $('.chatbot-body-text-p-bot').last().append(`<p><i>${data.description}</i></p>`);
                 resetChatbotTextarea()
             }, 1000);
         }
@@ -384,13 +387,14 @@ $('#chatbot-submit-message').click(function (e) {
 function setPostMessageBody(msg) {
     setTimeout(function () {
         $('.text-loader').remove();
-        $('#chatbot-body').append(generateChatbotBody(msg, type = "bot"));
+        $('#chatbot-body').append(generateChatbotBody(type = "bot"));
+        $('.chatbot-body-text-p-bot').last().append(msg);
         $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
     }, 250);
 }
 
 $('#chatbotModalMsgClose').click(function (e) {
-    setPostMessageBody("Cancelled sending the message.");
+    setPostMessageBody("<p>Cancelled sending the message.</p>");
 });
 
 function chatSubmitMessage(e) {
@@ -422,13 +426,13 @@ function chatSubmitMessage(e) {
             },
             success: function (response) {
                 localStorage.setItem('ref_email_message', '');
-                setPostMessageBody("I have sent your message :-)");
+                setPostMessageBody("<p>I have sent your message :-)</p>");
             },
             error: function (response) {
                 const data = response.responseJSON;
                 setTimeout(function () {
                     localStorage.setItem('ref_email_message', '');
-                    setPostMessageBody(`<i>${data.description.replace(/\n/g, "<br>")}</i>`);
+                    setPostMessageBody(`<p><i>${data.description}</i></p>`);
                 }, 1000);
             }
         });
