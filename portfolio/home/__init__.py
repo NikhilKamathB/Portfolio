@@ -59,7 +59,7 @@ _LLM = ChatOpenAI(
     model=settings.LLM_MODEL_NAME,
     temperature=settings.LLM_TEMPERATURE,
     max_tokens=settings.LLM_MAX_TOKEN_LENGTH,
-    model_kwargs=__model_kwargs__
+    **__model_kwargs__
 ).bind(functions=_FUNCTIONS)
 # Chain
 _CHAIN = (

@@ -62,7 +62,7 @@ env = environ.Env(
     PINECONE_INDEX_NAME=(str, "langchain"),
     # GCP
     SETTINGS_NAME=(str, "portfolio_settings"),
-    SECRET_MANAGER_VERSION=(str, "3"),
+    SECRET_MANAGER_VERSION=(str, "4"),
     # AWS
     AWS_ACCESS_KEY_ID=(str, ""),
     AWS_SECRET_ACCESS_KEY=(str, ""),

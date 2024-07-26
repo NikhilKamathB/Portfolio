@@ -23,5 +23,7 @@ venv/
 .pth
 # static files
 */static_base/*
+# nbs files
+*/nbs/*
 # Secrets
 *.env*
