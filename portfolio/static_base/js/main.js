@@ -402,8 +402,6 @@ function chatSubmitMessage(e) {
     const csrftoken = getCookie('csrftoken');
     const email = $('#chatbot-email').val().trim();
     const message = $('#chatbot-email-text').val().trim();
-    $('#chatbotSecondaryModal').modal('hide');
-    $('#chatbotModal').modal('show');
     setTimeout(function () {
         $("#chatbotModalBody").animate({ scrollTop: $('#chatbot-body').height() }, "slow");
         $('#chatbot-body').append(generateChatbotBodyLoader());
@@ -415,6 +413,8 @@ function chatSubmitMessage(e) {
         alert('Please enter a valid email address.');
     } else {
         // Proceed with form submission
+        $('#chatbotSecondaryModal').modal('hide');
+        $('#chatbotModal').modal('show');
         localStorage.setItem('ref_email', email);
         $.ajax({
             type: "POST",

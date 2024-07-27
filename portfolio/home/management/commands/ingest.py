@@ -18,8 +18,6 @@ class Command(BaseCommand):
     def add_arguments(self, parser: CommandParser) -> None:
         parser.add_argument("-i", "--input_directory", default=settings.RAW_DATA_PATH,
                             type=str, help="Directory containing data to ingest.")
-        parser.add_argument("-o", "--output_directory", default=settings.CHORMA_DB_PATH,
-                            type=str, help="Directory to output data to.")
         parser.add_argument("-c", "--chunk_size", default=settings.CHUNK_SIZE,
                             type=int, help="Text splitter chunk size.")
         parser.add_argument("-co", "--overlap", default=settings.CHUNK_OVERLAP,
@@ -32,7 +30,6 @@ class Command(BaseCommand):
             print("#" * 50)
             print("Command Parameters:")
             print(f"Input Directory: {options['input_directory']}")
-            print(f"Output Directory: {options['output_directory']}")
             print(f"Chunk Size: {options['chunk_size']}")
             print(f"Chunk Overlap: {options['overlap']}")
             print(f"Embedding Type: {options['embedding_type']}")

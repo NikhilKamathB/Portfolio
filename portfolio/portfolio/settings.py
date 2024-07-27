@@ -35,7 +35,6 @@ env = environ.Env(
     CMMT_SESSION_TRIES=(int, 5),
     # Langchain
     RAW_DATA_PATH=(str, "./static_base/data"),
-    CHORMA_DB_PATH=(str, "./static_base/chroma_db"),
     TOP_K=(int, 4),
     FETCH_K=(int, 20),
     LAMBDA_MULTIPLIER=(float, 0.5),
@@ -281,7 +280,6 @@ CM_MT_GCLOUD_RUN_API = "https://cmmt-zwqz52dqpa-uw.a.run.app"
 
 # Langchain settings
 RAW_DATA_PATH = env("RAW_DATA_PATH")
-CHORMA_DB_PATH = env("CHORMA_DB_PATH")
 TOP_K = env("TOP_K")
 FETCH_K = env("FETCH_K")
 LAMBDA_MULTIPLIER = env("LAMBDA_MULTIPLIER")
