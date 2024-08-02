@@ -103,6 +103,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
 
     # third party
+    'corsheaders',
     'django_summernote',
     # apps
     'home.apps.HomeConfig',
@@ -116,6 +117,7 @@ INSTALLED_APPS = [
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
     'django.contrib.sessions.middleware.SessionMiddleware',
+    'corsheaders.middleware.CorsMiddleware',
     'django.middleware.common.CommonMiddleware',
     'django.middleware.csrf.CsrfViewMiddleware',
     'django.contrib.auth.middleware.AuthenticationMiddleware',
@@ -145,7 +147,8 @@ TEMPLATES = [
 
 WSGI_APPLICATION = 'portfolio.wsgi.application'
 
-CSRF_TRUSTED_ORIGINS = ["https://personal-project-381802.wl.r.appspot.com", "https://kamath.work"]
+CORS_ALLOWED_ORIGINS = CSRF_TRUSTED_ORIGINS = [
+    "https://personal-project-381802.wl.r.appspot.com", "https://kamath.work"]
 
 # Database
 # https://docs.djangoproject.com/en/4.0/ref/settings/#databases
