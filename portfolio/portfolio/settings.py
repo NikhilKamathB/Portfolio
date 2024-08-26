@@ -62,6 +62,7 @@ env = environ.Env(
     # GCP
     SETTINGS_NAME=(str, "portfolio_settings"),
     SECRET_MANAGER_VERSION=(str, "4"),
+    GOOGLE_APPLICATION_CREDENTIALS=(str, ""),
     # AWS
     AWS_ACCESS_KEY_ID=(str, ""),
     AWS_SECRET_ACCESS_KEY=(str, ""),
@@ -73,12 +74,14 @@ env_file = os.path.join(BASE_DIR, ".env")
 # Load environment variables from file or secret manager
 if os.path.exists(env_file):
     env.read_env(env_file)
+    GOOGLE_APPLICATION_CREDENTIALS = env("GOOGLE_APPLICATION_CREDENTIALS")
 elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
     project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
     client = secretmanager.SecretManagerServiceClient()
     name = f"projects/{project_id}/secrets/{env('SETTINGS_NAME')}/versions/{env('SECRET_MANAGER_VERSION')}"
     payload = client.access_secret_version(name=name).payload.data.decode("UTF-8")
     env.read_env(io.StringIO(payload))
+    GOOGLE_APPLICATION_CREDENTIALS = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 else:
     raise Exception("No environment file or secret manager found.")
 
@@ -258,6 +261,9 @@ EMAIL_BACKEND = 'django_ses.SESBackend'
 DEFAULT_FROM_EMAIL = "no-reply@kamath.work"
 DEFAULT_NIKHIL_EMAIL = "nikhilbo@kamath.work"
 DEFAULT_EMAIL_SUBJECT = "Nikhil Bola Kamath - Contact Form"
+
+# Calendar settings
+DEFAULT_CALENDAR_IDS = ["nikhilkb98@gmail.com", "nikhilkb998@gmail.com", "nikhilbolakamath@gmail.com", "nikhilbo@usc.edu", "nikhilbo@kamath.work"]
 
 # AWS settings
 AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")

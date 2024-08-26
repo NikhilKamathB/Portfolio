@@ -1,10 +1,13 @@
+import os
 from langchain import hub
 from django.conf import settings
 from langchain.tools import tool
 from django.core.cache import cache
 from langchain_openai import ChatOpenAI
 from pydantic.v1 import BaseModel, Field
+from google.oauth2 import service_account
 from langchain.agents import AgentExecutor
+from googleapiclient.discovery import build
 from langchain_openai import OpenAIEmbeddings
 from langchain_pinecone import PineconeVectorStore
 from langchain_core.runnables import RunnablePassthrough
@@ -12,6 +15,8 @@ from langchain.agents.format_scratchpad import format_to_openai_functions
 from langchain.agents.output_parsers import OpenAIFunctionsAgentOutputParser
 from langchain_core.utils.function_calling import convert_to_openai_function
 
+CALENDAR_SERVICE = build("calendar", "v3", credentials=service_account.Credentials.from_service_account_file(
+    settings.GOOGLE_APPLICATION_CREDENTIALS, scopes=["https://www.googleapis.com/auth/calendar.readonly"]))
 
 class EmailInput(BaseModel):
     message: str = Field(..., description="The message content.")

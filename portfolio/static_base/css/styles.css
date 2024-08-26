@@ -700,7 +700,8 @@ img {
 .sdc__container,
 .simpan__container,
 .ocr__container,
-.acnn_container,
+.acnn__container,
+.schedule__container,
 .cmmt__container {
     text-align: center;
 }
@@ -710,6 +711,11 @@ img {
 .home__buttons:hover,
 .cmmt-example:hover {
     cursor: pointer;
+}
+
+/*================= Schedule =================*/
+.schedule__container table {
+    width: 100%;
 }
 
 /*========== SDC ==========*/

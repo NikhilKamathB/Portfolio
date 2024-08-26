@@ -1,0 +1,48 @@
+{% extends 'base.html' %}
+
+{% load static %}
+{% load custom_filter %}
+
+{% block title %}ACNN{% endblock title %}
+
+{% block header %}
+{% include 'partials/alt_header.html' %}
+{% endblock header %}
+
+{% block body %}
+<div class="container-flex main__div">
+    <section class="home section" id="ancc-home">
+        <div class="home__container schedule__container container grid">
+            <div class="home__content grid pt-0">
+                <div class="home__data mt-5">
+                    <h2 class="home__title mb-0">
+                        My Schedule
+                    </h2>
+                </div>
+            </div>
+        </div>
+    </section>
+    <section class="about section" id="acnn-about">
+        <span class="section__subtitle"></span>
+        <div class="about__container schedule__container container">
+            <div class="about__data">
+                {{ calendar }}
+                {{ calendar | safe }}
+            </div>
+        </div>
+    </section>
+</div>
+
+<!-- scroll top  -->
+{% include 'partials/scrollup.html' %}
+<!-- end scroll top -->
+
+<!-- contact me -->
+{% include 'partials/contactme.html' %}
+<!-- end contact me -->
+
+{% endblock body %}
+
+{% block footer %}
+{% include 'partials/footer.html' %}
+{% endblock footer %}

@@ -16,6 +16,7 @@ langchainhub~=0.1.20
 unstructured~=0.15.0
 psutil~=6.0.0
 google-cloud-secret-manager~=2.20.1
+google-api-python-client~=2.142.0
 pydantic~=2.8.2
 python-dotenv~=1.0.1
 Markdown~=3.6

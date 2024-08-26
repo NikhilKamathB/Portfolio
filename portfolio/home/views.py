@@ -6,16 +6,32 @@ from django.shortcuts import render
 from django.core.cache import cache
 from django.http import JsonResponse
 from django.core.exceptions import BadRequest
-from home import AGENT
 from home.models import ChatResponse
-from home.utils import send_email_utils
-from home.decorator import post_view_handler
+from home import AGENT, CALENDAR_SERVICE
+from home.validators import CalendarData
+from home.decorator import post_chat_view_handler
+from home.utils import send_email_utils, Calendar
 
 
 def index(request):
     return render(request, "home/home.html")
 
-@post_view_handler
+def schedule(request):
+    for calendar_id in settings.DEFAULT_CALENDAR_IDS:
+        page_token = None
+        while True:
+            events = CALENDAR_SERVICE.events().list(calendarId=calendar_id, pageToken=page_token).execute()
+            calendar_data = CalendarData(**events)
+            print(calendar_data.model_dump_json())
+            page_token = events.get('nextPageToken')
+            if not page_token: break
+    cal = Calendar()
+    context = {
+        "calendar": cal.formatmonth(2024, 8)
+    }
+    return render(request, "home/schedule.html", context)
+
+@post_chat_view_handler
 def chat(request):
     query = request.POST.get("chat-query")
     if not query:
@@ -39,7 +55,7 @@ def chat(request):
         status=status.HTTP_200_OK
     )
 
-@post_view_handler
+@post_chat_view_handler
 def send_email(request):
     message = request.POST.get("message")
     email = request.POST.get("email")

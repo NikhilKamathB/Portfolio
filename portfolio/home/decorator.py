@@ -4,7 +4,7 @@ from django.core.exceptions import BadRequest
 from home.models import ChatResponse
 
 
-def post_view_handler(func):
+def post_chat_view_handler(func):
     def wrapper(request, *args, **kwargs):
         if request.method == "POST":
             try:
