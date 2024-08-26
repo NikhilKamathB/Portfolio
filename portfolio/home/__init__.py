@@ -27,7 +27,7 @@ def register_send_email(message: str) -> str:
     """
     Send a message to Nikhil
     """
-    cache.set("chatbot_message", message)
+    cache.set(settings.CHATBOT_MESSAGE_KEY, message)
     return settings.REGISTER_SEND_EMAIL_RETURN
 
 # Langchain RAG settings

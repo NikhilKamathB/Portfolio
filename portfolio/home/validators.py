@@ -4,8 +4,8 @@ from pydantic import BaseModel, Field
 
 class TimeData(BaseModel):
 
-    dateTime: str = Field(..., description="The date and time of the event.")
-    timeZone: str = Field(..., description="The timezone of the event.")
+    dateTime: str
+    timeZone: str
 
 
 class CalendarEvent(BaseModel):
@@ -13,8 +13,8 @@ class CalendarEvent(BaseModel):
     id: str
     status: str
     summary: Optional[str] = ""
-    # start: TimeData = Field(..., description="The start time of calendar event.")
-    # end: TimeData = Field(..., description="The end time of calendar event.")
+    start: Optional[TimeData] = None
+    end: Optional[TimeData] = None
 
 
 class CalendarData(BaseModel):

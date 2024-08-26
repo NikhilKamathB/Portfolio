@@ -718,6 +718,31 @@ img {
     width: 100%;
 }
 
+.schedule__container table tr th {
+    font-size: var(--h2-font-size);
+    color: var(--title-color);
+}
+
+.schedule__container table tr td {
+    padding: 0;
+    width: 14.28%;
+    height: 5rem;
+    border: 0.25rem solid var(--first-color);
+}
+
+.schedule__container table tr td .day {
+    margin: 1rem;
+}
+
+.schedule__container table tr td li:hover {
+    color: var(--first-color);
+}
+
+.schedule__container table tr td p {
+    margin: 0.35rem;
+    text-align: left;
+}
+
 /*========== SDC ==========*/
 .sdc__video {
     width: 75vw;
