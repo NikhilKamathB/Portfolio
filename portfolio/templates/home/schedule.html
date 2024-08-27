@@ -11,7 +11,7 @@
 
 {% block body %}
 <div class="container-flex main__div">
-    <section class="home section" id="ancc-home">
+    <section class="home section" id="schedule-home">
         <div class="home__container schedule__container container grid">
             <div class="home__content grid pt-0">
                 <div class="home__data mt-5">
@@ -28,8 +28,43 @@
             <div class="about__data my-5">
                 {{ calendar | safe }}
             </div>
+            <div>
+                <a class="button button--flex authModalButton" data-bs-toggle="modal" data-bs-target="#authmodal">
+                    View Event Details
+                </a>
+            </div>
         </div>
     </section>
+</div>
+
+<div class="modal fade" id="authmodal" tabindex="-1" aria-labelledby="authmodalLabel" aria-hidden="true">
+    <div class="modal-dialog">
+        <div class="modal-content">
+            <div class="modal-header" id="authmodalHeader">
+                <h5 class="modal-title" id="authmodalLabel">Authenticate</h5>
+                <a type="button" id="authModalClose" data-bs-dismiss="modal" aria-label="Close">
+                    <i class="fa-solid fa-xmark"></i>
+                </a>
+            </div>
+            <div class="modal-body">
+                <form method="POST" action="{% url 'home:schedule' %}" id="scheduleForm">
+                    {% csrf_token %}
+                    <div class="mb-3">
+                        <label for="passkey" class="form-label">Enter your Passkey</label>
+                        <input type="text" name="passkey" class="form-control" id="passkey">
+                    </div>
+                    <div class="mt-4 mb-2 authmodalButtons">
+                        <a class="button button--flex p-2 authModalButton" data-bs-dismiss="modal">
+                            Close
+                        </a>
+                        <a class="button button--flex p-2 authModalButton" href="#" onclick="document.getElementById('scheduleForm').submit(); return false;">
+                            Submit
+                        </a>
+                    </div>
+                </form>
+            </div>
+        </div>
+    </div>
 </div>
 
 <!-- scroll top  -->

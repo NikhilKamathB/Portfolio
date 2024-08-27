@@ -7,19 +7,18 @@ from django.shortcuts import render
 from django.core.cache import cache
 from django.http import JsonResponse
 from django.core.exceptions import BadRequest
-from django.views.decorators.cache import cache_page
-from home.models import ChatResponse
 from home import AGENT, CALENDAR_SERVICE
-from home.validators import CalendarData
-from home.decorator import post_chat_view_handler
 from home.utils import send_email_utils, Calendar
+from home.validators import CalendarData, ChatResponse
+from home.decorator import post_chat_view_handler, authenticate_superuser_view_handler
 
 
 def index(request):
     return render(request, "home/home.html")
 
 # @cache_page(60 * 0.5)
-def schedule(request):
+@authenticate_superuser_view_handler
+def schedule(request, show_event_summary: bool = False):
     event_data = []
     now = timezone.now()
     this_month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
@@ -38,7 +37,7 @@ def schedule(request):
             event_data.append(CalendarData(**events))
             page_token = events.get('nextPageToken')
             if not page_token: break
-    cal = Calendar(year=now.year, month=now.month, calendar_data=event_data)
+    cal = Calendar(year=now.year, month=now.month, calendar_data=event_data, show_event_summary=show_event_summary)
     context = {
         "calendar": cal.formatmonth(2024, 8)
     }

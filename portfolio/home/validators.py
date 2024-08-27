@@ -2,6 +2,12 @@ from typing import Optional
 from pydantic import BaseModel, Field
 
 
+class ChatResponse(BaseModel):
+    success: bool
+    message: str
+    description: str
+
+    
 class TimeData(BaseModel):
 
     dateTime: str

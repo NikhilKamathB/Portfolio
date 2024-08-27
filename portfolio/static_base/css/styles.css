@@ -709,6 +709,7 @@ img {
 .ocr-submit:hover,
 .cmmt-submit:hover,
 .home__buttons:hover,
+.authModalButton:hover,
 .cmmt-example:hover {
     cursor: pointer;
 }
@@ -741,6 +742,10 @@ img {
 .schedule__container table tr td p {
     margin: 0.35rem;
     text-align: left;
+}
+
+.authmodalButtons {
+    text-align: right;
 }
 
 /*========== SDC ==========*/
@@ -896,12 +901,14 @@ img {
 
 #chatbotModalLabel,
 #chatbotModalClose,
+#authModalClose,
 #chatbotModalMsgClose,
 #contact-me-close {
     color: var(--title-color)
 }
 
 #chatbotModalClose,
+#authModalClose,
 #chatbotModalMsgClose,
 #contact-me-close {
     font-size: 20px;
@@ -911,7 +918,7 @@ img {
     color: var(--first-color);
 }
 
-#chatbotModalLabelHeader, #offcanvasRight {
+#chatbotModalLabelHeader, #offcanvasRight, #authmodalHeader {
     background-color: var(--body-color);
 }
 
