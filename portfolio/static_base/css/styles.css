@@ -710,13 +710,26 @@ img {
 .cmmt-submit:hover,
 .home__buttons:hover,
 .authModalButton:hover,
+.schedule__container__alt a:hover,
 .cmmt-example:hover {
     cursor: pointer;
 }
 
 /*================= Schedule =================*/
+
+.schedule__container {
+    overflow-x: scroll;
+    -ms-overflow-style: none;
+    scrollbar-width: none;
+}
+
+.schedule__container__alt{
+    text-align: center;
+}
+
 .schedule__container table {
     width: 100%;
+    min-width: 1024px;
 }
 
 .schedule__container table tr th {
@@ -739,9 +752,15 @@ img {
     color: var(--first-color);
 }
 
-.schedule__container table tr td p {
+.schedule__container table tr td li {
+    font-size: var(--normal-font-size);
     margin: 0.35rem;
-    text-align: left;
+}
+
+.schedule__container table tr td div .today {
+    color: var(--first-color);
+    font-size: var(--h3-font-size);
+    font-weight: bold;
 }
 
 .authmodalButtons {
@@ -1113,6 +1132,10 @@ img {
     background-color: var(--text-color-light);
 }
 
+.schedule__container::-webkit-scrollbar {
+    display: none;
+}
+
 /*================= Loader =================*/
 .spinner-laoder {
     width: 1.5rem;
@@ -1165,6 +1188,12 @@ img {
         grid-template-columns: repeat(2, 1fr);
     }
 
+    .qualification__sections {
+        display: grid;
+        grid-template-columns: .6fr;
+        justify-content: center;
+    }
+
     .footer__bg {
         padding: 3rem 0 3.5rem;
     }
@@ -1174,12 +1203,6 @@ img {
         column-gap: 2rem;
     }
 
-    .qualification__sections {
-        display: grid;
-        grid-template-columns: .6fr;
-        justify-content: center;
-    }
-    
 }
 
 @media screen and (max-width: 568px) {

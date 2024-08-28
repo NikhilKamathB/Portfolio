@@ -7,7 +7,7 @@ class ChatResponse(BaseModel):
     message: str
     description: str
 
-    
+
 class TimeData(BaseModel):
 
     dateTime: str

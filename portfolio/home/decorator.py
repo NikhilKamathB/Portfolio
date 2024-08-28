@@ -1,10 +1,14 @@
 import os
 from hashlib import sha256
+from django.conf import settings
+from django.utils import timezone
 from rest_framework import status
 from django.contrib import messages
+from django.core.cache import cache
 from django.http import JsonResponse
 from django.core.exceptions import BadRequest
-from home.validators import ChatResponse
+from home import CALENDAR_SERVICE
+from home.validators import ChatResponse, CalendarData
 
 
 def post_chat_view_handler(func):
@@ -29,6 +33,35 @@ def post_chat_view_handler(func):
                         description="This method is not allowed.").model_dump(),
             status=status.HTTP_405_METHOD_NOT_ALLOWED
         )
+    return wrapper
+
+def cache_event_details_handler(func):
+    def wrapper(request, *args, **kwargs):
+        if not cache.get(settings.CACHE_EVENT_DETAILS, None):
+            now = timezone.now()
+            event_data = []
+            this_month_start = now.replace(
+                day=1, hour=0, minute=0, second=0, microsecond=0)
+            one_year_from_now = now + timezone.timedelta(days=settings.QUERY_DAYS)
+            time_min = this_month_start.isoformat()
+            time_max = one_year_from_now.isoformat()
+            for calendar_id in settings.DEFAULT_CALENDAR_IDS:
+                page_token = None
+                while True:
+                    events = CALENDAR_SERVICE.events().list(
+                        calendarId=calendar_id,
+                        timeMin=time_min,
+                        timeMax=time_max,
+                        pageToken=page_token,
+                        singleEvents=True,
+                    ).execute()
+                    event_data.append(CalendarData(**events).model_dump_json())
+                    page_token = events.get('nextPageToken')
+                    if not page_token:
+                        break
+            cache.set(settings.CACHE_EVENT_DETAILS, event_data,
+                    settings.CACHE_EVENT_DETAILS_EXPIRY)
+        return func(request, *args, **kwargs)
     return wrapper
 
 def authenticate_superuser_view_handler(func):

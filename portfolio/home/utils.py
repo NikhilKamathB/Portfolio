@@ -5,6 +5,7 @@ from collections import defaultdict
 from django.core.mail import send_mail
 from typing import List, DefaultDict, Tuple
 from calendar import HTMLCalendar, month_name
+from dateutil.relativedelta import relativedelta
 from home.validators import CalendarData, CalendarEvent
 
 
@@ -14,6 +15,19 @@ def send_email_utils(email: str, message: str) -> None:
     """
     subject = settings.DEFAULT_EMAIL_SUBJECT
     send_mail(subject, message, settings.DEFAULT_FROM_EMAIL, [email, settings.DEFAULT_NIKHIL_EMAIL])
+
+def get_months_years() -> List[Tuple[int, int]]:
+    """
+    Get a list of months and years for the next settings.QUERY_DAYS
+    """
+    time = []
+    now = timezone.now()
+    end_data = now + timezone.timedelta(days=settings.QUERY_DAYS)
+    current_date = now
+    while current_date <= end_data:
+        time.append((current_date.month, current_date.year))
+        current_date += relativedelta(months=1)
+    return time
 
 
 class Calendar(HTMLCalendar):
@@ -52,7 +66,12 @@ class Calendar(HTMLCalendar):
                 time_info = f"{start_time.strftime('%I:%M %p')} - {end_time.strftime('%I:%M %p')}"
                 event_title = event.summary if self.show_event_summary else f"Event {idx + 1}"
                 d += f"<li>{event_title} - {time_info}</li>"
-            return f"<td><div class='day'><span>{day}</span><ul>{d}</ul></div></td>"
+            now = datetime.now()
+            if now.day == day and now.month == self.month and now.year == self.year:
+                day_span = f"<span><div class='today'>{day}</div></span>"
+            else:
+                day_span = f"<span>{day}</span>"
+            return f"<td><div class='day'>{day_span}<ul>{d}</ul></div></td>"
         return "<td style='border: none;'></td>"
 
     def formatweek(self, theweek: List[Tuple[int, int]], events: List[CalendarEvent]) -> str:
@@ -90,6 +109,7 @@ class Calendar(HTMLCalendar):
             date_iso = datetime.fromisoformat(date)
             if date_iso.year == theyear and date_iso.month == themonth:
                 events.extend(self.events[date])
+        events.sort(key=lambda x: datetime.fromisoformat(x.start.dateTime))
         v = []
         a = v.append
         a('<table border="0" cellpadding="0" cellspacing="0" class="%s">' % (

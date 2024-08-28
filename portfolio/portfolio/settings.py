@@ -61,7 +61,7 @@ env = environ.Env(
     PINECONE_INDEX_NAME=(str, "langchain"),
     # GCP
     SETTINGS_NAME=(str, "portfolio_settings"),
-    SECRET_MANAGER_VERSION=(str, "4"),
+    SECRET_MANAGER_VERSION=(str, "6"),
     GOOGLE_APPLICATION_CREDENTIALS=(str, ""),
     # AWS
     AWS_ACCESS_KEY_ID=(str, ""),
@@ -264,6 +264,7 @@ DEFAULT_EMAIL_SUBJECT = "Nikhil Bola Kamath - Contact Form"
 
 # Calendar settings
 DEFAULT_CALENDAR_IDS = ["nikhilkb98@gmail.com", "nikhilkb998@gmail.com", "nikhilbolakamath@gmail.com", "nikhilbo@usc.edu", "nikhilbo@kamath.work"]
+QUERY_DAYS = 365
 
 # AWS settings
 AWS_ACCESS_KEY_ID = env("AWS_ACCESS_KEY_ID")
@@ -281,6 +282,8 @@ SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_AGE = 60 * 60 * 3 # 3 hours
 CHATBOT_MESSAGE_KEY = "chatbot_message"
+CACHE_EVENT_DETAILS = "calendar_event_details"
+CACHE_EVENT_DETAILS_EXPIRY = 60 * 10 # 10 minute
 
 # Service APIs
 # OCR

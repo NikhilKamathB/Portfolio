@@ -28,11 +28,23 @@
             <div class="about__data my-5">
                 {{ calendar | safe }}
             </div>
-            <div>
-                <a class="button button--flex authModalButton" data-bs-toggle="modal" data-bs-target="#authmodal">
-                    View Event Details
-                </a>
-            </div>
+        </div>
+        <div class="schedule__container__alt container my-2">
+            {% if prev_cal %}
+            <a class="button button--flex authModalButton mx-2"
+                href="{% url 'home:schedule' %}?month={{ prev_cal.0 }}&year={{ prev_cal.1 }}">
+                <i class="fa-solid fa-arrow-left"></i>
+            </a>
+            {% endif %}
+            <a class="button button--flex authModalButton" data-bs-toggle="modal" data-bs-target="#authmodal">
+                View Event Details
+            </a>
+            {% if next_cal %}
+            <a class="button button--flex authModalButton mx-2"
+                href="{% url 'home:schedule' %}?month={{ next_cal.0 }}&year={{ next_cal.1 }}">
+                <i class="fa-solid fa-arrow-right"></i>
+            </a>
+            {% endif %}
         </div>
     </section>
 </div>

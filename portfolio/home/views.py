@@ -3,43 +3,42 @@ from markdown import markdown
 from django.conf import settings
 from django.utils import timezone
 from rest_framework import status
+from django.contrib import messages
 from django.shortcuts import render
 from django.core.cache import cache
 from django.http import JsonResponse
 from django.core.exceptions import BadRequest
-from home import AGENT, CALENDAR_SERVICE
-from home.utils import send_email_utils, Calendar
+from home import AGENT
 from home.validators import CalendarData, ChatResponse
-from home.decorator import post_chat_view_handler, authenticate_superuser_view_handler
+from home.utils import send_email_utils, get_months_years, Calendar
+from home.decorator import post_chat_view_handler, cache_event_details_handler, authenticate_superuser_view_handler
 
 
 def index(request):
     return render(request, "home/home.html")
 
-# @cache_page(60 * 0.5)
+@cache_event_details_handler
 @authenticate_superuser_view_handler
 def schedule(request, show_event_summary: bool = False):
-    event_data = []
     now = timezone.now()
-    this_month_start = now.replace(day=1, hour=0, minute=0, second=0, microsecond=0)
-    one_year_from_now = now + timezone.timedelta(days=365)
-    time_min = this_month_start.isoformat()
-    time_max = one_year_from_now.isoformat()
-    for calendar_id in settings.DEFAULT_CALENDAR_IDS:
-        page_token = None
-        while True:
-            events = CALENDAR_SERVICE.events().list(
-                calendarId=calendar_id,
-                timeMin=time_min,
-                timeMax=time_max,
-                pageToken=page_token
-            ).execute()
-            event_data.append(CalendarData(**events))
-            page_token = events.get('nextPageToken')
-            if not page_token: break
-    cal = Calendar(year=now.year, month=now.month, calendar_data=event_data, show_event_summary=show_event_summary)
+    event_data = list(map(lambda x: CalendarData.model_validate_json(x), cache.get(settings.CACHE_EVENT_DETAILS)))
+    month = int(request.GET.get("month", now.month))
+    year = int(request.GET.get("year", now.year))
+    time_span = get_months_years()
+    if (month, year) not in time_span:
+        messages.warning(request, "The calendar for the requested month and year is not available.")
+        month, year = now.month, now.year
+    idx = time_span.index((month, year))
+    prev_cal, next_cal = None, None
+    if idx > 0:
+        prev_cal = time_span[idx - 1]
+    if idx < len(time_span) - 1:
+        next_cal = time_span[idx + 1]
+    cal = Calendar(year=year, month=month, calendar_data=event_data, show_event_summary=show_event_summary)
     context = {
-        "calendar": cal.formatmonth(2024, 8)
+        "calendar": cal.formatmonth(year, month),
+        "prev_cal": prev_cal,
+        "next_cal": next_cal
     }
     return render(request, "home/schedule.html", context)
 
