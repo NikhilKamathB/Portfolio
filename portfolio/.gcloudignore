@@ -27,4 +27,3 @@ venv/
 */nbs/*
 # Secrets
 *.env*
-*secrets*

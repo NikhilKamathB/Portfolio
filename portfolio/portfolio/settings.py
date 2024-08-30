@@ -19,7 +19,10 @@ import io
 import os
 import environ
 from pathlib import Path
+from google.auth import default
 from google.cloud import secretmanager
+from google.oauth2 import service_account
+from googleapiclient.discovery import build
 
 
 # Build paths inside the project like this: BASE_DIR / 'subdir'.
@@ -62,7 +65,7 @@ env = environ.Env(
     # GCP
     SETTINGS_NAME=(str, "portfolio_settings"),
     SECRET_MANAGER_VERSION=(str, "6"),
-    GOOGLE_APPLICATION_CREDENTIALS=(str, ""),
+    GOOGLE_APPLICATION_CALENDAR_CREDENTIALS=(str, "./secrets/credentials.json"),
     # AWS
     AWS_ACCESS_KEY_ID=(str, ""),
     AWS_SECRET_ACCESS_KEY=(str, ""),
@@ -74,16 +77,20 @@ env_file = os.path.join(BASE_DIR, ".env")
 # Load environment variables from file or secret manager
 if os.path.exists(env_file):
     env.read_env(env_file)
-    GOOGLE_APPLICATION_CREDENTIALS = env("GOOGLE_APPLICATION_CREDENTIALS")
 elif os.environ.get("GOOGLE_CLOUD_PROJECT", None):
     project_id = os.environ.get("GOOGLE_CLOUD_PROJECT")
     client = secretmanager.SecretManagerServiceClient()
     name = f"projects/{project_id}/secrets/{env('SETTINGS_NAME')}/versions/{env('SECRET_MANAGER_VERSION')}"
     payload = client.access_secret_version(name=name).payload.data.decode("UTF-8")
     env.read_env(io.StringIO(payload))
-    GOOGLE_APPLICATION_CREDENTIALS = os.getenv("GOOGLE_APPLICATION_CREDENTIALS")
 else:
     raise Exception("No environment file or secret manager found.")
+
+# GCP
+gcp_cal_scopes = ["https://www.googleapis.com/auth/calendar"]
+GOOGLE_APPLICATION_CALENDAR_CREDENTIALS = env("GOOGLE_APPLICATION_CALENDAR_CREDENTIALS")
+_creds = service_account.Credentials.from_service_account_file(GOOGLE_APPLICATION_CALENDAR_CREDENTIALS, scopes=gcp_cal_scopes)
+CALENDAR_SERVICE = build("calendar", "v3", credentials=_creds)
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/5.0/howto/deployment/checklist/

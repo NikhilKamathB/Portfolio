@@ -7,7 +7,6 @@ from django.contrib import messages
 from django.core.cache import cache
 from django.http import JsonResponse
 from django.core.exceptions import BadRequest
-from home import CALENDAR_SERVICE
 from home.validators import ChatResponse, CalendarData
 
 
@@ -48,7 +47,7 @@ def cache_event_details_handler(func):
             for calendar_id in settings.DEFAULT_CALENDAR_IDS:
                 page_token = None
                 while True:
-                    events = CALENDAR_SERVICE.events().list(
+                    events = settings.CALENDAR_SERVICE.events().list(
                         calendarId=calendar_id,
                         timeMin=time_min,
                         timeMax=time_max,
