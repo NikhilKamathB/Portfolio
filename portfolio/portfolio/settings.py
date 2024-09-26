@@ -19,7 +19,6 @@ import io
 import os
 import environ
 from pathlib import Path
-from google.auth import default
 from google.cloud import secretmanager
 from google.oauth2 import service_account
 from googleapiclient.discovery import build
@@ -36,32 +35,6 @@ env = environ.Env(
     STATIC_ROOT=(str, "static"),
     OCR_SESSION_TRIES=(int, 3),
     CMMT_SESSION_TRIES=(int, 5),
-    # Langchain
-    RAW_DATA_PATH=(str, "./static_base/data"),
-    TOP_K=(int, 4),
-    FETCH_K=(int, 20),
-    LAMBDA_MULTIPLIER=(float, 0.5),
-    CHUNK_SIZE=(int, 4000),
-    CHUNK_OVERLAP=(int, 200),
-    EMBEDDING_TYPE=(str, "text-embedding-3-large"),
-    SEARCH_TYPE=(str, "similarity"),
-    DOCUMENT_SEPARATOR=(str, "\n\n"),
-    LLM_MODEL_NAME=(str, "gpt-3.5-turbo"),
-    LLM_TEMPERATURE=(float, 1.0),
-    LLM_MAX_TOKEN_LENGTH=(int, None),
-    LLM_TOP_P=(float, 1.0),
-    LLM_PRESENCE_PENALTY=(float, 0.0),
-    LLM_FREQUENCY_PENALTY=(float, 0.0),
-    LLM_RAG_PROMPT_NAME=(str, "portfolio-rag-prompt"),
-    LLM_AGENT_MAX_ITERATIONS=(int, 5),
-    # Langsmith
-    LANGCHAIN_TRACING_V2=(bool, True),
-    LANGCHAIN_ENDPOINT=(str, "https://api.smith.langchain.com"),
-    LANGCHAIN_API_KEY=(str, ""),
-    LANGCHAIN_PROJECT=(str, "Portfolio"),
-    # Pinecone
-    PINECONE_API_KEY=(str, ""),
-    PINECONE_INDEX_NAME=(str, "langchain"),
     # GCP
     SETTINGS_NAME=(str, "portfolio_settings"),
     SECRET_MANAGER_VERSION=(str, "6"),
@@ -114,14 +87,8 @@ INSTALLED_APPS = [
 
     # third party
     'corsheaders',
-    'django_summernote',
     # apps
     'home.apps.HomeConfig',
-    'sdc.apps.SdcConfig',
-    'ocr.apps.OcrConfig',
-    'cm_mt.apps.CmMtConfig',
-    'acnn.apps.AcnnConfig',
-    'simpan.apps.SimpanConfig',
 ]
 
 MIDDLEWARE = [
@@ -133,8 +100,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'ocr.middleware.OcrMiddleware',
-    'cm_mt.middleware.CmmtMiddleware'
 ]
 
 ROOT_URLCONF = 'portfolio.urls'
@@ -248,20 +213,6 @@ INTERNAL_IPS = ['127.0.0.1',]
 
 # Summernote config
 X_FRAME_OPTIONS = 'SAMEORIGIN'
-SUMMERNOTE_CONFIG = {
-    'disable_attachment': False,
-    'summernote': {
-            'toolbar': [
-        ['style', ['bold', 'italic', 'underline', 'clear']],
-        ['fontsize', ['fontsize']],
-        ['color', ['color']],
-        ['para', ['ul', 'ol', 'paragraph']],
-        ['table', ['table']],
-        ['insert', ['link', 'picture', 'video']],
-        ['view', ['fullscreen', 'codeview', 'help']]
-            ]
-        }
-    }
 
 # Email settings
 EMAIL_BACKEND = 'django_ses.SESBackend'
@@ -281,51 +232,10 @@ AWS_SES_REGION_ENDPOINT = env("AWS_SES_REGION_ENDPOINT")
 
 # Django cache and session settings
 SESSION_ENGINE = 'django.contrib.sessions.backends.signed_cookies'
-OCR_SESSION_KEY_TRIES = ["ocr_session_tries", env("OCR_SESSION_TRIES")]
-CMMT_SESSION_KEY_TRIES = ["cmmt_session_tries", env("CMMT_SESSION_TRIES")]
 SESSION_EXPIRE_AT_BROWSER_CLOSE = False
 SESSION_SAVE_EVERY_REQUEST = True
 SESSION_COOKIE_HTTPONLY = True
 SESSION_COOKIE_SECURE = True
 SESSION_COOKIE_AGE = 60 * 60 * 3 # 3 hours
-CHATBOT_MESSAGE_KEY = "chatbot_message"
 CACHE_EVENT_DETAILS = "calendar_event_details"
 CACHE_EVENT_DETAILS_EXPIRY = 60 * 10 # 10 minute
-
-# Service APIs
-# OCR
-OCR_GCLOUD_RUN_API = "https://ocr-zwqz52dqpa-uw.a.run.app"
-# CM-MT
-CM_MT_GCLOUD_RUN_API = "https://cmmt-zwqz52dqpa-uw.a.run.app"
-
-# Langchain settings
-RAW_DATA_PATH = env("RAW_DATA_PATH")
-TOP_K = env("TOP_K")
-FETCH_K = env("FETCH_K")
-LAMBDA_MULTIPLIER = env("LAMBDA_MULTIPLIER")
-CHUNK_SIZE = env("CHUNK_SIZE")
-CHUNK_OVERLAP = env("CHUNK_OVERLAP")
-EMBEDDING_TYPE = env("EMBEDDING_TYPE")
-SEARCH_TYPE = env("SEARCH_TYPE")
-DOCUMENT_SEPARATOR = env("DOCUMENT_SEPARATOR")
-LLM_MODEL_NAME = env("LLM_MODEL_NAME")
-LLM_TEMPERATURE = env("LLM_TEMPERATURE")
-LLM_MAX_TOKEN_LENGTH = env("LLM_MAX_TOKEN_LENGTH")
-LLM_TOP_P = env("LLM_TOP_P")
-LLM_PRESENCE_PENALTY = env("LLM_PRESENCE_PENALTY")
-LLM_FREQUENCY_PENALTY = env("LLM_FREQUENCY_PENALTY")
-LLM_RAG_PROMPT_NAME = env("LLM_RAG_PROMPT_NAME")
-LLM_AGENT_MAX_ITERATIONS = env("LLM_AGENT_MAX_ITERATIONS")
-
-# Langchain tool setting
-REGISTER_SEND_EMAIL_RETURN = "Your message has been registered for sending."
-
-# Pinecone settings
-PINECONE_API_KEY = env("PINECONE_API_KEY")
-PINECONE_INDEX_NAME = env("PINECONE_INDEX_NAME")
-PINECONE_INDEX_CONFIG = {
-    "text-embedding-3-large": {
-        "dimension": 3072,
-        "metric": "cosine"
-    }
-}

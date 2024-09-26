@@ -7,28 +7,28 @@ from django.contrib import messages
 from django.core.cache import cache
 from django.http import JsonResponse
 from django.core.exceptions import BadRequest
-from home.validators import ChatResponse, CalendarData
+from home.validators import APIResponse, CalendarData
 
 
-def post_chat_view_handler(func):
+def post_view_handler(func):
     def wrapper(request, *args, **kwargs):
         if request.method == "POST":
             try:
                 return func(request, *args, **kwargs)
             except BadRequest as e:
                 return JsonResponse(
-                    ChatResponse(success=False, message="Bad Request",
+                    APIResponse(success=False, message="Bad Request",
                                 description=f"{e}").model_dump(),
                     status=status.HTTP_400_BAD_REQUEST
                 )
             except Exception as e:
                 return JsonResponse(
-                    ChatResponse(success=False, message="Internal Server Error",
+                    APIResponse(success=False, message="Internal Server Error",
                                 description=f"{e}").model_dump(),
                     status=status.HTTP_500_INTERNAL_SERVER_ERROR
                 )
         return JsonResponse(
-            ChatResponse(success=False, message="Method not allowed",
+            APIResponse(success=False, message="Method not allowed",
                         description="This method is not allowed.").model_dump(),
             status=status.HTTP_405_METHOD_NOT_ALLOWED
         )

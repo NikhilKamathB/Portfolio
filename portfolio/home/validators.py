@@ -1,8 +1,8 @@
 from typing import Optional
-from pydantic import BaseModel, Field
+from pydantic import BaseModel
 
 
-class ChatResponse(BaseModel):
+class APIResponse(BaseModel):
     success: bool
     message: str
     description: str

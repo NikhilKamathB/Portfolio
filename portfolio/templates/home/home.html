@@ -33,9 +33,6 @@
                         </a>
                     </div>
                     <div class="home__buttons">
-                        <a class="button button--flex" id="chatbot-up" type="button" data-bs-toggle="modal" data-bs-target="#chatbotModal">
-                            Chat with me <i class="uil uil-comment-info-alt button__icon"></i>
-                        </a>
                         <a class="button button--flex" id="schedule-button" type="button" href="{% url 'home:schedule' %}">
                             Check Nikhil's Schedule <i class="uil uil-calendar-alt button__icon"></i>
                         </a>
@@ -204,7 +201,7 @@
                 <div>
                     <img src="{% static 'img/simpan.jpg' %}" alt="" class="project__img">
                 </div>
-                <a href="{% url 'simpan:simpan' %}" class="button--flex button--small project__button">
+                <a href="https://github.com/NikhilKamathB/SimPan" target="_blank" class="button--flex button--small project__button">
                     <h4 class="project__title">SimPan<i class="uil uil-arrow-right button__icon"></i></h4>
                 </a>
             </div>
@@ -212,7 +209,7 @@
                 <div>
                     <img src="{% static 'img/sdc.jpeg' %}" alt="" class="project__img">
                 </div>
-                <a href="{% url 'sdc:sdc' %}" class="button--flex button--small project__button">
+                <a href="https://github.com/NikhilKamathB/SDC" target="_blank" class="button--flex button--small project__button">
                     <h4 class="project__title">Self-Driving Car<i class="uil uil-arrow-right button__icon"></i></h4>
                 </a>
             </div>
@@ -220,7 +217,7 @@
                 <div>
                     <img src="{% static 'img/ocr.jpeg' %}" alt="" class="project__img">
                 </div>
-                <a href="{% url 'ocr:ocr' %}" class="button--flex button--small project__button">
+                <a href="https://github.com/NikhilKamathB/OCR" target="_blank" class="button--flex button--small project__button">
                     <h4 class="project__title">Optical Character Recognition<i
                             class="uil uil-arrow-right button__icon"></i></h4>
                 </a>
@@ -229,7 +226,7 @@
                 <div>
                     <img src="{% static 'img/cmmt.jpeg' %}" alt="" class="project__img">
                 </div>
-                <a href="{% url 'cmmt:cmmt' %}" class="button--flex button--small project__button">
+                <a href="https://github.com/NikhilKamathB/Code-Mixed-Machine-Translation" target="_blank" class="button--flex button--small project__button">
                     <h4 class="project__title">Code-Mixed Machine Translation<i
                             class="uil uil-arrow-right button__icon"></i></h4>
                 </a>
@@ -238,7 +235,7 @@
                 <div>
                     <img src="{% static 'img/nn.jpeg' %}" alt="" class="project__img">
                 </div>
-                <a href="{% url 'acnn:acnn' %}" class="button--flex button--small project__button">
+                <a href="https://github.com/NikhilKamathB/Actor-Critic-Neural-Network-Modeling" target="_blank" class="button--flex button--small project__button">
                     <h4 class="project__title">Actor Critic Neural Modeling<i
                             class="uil uil-arrow-right button__icon"></i></h4>
                 </a>
@@ -250,10 +247,6 @@
 <!-- scroll top  -->
 {% include 'partials/scrollup.html' %}
 <!-- end scroll top -->
-
-<!-- chatbot -->
-{% include 'partials/chatbot.html' %}
-<!-- end chatbot -->
 
 <!-- contact me -->
 {% include 'partials/contactme.html' %}
